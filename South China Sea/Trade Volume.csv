@@ -1,0 +1,17 @@
+Country,Year,Trade Volume (Imports+Exports) in SCS ($B),Sources
+China,1995,8,https://archive.org/details/ASEANStatisticalYearbook1997
+China,2005,130.4,https://data.worldbank.org/indicator/NE.TRD.GNFS.ZS?locations=CN
+China,2015,472.2,https://chinapower.csis.org/data/trade-flows-south-china-sea/
+China,2023,685,https://www.customs.gov.vn/Lists/EnglishStatistics/ViewDetails.aspx?ID=1024
+China,2025 Q1,234.2,https://www.gso.gov.vn/en/px-web/?pxid=E1115&theme=Trade%20and%20Services
+US,1995,120,https://www.census.gov/foreign-trade/balance/c5180.html#1995
+US,2005,234,https://www.census.gov/foreign-trade/balance/c5180.html#2005
+US,2015,366,https://ustr.gov/countries-regions/southeast-asia-pacific/asean
+US,2023,571.7,https://www.census.gov/foreign-trade/balance/c0004.html
+Japan,1995,88,https://wits.worldbank.org/countryprofile/en/country/jpn/year/2015/summarytext
+Japan,2005,160,https://wits.worldbank.org/countryprofile/en/country/jpn/year/2015/summarytext
+Japan,2015,185,https://wits.worldbank.org/countryprofile/en/country/jpn/year/2015/summarytext
+Japan,2023,220,https://www.customs.go.jp/toukei/shinbun/happyou_e.htm
+Vietnam,2005,12,https://data.worldbank.org/country/VN
+Vietnam,2015,65,https://www.gso.gov.vn/en/px-web/
+Vietnam,2023,223.2,https://www.customs.gov.vn/Lists/EnglishStatistics/AllItems.aspx
