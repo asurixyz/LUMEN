@@ -36,7 +36,7 @@
       const container = 'chart';
       if (!data || !data.length) { document.getElementById(container).innerText = 'No data'; return; }
       const yearKey = 'Year' in data[0] ? 'Year' : ('year' in data[0] ? 'year' : Object.keys(data[0])[0]);
-      const keys = Object.keys(data[0]).filter(k => k !== yearKey);
+      const keys = Object.keys(data[0]).filter(k => k !== yearKey && !/source|note/i.test(String(k)));
       const years = data.map(d => d[yearKey]);
       const traces = keys.map(k => ({ x: years, y: data.map(d => numberize(d[k])), mode: 'lines+markers', name: k }));
       const p = Plotly.newPlot(container, traces, { title: 'Total Trade Volume with East African Countries', xaxis: {title:'Year'}, yaxis: {title: 'Trade Volume (Billion USD)'}, legend: {orientation:'h', y:-0.3} }, {responsive:true});
@@ -48,7 +48,7 @@
       const container = 'chart';
       if (!data || !data.length) { document.getElementById(container).innerText = 'No data'; return; }
       const yearKey = 'Year' in data[0] ? 'Year' : ('year' in data[0] ? 'year' : Object.keys(data[0])[0]);
-      const keys = Object.keys(data[0]).filter(k => k !== yearKey);
+      const keys = Object.keys(data[0]).filter(k => k !== yearKey && !/source|note/i.test(String(k)));
       const years = data.map(d => d[yearKey]);
       const traces = keys.map(k => ({ x: years, y: data.map(d => numberize(d[k])), mode: 'lines+markers', name: k }));
       const p = Plotly.newPlot(container, traces, { title: 'Investment in East African Countries', xaxis:{title:'Year'}, yaxis:{title:'Investment (Billion USD)'}, legend:{orientation:'h', y:-0.3} }, {responsive:true});
