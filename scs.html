@@ -22,7 +22,9 @@
       text-align: center;
       font-size: 1.5rem;
       font-weight: bold;
+      position: relative;
     }
+    .home-icon { position:absolute; top:10px; right:10px; display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:8px; background:#ffffff; color:#004080; text-decoration:none; font-size:18px; border:1px solid #d1d5db }
     nav {
       display: flex;
       background: #e1e1e1;
@@ -31,6 +33,7 @@
       padding: 0.5rem 0.5rem;
       flex-wrap: wrap;
     }
+    .tabs { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; }
     nav button {
       background: none;
       border: none;
@@ -87,14 +90,16 @@
   </style>
 </head>
 <body>
-  <header>South China Sea Data Visualization</header>
+  <header><span>South China Sea Data Visualization</span><a href="home.html" class="home-icon" aria-label="Home">🏠</a></header>
   <nav>
-    <button class="active" data-file="South China Sea/Trade Volume.csv" data-chart="tradeVolume">Trade Volume</button>
-    <button data-file="South China Sea/Chinese Investment.csv" data-chart="chinaInvestment">Chinese Investment</button>
-    <button data-file="South China Sea/US Investment.csv" data-chart="usInvestment">US Investment</button>
-    <button data-file="South China Sea/Total Investment.csv" data-chart="totalInvestment">Total Investment</button>
-    <button data-file="South China Sea/Consumption of Energy.csv" data-chart="energyConsumption">Energy Consumption</button>
-    <button data-file="South China Sea/Key Players Trade with SCS Countries.csv" data-chart="keyPlayersTrade">Key Players Trade</button>
+    <div class="tabs">
+      <button class="active" data-file="South China Sea/Trade Volume.csv" data-chart="tradeVolume">Trade Volume</button>
+      <button data-file="South China Sea/Chinese Investment.csv" data-chart="chinaInvestment">Chinese Investment</button>
+      <button data-file="South China Sea/US Investment.csv" data-chart="usInvestment">US Investment</button>
+      <button data-file="South China Sea/Total Investment.csv" data-chart="totalInvestment">Total Investment</button>
+      <button data-file="South China Sea/Consumption of Energy.csv" data-chart="energyConsumption">Energy Consumption</button>
+      <button data-file="South China Sea/Key Players Trade with SCS Countries.csv" data-chart="keyPlayersTrade">Key Players Trade</button>
+    </div>
   </nav>
   <main>
     <div id="chart"></div>
