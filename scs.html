@@ -172,10 +172,28 @@
       const oilGas = data.map(d => d["Oil & Gas"]);
       const military = data.map(d => d["Military Infrastructure"]);
       const ports = data.map(d => d["Ports/BRI Projects"]);
+      const n = (v) => {
+        if (v == null) return null;
+        if (typeof v === 'number') return Number.isFinite(v) ? v : null;
+        if (typeof v === 'string') {
+          const t = v.replace(/[$,]/g, '').trim();
+          const num = Number(t);
+          return Number.isFinite(num) ? num : null;
+        }
+        return null;
+      };
+      const totals = years.map((_, i) => {
+        const a = n(oilGas[i]) || 0;
+        const b = n(military[i]) || 0;
+        const c = n(ports[i]) || 0;
+        const sum = a + b + c;
+        return Number.isFinite(sum) ? sum : null;
+      });
       const traces = [
         {x: years, y: oilGas, mode:'lines+markers', name: 'Oil & Gas'},
         {x: years, y: military, mode:'lines+markers', name: 'Military Infrastructure'},
-        {x: years, y: ports, mode:'lines+markers', name: 'Ports/BRI Projects'}
+        {x: years, y: ports, mode:'lines+markers', name: 'Ports/BRI Projects'},
+        {x: years, y: totals, mode:'lines+markers', name: 'Total', line: {width: 3}}
       ];
       const p = Plotly.newPlot('chart', traces, {
         title: 'Chinese Investment in the South China Sea',
@@ -209,11 +227,19 @@
       const fdi = data.map(d => num(d[fdiKey]));
       const security = data.map(d => num(d[secKey]));
       const dev = data.map(d => num(d[devKey]));
+      const totals = years.map((_, i) => {
+        const a = num(fdi[i]) || 0;
+        const b = num(security[i]) || 0;
+        const c = num(dev[i]) || 0;
+        const sum = a + b + c;
+        return Number.isFinite(sum) ? sum : null;
+      });
 
       const traces = [
         {x: years, y: fdi, mode:'lines+markers', name: 'FDI'},
         {x: years, y: security, mode:'lines+markers', name: 'Security Assistance'},
-        {x: years, y: dev, mode:'lines+markers', name: 'Development & Economic Assistance'}
+        {x: years, y: dev, mode:'lines+markers', name: 'Development & Economic Assistance'},
+        {x: years, y: totals, mode:'lines+markers', name: 'Total', line: {width: 3}}
       ];
       const p = Plotly.newPlot('chart', traces, {
         title: 'US Investment in the South China Sea',
