@@ -27,22 +27,26 @@
       display: flex;
       background: #e1e1e1;
       justify-content: center;
-      gap: 1rem;
-      padding: 0.5rem 0;
+      gap: 0.5rem;
+      padding: 0.5rem 0.5rem;
+      flex-wrap: wrap;
     }
     nav button {
       background: none;
       border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 0.9rem;
       font-size: 1rem;
       cursor: pointer;
       border-bottom: 3px solid transparent;
       transition: border-color 0.3s;
+      border-radius: 6px;
+      background: #f5f5f5;
     }
     nav button.active {
       border-bottom: 3px solid #004080;
       font-weight: bold;
       color: #004080;
+      background: #ffffff;
     }
     main {
       max-width: 900px;
@@ -54,12 +58,24 @@
     }
     #chart {
       width: 100%;
-      height: 620px;
+      height: 60vh;          /* scale with viewport */
+      min-height: 360px;     /* ensure readable on phones */
+      max-height: 760px;     /* avoid overly tall on desktops */
     }
     .chart-desc {
       margin-top: .5rem;
       color: #555;
       font-size: .95rem;
+    }
+    @media (max-width: 900px) {
+      main { margin: 0.5rem; padding: 0.75rem; }
+      nav button { font-size: 0.95rem; padding: 0.55rem 0.8rem; }
+    }
+    @media (max-width: 600px) {
+      header { font-size: 1.25rem; }
+      nav { gap: 0.4rem; }
+      nav button { flex: 1 1 auto; }
+      .chart-desc { font-size: 0.92rem; }
     }
     footer {
       text-align: center;
@@ -139,7 +155,7 @@
         xaxis: {title: 'Year'},
         yaxis: {title: 'Trade Volume (Billion USD)'},
         legend: {orientation: "h", y: -0.3}
-      });
+      }, {responsive: true});
       document.getElementById('chart-desc').textContent = 'Annual trade volume (imports + exports) through the South China Sea by country.';
       return p;
     };
@@ -160,7 +176,7 @@
         xaxis: {title: 'Year'},
         yaxis: {title: 'Investment (Billion USD)'},
         legend: {orientation: "h", y: -0.3}
-      });
+      }, {responsive: true});
       document.getElementById('chart-desc').textContent = 'Breakdown of China\'s annual investment in the South China Sea by sector.';
       return p;
     };
@@ -198,7 +214,7 @@
         xaxis: {title: 'Year'},
         yaxis: {title: 'Investment (Billion USD)'},
         legend: {orientation: "h", y: -0.3}
-      });
+      }, {responsive: true});
       document.getElementById('chart-desc').textContent = 'US financial flows to the region: FDI, security, and development assistance.';
       return p;
     };
@@ -217,7 +233,7 @@
         xaxis: {title: 'Year'},
         yaxis: {title: 'Total Investment (Billion USD)'},
         legend: {orientation: "h", y: -0.3}
-      });
+      }, {responsive: true});
       document.getElementById('chart-desc').textContent = 'Total annual investment comparison between China and the US in the SCS.';
       return p;
     };
@@ -243,7 +259,7 @@
         xaxis: {title: 'Year'},
         yaxis: {title: 'Energy Consumption Share (%)'},
         legend: {orientation: "h", y: -0.3}
-      });
+      }, {responsive: true});
       document.getElementById('chart-desc').textContent = 'Share of each economy\'s energy consumption that transits the South China Sea.';
       return p;
     };
@@ -265,7 +281,7 @@
         xaxis: {title: 'Year'},
         yaxis: {title: 'Trade Volume (Billion USD)'},
         legend: {orientation: "h", y: -0.3}
-      });
+      }, {responsive: true});
       document.getElementById('chart-desc').textContent = 'Trade volumes of major economies with South China Sea countries.';
       return p;
     };
