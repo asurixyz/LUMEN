@@ -8,8 +8,10 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; color: #222; }
-    header { background: #004080; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; font-weight: bold; }
+    header { background: #004080; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; font-weight: bold; position:relative; }
+    .home-icon { position:absolute; top:10px; right:10px; display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:8px; background:#ffffff; color:#004080; text-decoration:none; font-size:18px; border:1px solid #d1d5db }
     nav { display: flex; background: #e1e1e1; justify-content: center; gap: 0.5rem; padding: 0.5rem 0.5rem; flex-wrap: wrap; }
+    .tabs { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; }
     nav button { background: #f5f5f5; border: none; padding: 0.6rem 0.9rem; font-size: 1rem; cursor: pointer; border-bottom: 3px solid transparent; transition: border-color 0.3s; border-radius: 6px; }
     nav button.active { border-bottom: 3px solid #004080; font-weight: bold; color: #004080; background: #ffffff; }
     main { max-width: 900px; margin: 1rem auto; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
@@ -76,10 +78,12 @@
   </script>
 </head>
 <body>
-  <header>Persian Gulf Data Visualization</header>
+  <header><span>Persian Gulf Data Visualization</span><a href="home.html" class="home-icon" aria-label="Home">🏠</a></header>
   <nav>
-    <button class="active" data-file="Persian Gulf/Trade Volume.csv" data-chart="trade">Trade Volume</button>
-    <button data-file="Persian Gulf/Key Players Trade with Persian Gulf Countries.csv" data-chart="key">Key Players Trade</button>
+    <div class="tabs">
+      <button class="active" data-file="Persian Gulf/Trade Volume.csv" data-chart="trade">Trade Volume</button>
+      <button data-file="Persian Gulf/Key Players Trade with Persian Gulf Countries.csv" data-chart="key">Key Players Trade</button>
+    </div>
   </nav>
   <main>
     <div id="chart"></div>
