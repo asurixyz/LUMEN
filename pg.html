@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Persian Gulf Data Visualization</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; color: #222; }
+    header { background: #004080; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; font-weight: bold; }
+    nav { display: flex; background: #e1e1e1; justify-content: center; gap: 0.5rem; padding: 0.5rem 0.5rem; flex-wrap: wrap; }
+    nav button { background: #f5f5f5; border: none; padding: 0.6rem 0.9rem; font-size: 1rem; cursor: pointer; border-bottom: 3px solid transparent; transition: border-color 0.3s; border-radius: 6px; }
+    nav button.active { border-bottom: 3px solid #004080; font-weight: bold; color: #004080; background: #ffffff; }
+    main { max-width: 900px; margin: 1rem auto; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+    #chart { width: 100%; height: 60vh; min-height: 360px; max-height: 760px; }
+    .chart-desc { margin-top: .5rem; color: #555; font-size: .95rem; }
+    footer { text-align: center; padding: 1rem; font-size: 0.9rem; color: #666; margin-top: 2rem; }
+    @media (max-width: 900px) { main { margin: 0.5rem; padding: 0.75rem; } nav button { font-size: 0.95rem; padding: 0.55rem 0.8rem; } }
+    @media (max-width: 600px) { header { font-size: 1.25rem; } nav { gap: 0.4rem; } nav button { flex: 1 1 auto; } .chart-desc { font-size: 0.92rem; } }
+  </style>
+  <script>
+    const fetchCsv = (path) => new Promise((resolve, reject) => {
+      Papa.parse(encodeURI(path), { download: true, header: true, dynamicTyping: true, skipEmptyLines: true,
+        complete: (res) => resolve(res.data || []), error: (err) => reject(err) });
+    });
+    const numberize = (val) => { if (val == null) return null; if (typeof val === 'number') return Number.isFinite(val) ? val : null; if (typeof val === 'string') { const t = val.replace(/[,$%]/g,'').trim(); const n = Number(t); return Number.isFinite(n) ? n : null; } return null; };
+
+    const plotTradeVolume = (data) => {
+      const container = 'chart';
+      if (!data || !data.length) { document.getElementById(container).innerText = 'No data'; return; }
+      const yearKey = 'Year' in data[0] ? 'Year' : ('year' in data[0] ? 'year' : Object.keys(data[0])[0]);
+      const keys = Object.keys(data[0]).filter(k => k !== yearKey && !/source|note/i.test(String(k)));
+      const years = data.map(d => d[yearKey]);
+      const traces = keys.map(k => ({ x: years, y: data.map(d => numberize(d[k])), mode: 'lines+markers', name: k }));
+      const p = Plotly.newPlot(container, traces, { title: 'Trade Volume in Persian Gulf', xaxis: {title:'Year'}, yaxis: {title:'Trade Volume (Billion USD)'}, legend: {orientation:'h', y:-0.3} }, {responsive:true});
+      document.getElementById('chart-desc').textContent = 'Aggregate trade volumes with Persian Gulf countries over time.';
+      return p;
+    };
+
+    const plotKeyPlayersTrade = (data) => {
+      const container = 'chart';
+      if (!data || !data.length) { document.getElementById(container).innerText = 'No data'; return; }
+      const yearKey = 'Year' in data[0] ? 'Year' : ('year' in data[0] ? 'year' : Object.keys(data[0])[0]);
+      const keys = Object.keys(data[0]).filter(k => k !== yearKey && !/source|note/i.test(String(k)));
+      const years = data.map(d => d[yearKey]);
+      const traces = keys.map(k => ({ x: years, y: data.map(d => numberize(d[k])), mode: 'lines+markers', name: k }));
+      const p = Plotly.newPlot(container, traces, { title: "Key Players' Trade with Persian Gulf Countries", xaxis: {title:'Year'}, yaxis: {title:'Trade Volume (Billion USD)'}, legend: {orientation:'h', y:-0.3} }, {responsive:true});
+      document.getElementById('chart-desc').textContent = 'Trade volumes of major economies with Persian Gulf countries.';
+      return p;
+    };
+
+    async function loadAndPlot(file, which) {
+      document.getElementById('chart').innerHTML = '';
+      document.getElementById('chart-desc').textContent = '';
+      try {
+        const data = await fetchCsv(file);
+        if (which === 'trade') return plotTradeVolume(data);
+        if (which === 'key') return plotKeyPlayersTrade(data);
+        document.getElementById('chart').innerText = 'Unknown chart type';
+      } catch (err) {
+        document.getElementById('chart').innerText = 'Error loading data';
+        console.error('Error loading', file, err);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const buttons = document.querySelectorAll('nav button');
+      buttons.forEach(btn => btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        loadAndPlot(btn.dataset.file, btn.dataset.chart);
+      }));
+      loadAndPlot('Persian Gulf/Trade Volume.csv', 'trade');
+    });
+  </script>
+</head>
+<body>
+  <header>Persian Gulf Data Visualization</header>
+  <nav>
+    <button class="active" data-file="Persian Gulf/Trade Volume.csv" data-chart="trade">Trade Volume</button>
+    <button data-file="Persian Gulf/Key Players Trade with Persian Gulf Countries.csv" data-chart="key">Key Players Trade</button>
+  </nav>
+  <main>
+    <div id="chart"></div>
+    <div id="chart-desc" class="chart-desc"></div>
+  </main>
+  <footer>Data sources compiled by user | Hosted on GitHub Pages</footer>
+</body>
+</html>
+
+
