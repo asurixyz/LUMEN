@@ -70,7 +70,7 @@
   <nav>
     <button class="active" data-file="South China Sea/Trade Volume.csv" data-chart="tradeVolume">Trade Volume</button>
     <button data-file="South China Sea/Chinese Investment.csv" data-chart="chinaInvestment">Chinese Investment</button>
-    <button data-file="US Investment.txt" data-chart="usInvestment">US Investment</button>
+    <button data-file="South China Sea/US Investment.csv" data-chart="usInvestment">US Investment</button>
     <button data-file="South China Sea/Total Investment.csv" data-chart="totalInvestment">Total Investment</button>
     <button data-file="South China Sea/Consumption of Energy.csv" data-chart="energyConsumption">Energy Consumption</button>
     <button data-file="South China Sea/Key Players Trade with SCS Countries.csv" data-chart="keyPlayersTrade">Key Players Trade</button>
@@ -156,11 +156,28 @@
     };
 
     const plotUSInvestment = (data) => {
-      // data fields: Year, FDI ($B), Security Assistance ($B), Development & Economic Assistance ($B), Total Annual Investment ($B)
-      const years = data.map(d => d.Year);
-      const fdi = data.map(d => d["FDI ($B)"]);
-      const security = data.map(d => d["Security Assistance ($B)"]);
-      const dev = data.map(d => d["Development & Economic Assistance ($B)"]);
+      // Accepts flexible header names. Normalizes keys to expected labels.
+      const keyOf = (row, candidates) => candidates.find(k => k in row);
+      const years = data.map(d => d.Year ?? d["year"] ?? d["Year "]); // handle minor variants
+
+      const fdiKey = keyOf(data[0] || {}, ["FDI ($B)", "FDI", "FDI (B)", "FDI (USD B)", "FDI_$_B"]);
+      const secKey = keyOf(data[0] || {}, ["Security Assistance ($B)", "Security Assistance", "Security ($B)", "Security_Assistance_B"]);
+      const devKey = keyOf(data[0] || {}, ["Development & Economic Assistance ($B)", "Development and Economic Assistance ($B)", "Dev & Econ Assistance ($B)", "Development Assistance ($B)", "Development_Economic_Assistance_B"]);
+
+      const num = (v) => {
+        if (v == null) return null;
+        if (typeof v === 'string') {
+          const t = v.replace(/[$,]/g, '').trim();
+          const n = Number(t);
+          return Number.isFinite(n) ? n : null;
+        }
+        return Number.isFinite(v) ? v : null;
+      };
+
+      const fdi = data.map(d => num(d[fdiKey]));
+      const security = data.map(d => num(d[secKey]));
+      const dev = data.map(d => num(d[devKey]));
+
       const traces = [
         {x: years, y: fdi, mode:'lines+markers', name: 'FDI'},
         {x: years, y: security, mode:'lines+markers', name: 'Security Assistance'},
