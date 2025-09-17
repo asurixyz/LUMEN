@@ -97,7 +97,7 @@
       <button data-file="South China Sea/Chinese Investment.csv" data-chart="chinaInvestment">Chinese Investment</button>
       <button data-file="South China Sea/US Investment.csv" data-chart="usInvestment">US Investment</button>
       <button data-file="South China Sea/Total Investment.csv" data-chart="totalInvestment">Total Investment</button>
-      <button data-file="South China Sea/Consumption of Energy.csv" data-chart="energyConsumption">Energy Consumption</button>
+      <button data-file="South China Sea/Consumption of Energy.csv" data-chart="energyConsumption">Transit of Energy through SCS</button>
       <button data-file="South China Sea/Key Players Trade with SCS Countries.csv" data-chart="keyPlayersTrade">Key Players Trade</button>
     </div>
   </nav>
@@ -106,7 +106,9 @@
     <div id="chart-desc" class="chart-desc"></div>
   </main>
   <footer>
-    Data sources compiled by user | Hosted on GitHub Pages
+    © Venkatakrishnan Asuri · 
+    <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> · 
+    <a href="https://www.linkedin.com/in/asurixyz" target="_blank" rel="noopener">LinkedIn</a>
   </footer>
 
   <script>
@@ -259,12 +261,12 @@
         };
       });
       const p = Plotly.newPlot('chart', traces, {
-        title: 'Consumption of Energy through South China Sea (%)',
+        title: 'Transit of Energy through SCS (%)',
         xaxis: {title: 'Year'},
         yaxis: {title: 'Energy Consumption Share (%)'},
         legend: {orientation: "h", y: -0.3}
       }, {responsive: true});
-      document.getElementById('chart-desc').textContent = 'Share of each economy\'s energy consumption that transits the South China Sea.';
+      document.getElementById('chart-desc').textContent = 'Share of each economy\'s energy consumption transiting the South China Sea (proxy for energy transit dependence).';
       return p;
     };
 
