@@ -142,19 +142,18 @@
     const plotTradeVolume = (data) => {
       // data fields: Country, Year, Trade Volume (Imports+Exports) in SCS ($B)
       // Prepare traces for each country, with year on x-axis
-      const countries = [...new Set(data.map(d => d.Country))];
+      const countries = [...new Set(data.map(d => d.Country))]
+        .filter(c => c !== undefined && c !== null && String(c).trim() !== "");
       const years = [...new Set(data.map(d => d.Year))].sort((a,b) => a-b);
       const traces = countries.map(country => {
-        return {
-          x: years,
-          y: years.map(year => {
-            const entry = data.find(d => d.Country === country && d.Year == year);
-            return entry ? entry["Trade Volume (Imports+Exports) in SCS ($B)"] : null;
-          }),
-          mode: 'lines+markers',
-          name: country
-        };
-      });
+        const series = years.map(year => {
+          const entry = data.find(d => d.Country === country && d.Year == year);
+          return entry ? entry["Trade Volume (Imports+Exports) in SCS ($B)"] : null;
+        });
+        const hasAnyNumber = series.some(v => typeof v === 'number' || (typeof v === 'string' && v.trim() !== '' && !Number.isNaN(Number(v))));
+        if (!hasAnyNumber) return null;
+        return { x: years, y: series, mode: 'lines+markers', name: String(country) };
+      }).filter(t => t !== null);
       const p = Plotly.newPlot('chart', traces, {
         title: 'Trade Volume (Imports + Exports) in South China Sea',
         xaxis: {title: 'Year'},
