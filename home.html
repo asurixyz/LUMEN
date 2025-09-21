@@ -7,67 +7,78 @@
   <style>
     :root { --accent:#004080; }
     body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f6f8fb; color:#1c2230; }
-    header { background: var(--accent); color:#fff; padding: 1.25rem 1rem; text-align:center; }
+    header { background: var(--accent); color:#fff; padding: 1.25rem 1rem; text-align:center; position:relative; }
     header h1 { margin:0; font-size:1.6rem; }
     header p { margin:.35rem 0 0 0; opacity:.9; }
-    main { max-width: 1000px; margin: 1rem auto; padding: 1rem; }
-    .intro { background:#ffffff; border-radius:10px; padding:1rem; box-shadow:0 2px 10px rgba(0,0,0,.06); }
+    .home-icon { position:absolute; top:10px; right:10px; display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:8px; background:#ffffff; color:#004080; text-decoration:none; font-size:18px; border:1px solid #d1d5db }
+    main { max-width: 1200px; margin: 1rem auto; padding: 1rem; }
+    .intro { background:#ffffff; border-radius:10px; padding:1rem; box-shadow:0 2px 10px rgba(0,0,0,.06); margin-bottom: 1rem; }
     .intro p { margin:.5rem 0; }
+    .intro h2 { color: var(--accent); margin-top: 1.5rem; margin-bottom: 0.5rem; }
+    .intro ul { margin: 0.5rem 0; padding-left: 1.5rem; }
+    .intro li { margin: 0.25rem 0; }
     .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 14px; margin-top: 14px; }
     .card { display:block; text-decoration:none; color:inherit; background:#fff; border-radius:10px; border:1px solid #e2e8f0; padding:14px; box-shadow:0 2px 10px rgba(0,0,0,.05); transition: transform .15s ease, box-shadow .15s ease; }
     .card:hover { transform: translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,.1); }
     .card h2 { margin:0 0 6px 0; font-size:1.05rem; color: var(--accent); }
     .card p { margin:0; color:#4b5563; font-size:.95rem; }
+    
+    
     footer { text-align:center; color:#6b7280; font-size:.9rem; padding: 1.25rem 0; }
     @media (max-width: 600px) { header h1 { font-size:1.35rem; } }
   </style>
 </head>
 <body>
   <header>
-    <h1>Maritime Trade & Investment Dashboards</h1>
-    <p>Explore interactive visualizations built from on-repo CSV datasets.</p>
+    <h1>Asian Geopolitics & Economic Data</h1>
+    <p>Data-driven insights into the forces shaping Asia's future.</p>
+    <a href="index.html" class="home-icon" aria-label="Home">🏠</a>
   </header>
   <main>
     <section class="intro">
-      <p><strong>About the data.</strong> Each dashboard reads CSV files in this repository (no database, no server). The series typically include annual trade volumes (in USD) and investment flows (e.g., FDI, infrastructure, security, development assistance). Countries and categories are plotted as separate traces so you can compare levels and rates of change over time.</p>
-      <p><strong>How to read the charts.</strong> Most pages include multiple line charts: one for total trade and one or more for investment breakdowns. Hover to see exact values; use the legend to toggle series. If you’re on mobile, rotate to landscape for more detail.</p>
-      <p><strong>What to look for.</strong></p>
+      <h2>Asia's Rise: A New Global Center</h2>
+      <p>Asia is at the heart of the 21st century's changing global landscape. Its rapid economic growth, shifting demographics, and complex regional relationships are creating a new world order. This dashboard provides a comprehensive look at the data driving these shifts, focusing on key players: China, Japan, India, South Korea, and the ASEAN bloc.</p>
+      
+      <p>Explore economic indicators and demographic trends to understand the rise of Asian economies and the geopolitical dynamics that define their interactions.</p>
+      
+      <h2>Global Supply Chains and Maritime Routes</h2>
+      <p>Beyond national economies, this analysis delves into the vital maritime regions that power global trade. These waterways are crucial economic corridors and, in some cases, points of strategic competition. Our analysis includes data from four key maritime regions:</p>
+      
       <ul>
-        <li><em>South China Sea:</em> Rising trade volumes across major economies; watch energy-dependence shares and the composition of Chinese investment (oil & gas, military infrastructure, ports/BRI).</li>
-        <li><em>Bay of Bengal:</em> Gradual growth in regional trade; compare investment series to see which economies lead during different periods.</li>
-        <li><em>East African Coast:</em> Expanding trade links; investment lines can highlight sectoral focus and timing of major projects.</li>
-        <li><em>Persian Gulf:</em> High absolute trade levels; key players’ trade compares large economies’ exposure to the Gulf over time.</li>
+        <li><strong>South China Sea:</strong> A critical chokepoint for global energy and a hub for Chinese investment, central to regional power rivalries.</li>
+        <li><strong>Bay of Bengal:</strong> An emerging trade route that highlights global efforts to diversify supply chains.</li>
+        <li><strong>East African Coast:</strong> A strategic link for trade between Asia and Africa, tracking new partnerships and investment flows.</li>
+        <li><strong>Persian Gulf:</strong> The heart of global energy, where data on trade and investment reflects key players' energy security priorities.</li>
       </ul>
-      <p><strong>Notes.</strong> Figures may be rounded; some CSVs aggregate categories. Column names drive the legends: if you change headers, the charts will update accordingly.</p>
-      <p>Choose a region to begin:</p>
     </section>
+
     <section class="grid">
+      <a class="card" href="asian_data.html">
+        <h2>Asian Economic Data</h2>
+        <p>Explore economic indicators for major economies and the ASEAN bloc.</p>
+      </a>
       <a class="card" href="scs.html">
         <h2>South China Sea</h2>
-        <p>Trade volumes, investments, energy dependence, and key players.</p>
+        <p>Data on trade, investments, and energy dependence in a critical region.</p>
       </a>
       <a class="card" href="bob.html">
         <h2>Bay of Bengal</h2>
-        <p>Regional trade and investment trends in the Bay of Bengal.</p>
+        <p>Analysis of regional trade and investment trends in the Bay of Bengal.</p>
       </a>
       <a class="card" href="eac.html">
         <h2>East African Coast</h2>
-        <p>Trade with and investment in East African economies.</p>
+        <p>Insights into trade and investment between Asia and East Africa.</p>
       </a>
       <a class="card" href="pg.html">
         <h2>Persian Gulf</h2>
-        <p>Trade volume and key players' trade with Gulf countries.</p>
+        <p>Data on trade and financial flows in a region vital for energy security.</p>
       </a>
     </section>
   </main>
   <footer>
     © Venkatakrishnan Asuri · 
     <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> · 
-    <a href="https://www.linkedin.com/in/venkatakrishnan-asuri" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://www.linkedin.com/in/asurixyz" target="_blank" rel="noopener">LinkedIn</a>
   </footer>
 </body>
 </html>
-
-
-
-
