@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMEN - Afghanistan Deep Dive</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #fdfdfd;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .home-link {
+            color: #004080;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .home-link:hover {
+            text-decoration: underline;
+        }
+        main {
+            max-width: 900px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+        }
+        .page-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: #004080;
+            margin-bottom: 1rem;
+        }
+        .intro {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #333;
+            text-align: justify;
+            margin-bottom: 3rem;
+        }
+        .chart-section {
+            margin-top: 4rem;
+        }
+        .chart-container {
+            width: 100%;
+            height: 500px;
+            margin-top: 1.5rem;
+        }
+        .timeline-container {
+            width: 100%;
+            height: 400px;
+            margin-top: 1.5rem;
+        }
+        .chart-section h2 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #004080;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.5rem;
+        }
+        .chart-section p.description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #444;
+            margin-top: 0.5rem;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+            color: #777;
+            border-top: 1px solid #eee;
+        }
+        footer a {
+            color: #004080;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LUMEN Deep Dive</h1>
+        <a href="home.html" class="home-link">← Return to Dashboard Index</a>
+    </header>
+
+    <main>
+        <h1 class="page-title">Afghanistan: A Nation at a Crossroads</h1>
+        <p class="intro">
+            Following the collapse of the Islamic Republic and the return of the Taliban in August 2021, Afghanistan entered a new era defined by profound economic, security, and diplomatic shifts. This analysis visualizes key data points that illuminate the country's trajectory, from the collapse of its foreign aid-dependent economy to the changing security landscape and the rising influence of regional actors like China.
+        </p>
+
+        <div class="chart-section" id="aid-section">
+            <h2>The Collapse of Foreign Aid</h2>
+            <p class="description">For two decades, Afghanistan's economy was overwhelmingly dependent on foreign aid. This chart shows the net Official Development Assistance (ODA) from the top five bilateral donors, highlighting the dramatic cessation of funds after August 2021.</p>
+            <div id="aid-chart" class="chart-container"></div>
+        </div>
+        
+        <div class="chart-section" id="forex-section">
+            <h2>Frozen Assets</h2>
+            <p class="description">Immediately following the takeover, approximately $7 billion of Afghanistan's central bank foreign reserves held in the United States were frozen, severely limiting the new government's access to capital and its ability to manage the economy.</p>
+            <div id="forex-chart" class="chart-container"></div>
+        </div>
+
+        <div class="chart-section" id="security-section">
+            <h2>A Shifting Security Landscape</h2>
+            <p class="description">While the Taliban's victory ended their insurgency, it did not end terrorism. This chart tracks the number of attacks, showing how the Taliban's role shifted from the primary perpetrator to the state power combatting the new main anti-state actor: ISIS-Khorasan (ISIS-K).</p>
+            <div id="terror-chart" class="chart-container"></div>
+        </div>
+
+        <div class="chart-section" id="opium-section">
+            <h2>The War on Drugs</h2>
+            <p class="description">In April 2022, the Taliban government issued a strict ban on poppy cultivation. Data from the UNODC shows the immediate and dramatic impact of this policy, with cultivation collapsing by an estimated 95% in a single year.</p>
+            <div id="opium-chart" class="chart-container"></div>
+        </div>
+        
+        <div class="chart-section" id="minerals-section">
+            <h2>Untapped Mineral Wealth</h2>
+            <p class="description">Afghanistan possesses vast, untapped mineral resources, estimated to be worth over $1 trillion. The Taliban government is actively seeking foreign investment to exploit these deposits as a potential pathway to economic self-sufficiency.</p>
+            <div id="minerals-chart" class="chart-container"></div>
+        </div>
+
+        <div class="chart-section" id="china-section">
+            <h2>China's Ascending Role</h2>
+            <p class="description">As Western nations withdrew, China maintained its diplomatic presence and has since emerged as a key economic and diplomatic partner for the new government, signing major resource extraction deals and formally including Afghanistan in its Belt and Road Initiative (BRI).</p>
+            <div id="china-timeline" class="timeline-container"></div>
+        </div>
+
+    </main>
+
+    <footer>
+        © Venkatakrishnan Asuri ·
+        <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> ·
+        <a href="https://www.linkedin.com/in/asurixyz" target="_blank" rel="noopener">LinkedIn</a>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const PLOTLY_LAYOUT_DEFAULTS = {
+                font: { family: 'Georgia, serif' },
+                paper_bgcolor: '#fdfdfd',
+                plot_bgcolor: '#fdfdfd',
+                margin: { t: 90, b: 50, l: 80, r: 40 },
+                legend: { font: { size: 12 } }
+            };
+
+            // 1. Bilateral Aid Chart
+            function renderAidChart() {
+                const aidData = [
+                    { year: 2011, USA: 3.21, Germany: 0.55, Japan: 0.60, UK: 0.45, Canada: 0.30 }, { year: 2012, USA: 2.65, Germany: 0.45, Japan: 0.35, UK: 0.38, Canada: 0.25 },
+                    { year: 2013, USA: 1.98, Germany: 0.40, Japan: 0.30, UK: 0.32, Canada: 0.20 }, { year: 2014, USA: 1.55, Germany: 0.38, Japan: 0.25, UK: 0.28, Canada: 0.15 },
+                    { year: 2015, USA: 1.45, Germany: 0.42, Japan: 0.22, UK: 0.25, Canada: 0.12 }, { year: 2016, USA: 1.20, Germany: 0.35, Japan: 0.20, UK: 0.22, Canada: 0.10 },
+                    { year: 2017, USA: 1.15, Germany: 0.33, Japan: 0.18, UK: 0.20, Canada: 0.09 }, { year: 2018, USA: 0.85, Germany: 0.30, Japan: 0.15, UK: 0.18, Canada: 0.08 },
+                    { year: 2019, USA: 0.80, Germany: 0.28, Japan: 0.14, UK: 0.16, Canada: 0.07 }, { year: 2020, USA: 0.95, Germany: 0.32, Japan: 0.16, UK: 0.19, Canada: 0.09 },
+                    { year: 2021, USA: 0.75, Germany: 0.25, Japan: 0.12, UK: 0.14, Canada: 0.06 }, { year: 2022, USA: 0.15, Germany: 0.05, Japan: 0.02, UK: 0.03, Canada: 0.01 }
+                ];
+                const years = aidData.map(d => d.year);
+                const donors = ['USA', 'Germany', 'Japan', 'UK', 'Canada'];
+                const traces = donors.map(donor => ({
+                    x: years,
+                    y: aidData.map(d => d[donor]),
+                    name: donor,
+                    type: 'bar'
+                }));
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, barmode: 'stack', title: { text: "Bilateral Aid from Top 5 Donors (2011-2022)<br><sup>Source: OECD Statistics</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year', dtick: 1 }, yaxis: { title: 'Bilateral ODA (Billion USD)' },
+                    shapes: [{ type: 'line', x0: 2021.5, x1: 2021.5, y0: 0, y1: 5, line: { color: 'black', width: 2, dash: 'dash' } }],
+                    annotations: [{ x: 2021.4, y: 4.5, text: 'August 2021:<br>Cessation of<br>development aid', showarrow: false, xanchor: 'right' }]
+                };
+                Plotly.newPlot('aid-chart', traces, layout, {responsive: true});
+            }
+
+            // 2. Foreign Reserves Chart
+            function renderForexChart() {
+                const years = [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022];
+                const accessible = [5.8, 6.9, 7.2, 7.5, 7.8, 8.1, 8.5, 9.2, 9.6, 9.4, 2.4, 2.2];
+                const frozen = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7.0, 7.0];
+                const traces = [
+                    { x: years, y: accessible, name: 'Accessible', type: 'bar' },
+                    { x: years, y: frozen, name: 'Frozen (by U.S.)', type: 'bar' }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, barmode: 'stack', title: { text: "Central Bank Foreign Reserves (2011-2022)<br><sup>Source: IMF & World Bank</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year', dtick: 1 }, yaxis: { title: 'Total Foreign Reserves (Billion USD)' },
+                    shapes: [{ type: 'line', x0: 2021.5, x1: 2021.5, y0: 0, y1: 10, line: { color: 'black', width: 2, dash: 'dash' } }],
+                    annotations: [{ x: 2021.4, y: 9, text: 'August 2021:<br>~$7B in assets frozen', showarrow: false, xanchor: 'right' }]
+                };
+                Plotly.newPlot('forex-chart', traces, layout, {responsive: true});
+            }
+
+            // 3. Terror Attacks Chart
+            function renderTerrorChart() {
+                const years = [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023];
+                const taliban = [850, 1400, 1600, 1591, 1093, 1614, 1416, 1293, 1100, 1608, 950, 0, 0];
+                const isis_k = [0, 0, 0, 0, 11, 62, 119, 218, 123, 75, 290, 181, 90];
+                const traces = [
+                    { x: years, y: taliban, name: 'Taliban (as insurgents)', type: 'bar' },
+                    { x: years, y: isis_k, name: 'ISIS-K', type: 'bar' }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, barmode: 'stack', title: { text: "Terrorist Attacks in Afghanistan (2011-2023)<br><sup>Source: Global Terrorism Index</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year', dtick: 1 }, yaxis: { title: 'Number of Terrorist Attacks' },
+                    shapes: [{ type: 'line', x0: 2021.5, x1: 2021.5, y0: 0, y1: 1800, line: { color: 'black', width: 2, dash: 'dash' } }],
+                    annotations: [{ x: 2021.4, y: 1600, text: 'August 2021:<br>Taliban take power', showarrow: false, xanchor: 'right' }]
+                };
+                Plotly.newPlot('terror-chart', traces, layout, {responsive: true});
+            }
+
+            // 4. Opium Cultivation Chart
+            function renderOpiumChart() {
+                const opiumData = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], hectares: [131000, 154000, 209000, 224000, 183000, 201000, 328000, 263000, 163000, 224000, 177000, 233000, 10800] };
+                const traces = [{ x: opiumData.years, y: opiumData.hectares, type: 'bar', marker: { color: 'brown' } }];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Opium Poppy Cultivation (2011-2023)<br><sup>Source: UNODC</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year', dtick: 1 }, yaxis: { title: 'Area Under Cultivation (Hectares)' },
+                    shapes: [{ type: 'line', x0: 2022.5, x1: 2022.5, y0: 0, y1: 350000, line: { color: 'blue', width: 2, dash: 'dash' } }],
+                    annotations: [{ x: 2022.4, y: 300000, text: 'April 2022:<br>Taliban ban on<br>poppy cultivation', showarrow: false, xanchor: 'right', font: { color: 'blue' } }]
+                };
+                Plotly.newPlot('opium-chart', traces, layout, {responsive: true});
+            }
+
+            // 5. Mineral Wealth Chart
+            function renderMineralsChart() {
+                const mineralsData = { minerals: ["Lithium & Rare Earths", "Iron", "Copper", "Marble & Granite"], values: [1000, 420, 285, 150] };
+                const traces = [{ x: mineralsData.minerals, y: mineralsData.values, type: 'bar' }];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Estimated Value of Untapped Mineral Wealth<br><sup>Source: USGS</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Mineral Resource' }, yaxis: { title: 'Estimated Value (Billion USD)' }
+                };
+                Plotly.newPlot('minerals-chart', traces, layout, {responsive: true});
+            }
+
+            // 6. China Timeline
+            function renderChinaTimeline() {
+                const timelineData = [
+                    { date: "2021-09-15", event: "China keeps embassy open,<br>pledges emergency aid" },
+                    { date: "2022-08-01", event: "Grants duty-free access<br>to 98% of Afghan exports" },
+                    { date: "2023-01-05", event: "Signs 25-year oil contract<br>for Amu Darya basin" },
+                    { date: "2023-09-13", event: "Becomes first nation to appoint<br>new ambassador to Kabul" },
+                    { date: "2023-10-18", event: "Afghanistan formally joins<br>China's Belt and Road Initiative (BRI)" }
+                ];
+                const traces = [{
+                    x: timelineData.map(d => d.date),
+                    y: [0, 0, 0, 0, 0],
+                    mode: 'markers',
+                    marker: { color: '#d90734', size: 10 }
+                }];
+                const annotations = timelineData.map((d, i) => ({
+                    x: d.date,
+                    y: (i % 2 === 0) ? 0.05 : -0.05,
+                    xref: 'x',
+                    yref: 'y',
+                    text: `<b>${d.date.substring(0,7)}</b><br>${d.event}`,
+                    showarrow: true,
+                    arrowhead: 0,
+                    ax: 0,
+                    ay: (i % 2 === 0) ? -40 : 40
+                }));
+                const layout = {
+                    ...PLOTLY_LAYOUT_DEFAULTS,
+                    title: { text: "Timeline of China's Engagement (2021-2023)<br><sup>Source: Official announcements & news reports</sup>", font: { size: 18 } },
+                    yaxis: { visible: false, range: [-1, 1] },
+                    xaxis: { showgrid: false, tickformat: '%b<br>%Y' },
+                    annotations: annotations,
+                    showlegend: false
+                };
+                Plotly.newPlot('china-timeline', traces, layout, {responsive: true});
+            }
+
+
+            // Render all charts
+            renderAidChart();
+            renderForexChart();
+            renderTerrorChart();
+            renderOpiumChart();
+            renderMineralsChart();
+            renderChinaTimeline();
+        });
+    </script>
+</body>
+</html>

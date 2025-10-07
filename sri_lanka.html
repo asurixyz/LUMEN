@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMEN - Sri Lanka Deep Dive</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #fdfdfd;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .home-link {
+            color: #004080;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .home-link:hover {
+            text-decoration: underline;
+        }
+        main {
+            max-width: 900px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+        }
+        .page-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: #004080;
+            margin-bottom: 1rem;
+        }
+        .intro {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #333;
+            text-align: justify;
+            margin-bottom: 3rem;
+        }
+        .chart-section {
+            margin-top: 4rem;
+        }
+        .chart-container {
+            width: 100%;
+            height: 500px;
+            margin-top: 1.5rem;
+        }
+        .chart-section h2 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .chart-section h3 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #004080;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.5rem;
+            margin-top: 3rem;
+        }
+        .chart-section p.description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #444;
+            margin-top: 0.5rem;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+            color: #777;
+            border-top: 1px solid #eee;
+        }
+        footer a {
+            color: #004080;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LUMEN Deep Dive</h1>
+        <a href="home.html" class="home-link">← Return to Dashboard Index</a>
+    </header>
+
+    <main>
+        <h1 class="page-title">Sri Lanka: A Strategic Balancing Act</h1>
+        <p class="intro">
+            Sri Lanka's strategic location in the Indian Ocean has long made it a nexus of regional competition. In recent decades, this has been most clearly defined by its complex relationship with its traditional neighbor, India, and its largest bilateral creditor, China. This analysis visualizes the key economic and military metrics that underscore Sri Lanka's delicate balancing act between these two Asian giants.
+        </p>
+
+        <div class="chart-section">
+            <h2>The Economic Dimension</h2>
+
+            <h3>Bilateral Debt</h3>
+            <p class="description">Following a period of extensive infrastructure development, China emerged as Sri Lanka's largest bilateral creditor. This chart tracks the evolution of outstanding debt owed to both India and China, showing a significant surge in Chinese loans post-2008.</p>
+            <div id="debt-chart" class="chart-container"></div>
+            
+            <h3>Foreign Direct Investment (FDI)</h3>
+            <p class="description">FDI inflows show a more volatile pattern, with significant spikes in Chinese investment corresponding to major infrastructure projects like the Colombo Port City. Indian FDI, while historically more consistent, has also seen recent growth.</p>
+            <div id="fdi-chart" class="chart-container"></div>
+
+            <h3>Bilateral Trade</h3>
+            <p class="description">Trade flows highlight a structural imbalance, particularly with China, where imports have consistently and dramatically outpaced Sri Lanka's exports, leading to a significant trade deficit.</p>
+            <div id="trade-chart" class="chart-container"></div>
+        </div>
+
+        <div class="chart-section">
+            <h2>The Strategic & Military Dimension</h2>
+
+            <h3>Arms Transfers</h3>
+            <p class="description">Using SIPRI's Trend Indicator Values, this chart tracks the volume of major arms transfers. It shows significant Chinese support during the final phase of the Sri Lankan Civil War and sporadic transfers from both nations in subsequent years.</p>
+            <div id="arms-chart" class="chart-container"></div>
+            
+            <h3>Military Training</h3>
+            <p class="description">India has historically been the dominant partner for training Sri Lankan armed forces personnel, consistently offering a significantly higher number of training slots and courses compared to China.</p>
+            <div id="training-chart" class="chart-container"></div>
+
+            <h3>High-Level Defence Visits</h3>
+            <p class="description">The frequency of official visits by high-level defence delegations (Ministers, NSAs, Service Chiefs) serves as a proxy for the intensity of strategic engagement, showing a consistent tempo of visits from India.</p>
+            <div id="visits-chart" class="chart-container"></div>
+        </div>
+    </main>
+
+    <footer>
+        © Venkatakrishnan Asuri ·
+        <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> ·
+        <a href="https://www.linkedin.com/in/asurixyz" target="_blank" rel="noopener">LinkedIn</a>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const PLOTLY_LAYOUT_DEFAULTS = {
+                font: { family: 'Georgia, serif' },
+                paper_bgcolor: '#fdfdfd',
+                plot_bgcolor: '#fdfdfd',
+                margin: { t: 90, b: 50, l: 80, r: 40 },
+                legend: { font: { size: 12 }, orientation: 'h', y: -0.2, x: 0.5, xanchor: 'center' }
+            };
+            const COLOR_INDIA = "#d95f02"; // Earthy Orange
+            const COLOR_CHINA = "#1b9e77"; // Deep Teal
+
+            function renderDebtChart() {
+                const data = { years: Array.from({length: 18}, (_, i) => 2005 + i), china: [175, 280, 450, 620, 850, 1210, 1640, 2156, 2697, 3452, 4107, 4398, 5092, 5321, 5504, 4791, 6863, 7350], india: [290, 320, 365, 410, 470, 512, 558, 595, 665, 781, 843, 915, 986, 1105, 1243, 1472, 1750, 1945]};
+                const traces = [
+                    { x: data.years, y: data.india, name: 'India', type: 'scatter', mode: 'lines+markers', line: { color: COLOR_INDIA, width: 2.5 } },
+                    { x: data.years, y: data.china, name: 'China', type: 'scatter', mode: 'lines+markers', line: { color: COLOR_CHINA, width: 2.5 } }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Outstanding Bilateral Debt (2005-2022)<br><sup>Source: Central Bank of Sri Lanka</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year', dtick: 2 }, yaxis: { title: 'Debt (US$ Million)' }
+                };
+                Plotly.newPlot('debt-chart', traces, layout, {responsive: true});
+            }
+
+            function renderFdiChart() {
+                const data = { years: Array.from({length: 17}, (_, i) => 2006 + i), china: [1.0, 10.0, 12.0, 13.0, 23.0, 49.0, 135.0, 197.8, 439.0, 146.1, 144.1, 210.4, 337.8, 175.0, 89.2, 74.3, 91.8], india: [42.0, 125.0, 42.6, 21.5, 51.7, 106.8, 120.3, 52.7, 85.6, 38.9, 48.2, 190.5, 206.6, 138.8, 71.5, 142.1, 111.4] };
+                const traces = [
+                    { x: data.years, y: data.india, name: 'India', type: 'scatter', mode: 'lines+markers', line: { color: COLOR_INDIA, width: 2.5 } },
+                    { x: data.years, y: data.china, name: 'China', type: 'scatter', mode: 'lines+markers', line: { color: COLOR_CHINA, width: 2.5 } }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "FDI Inflows (2006-2022)<br><sup>Source: Central Bank of Sri Lanka</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year', dtick: 2 }, yaxis: { title: 'FDI Inflow (US$ Million)' }
+                };
+                Plotly.newPlot('fdi-chart', traces, layout, {responsive: true});
+            }
+
+            function renderTradeChart() {
+                const data = { years: Array.from({length: 23}, (_, i) => 1999 + i),
+                    imports_india: [512, 600, 601, 853, 1073, 1439, 1835, 2173, 2610, 3447, 1820, 2570, 4431, 3640, 3171, 4023, 4268, 3815, 4527, 4231, 3899, 3079, 4625],
+                    exports_india: [49, 58, 72, 171, 245, 392, 566, 489, 515, 418, 322, 474, 519, 567, 544, 625, 643, 554, 691, 777, 768, 606, 829],
+                    imports_china: [224, 251, 269, 375, 549, 658, 839, 1060, 1310, 2180, 1260, 1990, 2900, 3150, 3350, 3580, 3940, 4310, 4580, 4450, 4210, 3580, 4790],
+                    exports_china: [27.6, 26.2, 33.5, 46.1, 73, 108, 117, 137, 133, 218, 171, 283, 331, 307, 287, 282, 344, 380, 412, 521, 515, 459, 343]
+                };
+                const traces = [
+                    { x: data.years, y: data.imports_india, name: 'Imports from India', type: 'scatter', mode: 'lines', line: { color: COLOR_INDIA, width: 2.5 } },
+                    { x: data.years, y: data.exports_india, name: 'Exports to India', type: 'scatter', mode: 'lines', line: { color: COLOR_INDIA, width: 2, dash: 'dot' } },
+                    { x: data.years, y: data.imports_china, name: 'Imports from China', type: 'scatter', mode: 'lines', line: { color: COLOR_CHINA, width: 2.5 } },
+                    { x: data.years, y: data.exports_china, name: 'Exports to China', type: 'scatter', mode: 'lines', line: { color: COLOR_CHINA, width: 2, dash: 'dot' } }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Bilateral Trade Flows (1999-2021)<br><sup>Source: HCoI Colombo, OEC</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year', dtick: 3 }, yaxis: { title: 'Trade Value (US$ Million)' }
+                };
+                Plotly.newPlot('trade-chart', traces, layout, {responsive: true});
+            }
+
+            function renderArmsChart() {
+                const data = { years: Array.from({length: 23}, (_, i) => 2000 + i), china: [16, 0, 0, 0, 0, 1, 31, 107, 102, 59, 1, 23, 11, 34, 153, 0, 0, 0, 118, 0, 0, 24, 0], india: [10, 20, 0, 0, 0, 0, 41, 5, 0, 0, 3, 0, 10, 0, 0, 0, 2, 5, 43, 0, 2, 50, 0] };
+                const traces = [
+                    { x: data.years, y: data.india, name: 'India', type: 'scatter', mode: 'lines+markers', line: { color: COLOR_INDIA, width: 2.5 } },
+                    { x: data.years, y: data.china, name: 'China', type: 'scatter', mode: 'lines+markers', line: { color: COLOR_CHINA, width: 2.5 } }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Major Arms Transfers (2000-2022)<br><sup>Source: SIPRI Arms Transfers Database</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year of Delivery', dtick: 2 }, yaxis: { title: 'Arms Transfer Volume (TIV, US$ M)' }
+                };
+                Plotly.newPlot('arms-chart', traces, layout, {responsive: true});
+            }
+
+            function renderTrainingChart() {
+                const data = { years: Array.from({length: 13}, (_, i) => 2010 + i), india: [450, 500, 800, 950, 1100, 1250, 1400, 1300, 1500, 1450, 900, 1100, 1350], china: [25, 30, 35, 40, 55, 60, 50, 70, 75, 65, 40, 30, 45] };
+                const traces = [
+                    { x: data.years, y: data.india, name: 'India', type: 'bar', marker: { color: COLOR_INDIA } },
+                    { x: data.years, y: data.china, name: 'China', type: 'bar', marker: { color: COLOR_CHINA } }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, barmode: 'group', title: { text: "Military Training Slots Provided (2010-2022)<br><sup>Source: Ministry of Defence, Sri Lanka</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year', dtick: 1 }, yaxis: { title: 'Number of Training Slots' }
+                };
+                Plotly.newPlot('training-chart', traces, layout, {responsive: true});
+            }
+
+            function renderVisitsChart() {
+                const data = { years: Array.from({length: 13}, (_, i) => 2010 + i), india: [3, 4, 4, 5, 3, 4, 5, 4, 6, 5, 2, 3, 5], china: [1, 1, 1, 2, 2, 1, 3, 2, 2, 1, 1, 0, 1] };
+                const traces = [
+                    { x: data.years, y: data.india, name: 'India', type: 'bar', marker: { color: COLOR_INDIA } },
+                    { x: data.years, y: data.china, name: 'China', type: 'bar', marker: { color: COLOR_CHINA } }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, barmode: 'group', title: { text: "High-Level Defence & Security Visits (2010-2022)<br><sup>Source: Official Govt. Press Releases</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year', dtick: 1 }, yaxis: { title: 'Number of High-Level Visits' }
+                };
+                Plotly.newPlot('visits-chart', traces, layout, {responsive: true});
+            }
+
+            // Render all charts
+            renderDebtChart();
+            renderFdiChart();
+            renderTradeChart();
+            renderArmsChart();
+            renderTrainingChart();
+            renderVisitsChart();
+        });
+    </script>
+</body>
+</html>

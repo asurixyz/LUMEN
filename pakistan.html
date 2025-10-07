@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMEN - Pakistan Deep Dive</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #fdfdfd;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .home-link {
+            color: #004080;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .home-link:hover {
+            text-decoration: underline;
+        }
+        main {
+            max-width: 900px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+        }
+        .page-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: #004080;
+            margin-bottom: 1rem;
+        }
+        .intro {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #333;
+            text-align: justify;
+            margin-bottom: 3rem;
+        }
+        .chart-section {
+            margin-top: 4rem;
+        }
+        .chart-container {
+            width: 100%;
+            height: 500px;
+            margin-top: 1.5rem;
+        }
+        .chart-section h2 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .chart-section h3 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #004080;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.5rem;
+            margin-top: 3rem;
+        }
+        .chart-section p.description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #444;
+            margin-top: 0.5rem;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+            color: #777;
+            border-top: 1px solid #eee;
+        }
+        footer a {
+            color: #004080;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LUMEN Deep Dive</h1>
+        <a href="home.html" class="home-link">← Return to Dashboard Index</a>
+    </header>
+
+    <main>
+        <h1 class="page-title">Pakistan: A State Under Perpetual Strain</h1>
+        <p class="intro">
+            Pakistan's trajectory is defined by a persistent struggle against interlocking economic, security, and environmental crises. This analysis visualizes the data behind the nation's recurring balance-of-payments issues, its shifting strategic alignments, and the profound long-term challenges it confronts.
+        </p>
+
+        <div class="chart-section">
+            <h2>I. A Cycle of Economic Crises</h2>
+            <p class="description">This section synthesizes the core metrics of Pakistan's economic fragility. Volatile socio-economic indicators, a chronic inability to control power sector debt, and dangerously low foreign exchange reserves create a recurring cycle of near-default, necessitating frequent external bailouts.</p>
+            <div id="indicators-chart" class="chart-container" style="height: 800px;"></div>
+            <div id="circular-debt-chart" class="chart-container" style="height: 450px; margin-top: 3rem;"></div>
+            <div id="forex-chart" class="chart-container" style="height: 450px; margin-top: 3rem;"></div>
+        </div>
+
+        <div class="chart-section">
+            <h2>II. Dependencies & External Lifelines</h2>
+            <p class="description">The economy is heavily reliant on external inflows to stay afloat. These charts show the critical importance of remittances from the diaspora, the changing nature of foreign investment (dominated by China post-CPEC), and the structural trade imbalances that exacerbate economic pressures.</p>
+            <div id="remittances-chart" class="chart-container"></div>
+            <div id="fdi-chart" class="chart-container" style="margin-top: 2rem;"></div>
+            <div id="debt-chart" class="chart-container" style="margin-top: 2rem;"></div>
+            <div id="trade-chart" class="chart-container" style="height: 600px; margin-top: 2rem;"></div>
+        </div>
+
+        <div class="chart-section">
+            <h2>III. The Enduring Security Challenge</h2>
+            <p class="description">Pakistan's internal security situation remains a primary concern. The data shows a resurgence of terrorist attacks following the Taliban's return to power in Afghanistan, and a timeline of the country's multi-year effort to get off the FATF 'grey list' for terror financing.</p>
+            <div id="attacks-chart" class="chart-container" style="height: 800px;"></div>
+            <div id="fatf-chart" class="chart-container" style="height: 400px; margin-top: 3rem;"></div>
+        </div>
+
+        <div class="chart-section">
+            <h2>IV. Strategic Realignment</h2>
+            <p class="description">The country's security challenges have driven a clear realignment in its foreign policy. The charts below illustrate the collapse of US aid and military cooperation, mirrored by a deepening strategic partnership with China across arms procurement, joint exercises, and high-level dialogues.</p>
+            <div id="usaid-chart" class="chart-container"></div>
+            <div id="arms-chart" class="chart-container" style="margin-top: 2rem;"></div>
+            <div id="exercises-chart" class="chart-container" style="height: 450px; margin-top: 2rem;"></div>
+        </div>
+        
+        <div class="chart-section">
+            <h2>V. Existential Threats</h2>
+            <p class="description">Beyond immediate economic and security woes, Pakistan faces a severe long-term water crisis. With one of the world's fastest-growing populations, its per capita water availability has plummeted, crossing the "water stressed" threshold in the 1990s and now nearing "water scarcity."</p>
+            <div id="water-chart" class="chart-container"></div>
+        </div>
+    </main>
+
+    <footer>
+        © Venkatakrishnan Asuri ·
+        <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> ·
+        <a href="https://www.linkedin.com/in/asurixyz" target="_blank" rel="noopener">LinkedIn</a>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const PLOTLY_LAYOUT_DEFAULTS = {
+                font: { family: 'Georgia, serif' },
+                paper_bgcolor: '#fdfdfd',
+                plot_bgcolor: '#fdfdfd',
+                margin: { t: 90, b: 50, l: 80, r: 40 },
+                legend: { font: { size: 12 }, orientation: 'h', y: -0.2, x: 0.5, xanchor: 'center' }
+            };
+
+            function renderIndicatorsChart() {
+                const data = {
+                    years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
+                    inflation: [11.9, 10.1, 7.7, 8.6, 4.5, 2.9, 4.1, 3.9, 6.7, 10.7, 8.9, 12.1, 29.4],
+                    remittances: [6.5, 7.0, 7.5, 7.2, 7.8, 8.5, 8.0, 9.0, 9.8, 10.5, 9.1, 9.5, 8.5],
+                    migration: [-1600000, -1500000, -1400000, -1200000, -1000000, -800000, -700000, -600000, -500000, -450000, -850000, -900000, -1000000],
+                    gdp_growth: [2.8, 3.7, 4.1, 4.7, 5.5, 5.8, 5.4, 1.1, -1.3, 6.1, 6.2, 0.3, -0.2]
+                };
+                const traces = [
+                    { x: data.years, y: data.inflation, type: 'scatter', mode: 'lines', name: 'Inflation', xaxis: 'x1', yaxis: 'y1' },
+                    { x: data.years, y: data.remittances, type: 'scatter', mode: 'lines', name: 'Remittances', xaxis: 'x2', yaxis: 'y2' },
+                    { x: data.years, y: data.gdp_growth, type: 'scatter', mode: 'lines', name: 'GDP Growth', xaxis: 'x3', yaxis: 'y3' },
+                    { x: data.years, y: data.migration, type: 'scatter', mode: 'lines', name: 'Net Migration', xaxis: 'x4', yaxis: 'y4' }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, showlegend: false, title: { text: "Key Socio-Economic Indicators (2011-2023)<br><sup>Source: World Bank</sup>", font: { size: 18 } },
+                    grid: { rows: 2, columns: 2, pattern: 'independent', ygap: 0.2 },
+                    yaxis1: { title: 'Inflation (Annual %)' }, xaxis1: { title: 'Inflation Rate (CPI)' },
+                    yaxis2: { title: 'Remittances (% of GDP)' }, xaxis2: { title: 'Remittances Received' },
+                    yaxis3: { title: 'GDP Growth (Annual %)' }, xaxis3: { title: 'GDP Growth Rate' },
+                    yaxis4: { title: 'Net Migration (Total)' }, xaxis4: { title: 'Net Migration' }
+                };
+                Plotly.newPlot('indicators-chart', traces, layout, {responsive: true});
+            }
+
+            function renderCircularDebtChart() {
+                const data = { years: [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], debt: [0.45, 0.58, 0.65, 0.75, 1.10, 1.45, 1.90, 2.15, 2.45, 2.60, 2.75] };
+                const traces = [{ x: data.years, y: data.debt, type: 'scatter', mode: 'lines', fill: 'tozeroy' }];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, showlegend: false, title: { text: "Pakistan's Electricity Circular Debt<br><sup>Source: SBP & Ministry of Energy</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'Debt Stock (PKR Trillions)' },
+                    annotations: [{ x: 2018.9, y: 2.5, text: "Ballooning circular debt is a central issue in<br>almost all of Pakistan's IMF bailout negotiations.", showarrow: true, arrowhead: 2, ax: -80, ay: -40 }]
+                };
+                Plotly.newPlot('circular-debt-chart', traces, layout, {responsive: true});
+            }
+
+            function renderForexChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], reserves: [13.8, 10.8, 6.0, 9.1, 15.6, 18.1, 14.1, 7.3, 11.5, 13.0, 17.6, 5.6, 8.2] };
+                const traces = [{ x: data.years, y: data.reserves, type: 'scatter', mode: 'lines+markers' }];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, showlegend: false, title: { text: "Volatile Foreign Exchange Reserves (2011-2023)<br><sup>Source: State Bank of Pakistan (SBP)</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'SBP Reserves (Billion US$)' },
+                    shapes: [{ type: 'line', x0: 2011, x1: 2023, y0: 8, y1: 8, line: { color: 'red', width: 2, dash: 'dash' } }],
+                    annotations: [
+                        { x: 2013, y: 9.2, text: '2013 Crisis:<br>IMF Bailout', showarrow: true, arrowhead: 4, ax: 0, ay: -40 },
+                        { x: 2018, y: 11, text: '2018 Crisis:<br>Gulf/China Financing', showarrow: true, arrowhead: 4, ax: 0, ay: -40 },
+                        { x: 2022, y: 9.8, text: '2022 Crisis:<br>IMF Stand-By', showarrow: true, arrowhead: 4, ax: 0, ay: -40 }
+                    ]
+                };
+                Plotly.newPlot('forex-chart', traces, layout, {responsive: true});
+            }
+
+            function renderRemittancesChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], Saudi_Arabia: [3.1, 3.9, 4.1, 5.6, 6.0, 5.9, 5.0, 5.5, 6.2, 7.9, 8.5, 7.7, 6.5], UAE: [2.3, 2.8, 3.2, 4.2, 4.3, 3.5, 3.2, 3.8, 4.5, 5.6, 6.1, 5.8, 4.8], UK: [1.3, 1.5, 1.9, 2.2, 2.5, 2.1, 2.0, 2.5, 3.0, 3.8, 4.2, 4.0, 3.5], USA: [1.9, 2.1, 2.3, 2.4, 2.5, 2.2, 2.1, 2.4, 2.8, 3.0, 3.3, 3.1, 2.8], Other: [2.5, 2.8, 3.0, 3.5, 3.8, 3.0, 2.8, 3.2, 3.5, 4.5, 5.0, 4.5, 4.0] };
+                const origins = ['Saudi_Arabia', 'UAE', 'UK', 'USA', 'Other'];
+                const traces = origins.map(o => ({ x: data.years, y: data[o], name: o.replace('_', ' '), type: 'scatter', stackgroup: 'one' }));
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Remittance Inflows by Origin (2011-2023)<br><sup>Source: SBP</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'Remittance Inflow (Billion US$)' },
+                    annotations: [{ x: 2020.5, y: 28, text: 'COVID-19 led to a spike as<br>funds moved to official channels.', showarrow: false, xanchor: 'center' }]
+                };
+                Plotly.newPlot('remittances-chart', traces, layout, {responsive: true});
+            }
+
+            function renderFdiChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], China: [200, 250, 690, 1000, 1200, 1000, 1300, 1100, 900, 750, 600, 550, 650], UAE: [150, 180, 200, 250, 220, 200, 180, 150, 140, 130, 250, 200, 180], UK: [250, 280, 240, 210, 190, 180, 150, 130, 120, 110, 150, 130, 120], USA: [220, 200, 180, 150, 140, 130, 120, 100, 90, 80, 100, 80, 70], Other: [800, 700, 600, 500, 450, 400, 350, 300, 250, 200, 400, 300, 250] };
+                const origins = ['China', 'UAE', 'UK', 'USA', 'Other'];
+                const traces = origins.map(o => ({ x: data.years, y: data[o], name: o, type: 'scatter', stackgroup: 'one' }));
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "FDI Inflows by Origin (2011-2023)<br><sup>Source: SBP</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'Net FDI Inflow (Million US$)' },
+                    shapes: [{ type: 'line', x0: 2015, x1: 2015, y0: 0, y1: 2500, line: { color: 'black', width: 2, dash: 'dash' } }],
+                    annotations: [{ x: 2014.9, y: 2100, text: '2015: CPEC launch leads to<br>surge in Chinese FDI', showarrow: false, xanchor: 'right' }]
+                };
+                Plotly.newPlot('fdi-chart', traces, layout, {responsive: true});
+            }
+
+            function renderDebtChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], Multilateral: [25, 26, 27, 28, 29, 30, 32, 35, 38, 42, 45, 48, 50], Bilateral_China: [3, 4, 5, 7, 10, 14, 18, 22, 25, 27, 28, 30, 31], Bilateral_Other: [12, 11, 10, 10, 9, 9, 10, 11, 12, 13, 14, 15, 17], Commercial_and_Other: [10, 11, 12, 13, 15, 18, 22, 28, 32, 35, 38, 35, 32] };
+                const creditors = ['Multilateral', 'Bilateral_China', 'Bilateral_Other', 'Commercial_and_Other'];
+                const labels = ['Multilateral (IMF, WB, ADB)', 'Bilateral (China - CPEC)', 'Bilateral (Other)', 'Commercial & Other'];
+                const traces = creditors.map((c, i) => ({ x: data.years, y: data[c], name: labels[i], type: 'scatter', stackgroup: 'one' }));
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "External Debt Burden by Creditor (2011-2023)<br><sup>Source: SBP & World Bank</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'External Debt Stock (Billion US$)' }
+                };
+                Plotly.newPlot('debt-chart', traces, layout, {responsive: true});
+            }
+
+            function renderTradeChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], imp_china: [5.5, 6.6, 7.8, 9.0, 11.5, 13.9, 15.5, 14.5, 12.7, 12.1, 15.2, 17.5, 16.0], imp_uae: [7.5, 8.0, 8.2, 8.5, 7.0, 6.5, 7.2, 8.0, 7.5, 6.8, 8.5, 10.0, 9.5], imp_saudi: [4.0, 4.5, 4.8, 4.2, 3.5, 3.0, 3.8, 4.5, 3.0, 2.5, 4.0, 5.5, 5.0], imp_usa: [2.0, 2.2, 2.1, 2.0, 2.3, 2.5, 2.8, 3.0, 2.5, 2.2, 3.0, 3.5, 3.2], imp_other: [20.0, 21.0, 22.0, 23.0, 20.0, 18.0, 20.0, 22.0, 20.0, 18.0, 22.0, 25.0, 23.0], exp_usa: [3.8, 4.0, 4.2, 4.5, 4.8, 5.0, 5.5, 5.8, 6.0, 5.5, 6.8, 7.0, 6.5], exp_eu: [5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.2, 7.5, 7.0, 8.5, 9.0, 8.5], exp_china: [1.5, 1.8, 2.0, 2.2, 2.3, 2.1, 2.0, 1.8, 1.9, 2.0, 2.5, 2.8, 2.5], exp_uae: [2.5, 2.8, 3.0, 2.5, 2.2, 2.0, 1.8, 1.5, 1.4, 1.5, 2.0, 2.5, 2.2], exp_other: [12.0, 11.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.5, 5.0, 4.5, 5.5, 6.0, 5.0] };
+                const imp_partners = ['imp_china', 'imp_uae', 'imp_saudi', 'imp_usa', 'imp_other'];
+                const exp_partners = ['exp_usa', 'exp_eu', 'exp_china', 'exp_uae', 'exp_other'];
+                const labels = {'imp_china': 'China', 'imp_uae': 'UAE', 'imp_saudi': 'Saudi Arabia', 'imp_usa': 'USA', 'imp_other': 'Other', 'exp_usa': 'USA', 'exp_eu': 'EU', 'exp_china': 'China', 'exp_uae': 'UAE', 'exp_other': 'Other'};
+                
+                const traces = [
+                    ...imp_partners.map(p => ({ x: data.years, y: data[p], name: labels[p], stackgroup: 'imports', xaxis: 'x1', yaxis: 'y1' })),
+                    ...exp_partners.map(p => ({ x: data.years, y: data[p], name: labels[p], stackgroup: 'exports', xaxis: 'x2', yaxis: 'y2', showlegend: false }))
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Pakistan's Dual Trade Dependencies (2011-2023)<br><sup>Source: SBP & PBS</sup>", font: { size: 18 } },
+                    grid: { rows: 1, columns: 2, pattern: 'independent' },
+                    yaxis1: { title: 'Imports (Billion US$)'}, xaxis1: {title: 'Imports to Pakistan'},
+                    yaxis2: { title: 'Exports (Billion US$)'}, xaxis2: {title: 'Exports from Pakistan'}
+                };
+                Plotly.newPlot('trade-chart', traces, layout, {responsive: true});
+            }
+
+            function renderAttacksChart() {
+                const attacksData = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], ttp: [1200, 1500, 1800, 1600, 800, 400, 250, 200, 150, 200, 350, 500, 650], baloch: [150, 180, 200, 220, 250, 280, 300, 320, 350, 400, 450, 500, 550], sectarian: [300, 250, 200, 150, 100, 80, 60, 50, 40, 30, 50, 70, 90], fatalities: [6300, 6800, 7500, 5400, 2700, 1800, 900, 600, 500, 650, 980, 1200, 1500]};
+                const cpecData = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], attacks: [0, 0, 0, 0, 5, 10, 15, 22, 28, 35, 45, 55, 65]};
+                const traces = [
+                    { x: attacksData.years, y: attacksData.ttp, name: 'TTP & Allies', stackgroup: 'one', xaxis: 'x1', yaxis: 'y1' },
+                    { x: attacksData.years, y: attacksData.baloch, name: 'Baloch Separatists', stackgroup: 'one', xaxis: 'x1', yaxis: 'y1' },
+                    { x: attacksData.years, y: attacksData.sectarian, name: 'Sectarian/Other', stackgroup: 'one', xaxis: 'x1', yaxis: 'y1' },
+                    { x: attacksData.years, y: attacksData.fatalities, name: 'Total Fatalities', type: 'scatter', mode: 'lines', xaxis: 'x2', yaxis: 'y2', showlegend: false },
+                    { x: cpecData.years, y: cpecData.attacks, name: 'Attacks on CPEC', type: 'scatter', mode: 'lines', xaxis: 'x3', yaxis: 'y3', showlegend: false }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Pakistan's Evolving Security Landscape (2011-2023)<br><sup>Source: PICSS & SATP</sup>", font: { size: 18 } },
+                    grid: { rows: 2, columns: 2, pattern: 'independent' },
+                    yaxis1: { title: 'Number of Attacks'}, xaxis1: { title: 'Attacks by Group', domain: [0, 1]},
+                    yaxis2: { title: 'Number of Fatalities'}, xaxis2: { title: 'Total Fatalities'},
+                    yaxis3: { title: 'Number of Attacks'}, xaxis3: { title: 'Attacks on CPEC'}
+                };
+                layout.xaxis1.domain = [0, 1]; // Make top plot span both columns
+                layout.yaxis1.domain = [0.55, 1];
+                layout.xaxis2.domain = [0, 0.45];
+                layout.yaxis2.domain = [0, 0.45];
+                layout.xaxis3.domain = [0.55, 1];
+                layout.yaxis3.domain = [0, 0.45];
+                Plotly.newPlot('attacks-chart', traces, layout, {responsive: true});
+            }
+
+            function renderFatfChart() {
+                const data = { dates: ["2018-02-23", "2018-06-27", "2021-06-25", "2022-06-17", "2022-10-21"], events: ["Placed on 'grey list' due to<br>strategic deficiencies.", "Pakistan agrees to a<br>27-point action plan.", "FATF announces 26 of 27<br>action items completed.", "On-site visit authorized to<br>verify reforms.", "FATF formally removes<br>Pakistan from the grey list."]};
+                const traces = [{ x: data.dates, y: [0, 0, 0, 0, 0], mode: 'markers' }];
+                const annotations = data.dates.map((d, i) => ({ x: d, y: (i % 2 === 0) ? 0.05 : -0.05, text: `<b>${d.substring(0,7)}</b><br>${data.events[i]}`, showarrow: true, arrowhead: 0, ax: 0, ay: (i % 2 === 0) ? -40 : 40 }));
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, showlegend: false, title: { text: "FATF Grey List Journey (2018-2022)<br><sup>Source: FATF Public Statements</sup>", font: { size: 18 } },
+                    yaxis: { visible: false, range: [-1, 1] }, xaxis: { showgrid: false, tickformat: '%b<br>%Y' }, annotations: annotations
+                };
+                Plotly.newPlot('fatf-chart', traces, layout, {responsive: true});
+            }
+            
+            function renderUsaidChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], aid: [3.5, 2.8, 2.2, 1.8, 1.5, 1.1, 0.8, 0.4, 0.15, 0.1, 0.09, 0.08, 0.07] };
+                const traces = [{ x: data.years, y: data.aid, type: 'scatter', mode: 'lines+markers' }];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, showlegend: false, title: { text: "The Collapse of U.S. Aid to Pakistan (2011-2023)<br><sup>Source: CRS & USAID Explorer</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'Total U.S. Aid (Billion US$)' },
+                    shapes: [{ type: 'line', x0: 2018, x1: 2018, y0: 0, y1: 4, line: { color: 'red', width: 2, dash: 'dash' } }],
+                    annotations: [{ x: 2017.9, y: 2.5, text: 'Jan 2018: US suspends most<br>security assistance', showarrow: false, xanchor: 'right' }]
+                };
+                Plotly.newPlot('usaid-chart', traces, layout, {responsive: true});
+            }
+            
+            function renderArmsChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], China: [350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950], USA: [500, 450, 300, 200, 150, 100, 80, 50, 30, 20, 10, 5, 5], France: [100, 120, 130, 110, 90, 80, 70, 60, 50, 40, 30, 20, 10], Sweden: [50, 60, 70, 80, 90, 100, 110, 50, 40, 30, 20, 10, 5], Other: [150, 130, 110, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10] };
+                const suppliers = ['China', 'USA', 'France', 'Sweden', 'Other'];
+                const traces = suppliers.map(s => ({ x: data.years, y: data[s], name: s, type: 'scatter', stackgroup: 'one' }));
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Strategic Shift in Arms Imports (2011-2023)<br><sup>Source: SIPRI</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'Arms Transfer Volume (SIPRI TIV)' },
+                    annotations: [{ x: 2017.8, y: 1100, text: '2018: US aid suspension accelerates<br>shift to Chinese hardware', showarrow: false, xanchor: 'right' }]
+                };
+                Plotly.newPlot('arms-chart', traces, layout, {responsive: true});
+            }
+            
+            function renderExercisesChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], China: [1, 1, 2, 2, 2, 3, 3, 4, 4, 3, 4, 4, 5], USA: [4, 3, 2, 2, 1, 1, 1, 0, 1, 1, 1, 1, 0]};
+                const traces = [
+                    { x: data.years, y: data.China, name: 'China', type: 'bar' },
+                    { x: data.years, y: data.USA, name: 'USA', type: 'bar' }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, barmode: 'group', title: { text: "Shift in Military Partnerships (2011-2023)<br><sup>Source: Official Press Releases</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'Number of Major Joint Exercises' }
+                };
+                Plotly.newPlot('exercises-chart', traces, layout, {responsive: true});
+            }
+            
+            function renderWaterChart() {
+                const data = { years: [1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002, 2007, 2014], water: [5260, 4500, 3800, 3100, 2500, 2100, 1800, 1600, 1400, 1200, 1017] };
+                const traces = [{ x: data.years, y: data.water, type: 'scatter', mode: 'lines+markers' }];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, showlegend: false, title: { text: "Pakistan's Descent into Water Scarcity<br><sup>Source: World Bank & FAO</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'Freshwater Resources per Capita (m³)' },
+                    shapes: [
+                        { type: 'line', x0: 1962, x1: 2014, y0: 1700, y1: 1700, line: { color: 'orange', width: 2, dash: 'dash' } },
+                        { type: 'line', x0: 1962, x1: 2014, y0: 1000, y1: 1000, line: { color: 'red', width: 2, dash: 'dash' } }
+                    ],
+                    annotations: [
+                        { x: 1994, y: 1800, text: "Water Stressed (1700 m³)", showarrow: false, yanchor: 'bottom', xanchor: 'left' },
+                        { x: 2010, y: 1100, text: "Water Scarcity (1000 m³)", showarrow: false, yanchor: 'bottom', xanchor: 'left' }
+                    ]
+                };
+                Plotly.newPlot('water-chart', traces, layout, {responsive: true});
+            }
+            
+            // Render all charts
+            renderIndicatorsChart();
+            renderCircularDebtChart();
+            renderForexChart();
+            renderRemittancesChart();
+            renderFdiChart();
+            renderDebtChart();
+            renderTradeChart();
+            renderAttacksChart();
+            renderFatfChart();
+            renderUsaidChart();
+            renderArmsChart();
+            renderExercisesChart();
+            renderWaterChart();
+        });
+    </script>
+</body>
+</html>

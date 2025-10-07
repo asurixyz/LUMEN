@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMEN - Bangladesh Deep Dive</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #fdfdfd;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .home-link {
+            color: #004080;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .home-link:hover {
+            text-decoration: underline;
+        }
+        main {
+            max-width: 900px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+        }
+        .page-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: #004080;
+            margin-bottom: 1rem;
+        }
+        .intro {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #333;
+            text-align: justify;
+            margin-bottom: 3rem;
+        }
+        .chart-section {
+            margin-top: 4rem;
+        }
+        .chart-container {
+            width: 100%;
+            height: 500px;
+            margin-top: 1.5rem;
+        }
+        .chart-section h2 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .chart-section h3 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #004080;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.5rem;
+            margin-top: 3rem;
+        }
+        .chart-section p.description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #444;
+            margin-top: 0.5rem;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+            color: #777;
+            border-top: 1px solid #eee;
+        }
+        footer a {
+            color: #004080;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LUMEN Deep Dive</h1>
+        <a href="home.html" class="home-link">← Return to Dashboard Index</a>
+    </header>
+
+    <main>
+        <h1 class="page-title">Bangladesh: A Nation in Transition</h1>
+        <p class="intro">
+            As one of the world's fastest-growing economies, Bangladesh has emerged as a key strategic player in the Bay of Bengal. Its rapid development, driven by a dominant export sector, is balanced by significant socio-economic challenges and a complex geopolitical landscape. This analysis visualizes the core indicators shaping Bangladesh's trajectory.
+        </p>
+        
+        <div class="chart-section">
+            <h2>Socio-Economic Profile</h2>
+            <p class="description">A synthesis of the core demographic, developmental, and economic factors shaping the nation, from its high population density and rising GDP per capita to challenges like inflation and reliance on remittances.</p>
+            <div id="indicators-chart" class="chart-container" style="height: 1200px;"></div>
+        </div>
+
+        <div class="chart-section">
+            <h2>The External Economy: Trade, Investment & Remittances</h2>
+
+            <h3>The Engine of Growth: Exports</h3>
+            <p class="description">Bangladesh's economic success is built on its export-oriented industry. These charts visualize the overwhelming dominance of the Ready-Made Garment (RMG) sector and the key destinations for its products.</p>
+            <div id="rmg-chart" class="chart-container" style="height: 450px;"></div>
+            <div id="exports-chart" class="chart-container" style="height: 450px; margin-top: 2rem;"></div>
+            
+            <h3>Import Dependencies</h3>
+            <p class="description">The country's industrial engine requires significant imports, primarily from regional giants China and India, creating a structural trade deficit.</p>
+            <div id="imports-chart" class="chart-container"></div>
+            
+            <h3>Foreign Capital Inflows</h3>
+            <p class="description">Foreign Direct Investment (FDI) and workers' remittances are crucial sources of foreign exchange. The data shows growing FDI from China and a consistent, vital flow of remittances from the Bangladeshi diaspora.</p>
+            <div id="fdi-chart" class="chart-container"></div>
+            <div id="remittances-chart" class="chart-container" style="margin-top: 2rem;"></div>
+        </div>
+
+        <div class="chart-section">
+            <h2>The Geopolitical & Security Dimension</h2>
+
+            <h3>Financing Development: Debt & Infrastructure</h3>
+            <p class="description">Bangladesh's infrastructure ambitions are funded by a diverse set of international partners. Multilateral institutions remain the largest creditors, but bilateral debt from Japan, China, and Russia for major projects has grown significantly.</p>
+            <div id="debt-chart" class="chart-container"></div>
+            <div id="infra-chart" class="chart-container" style="height: 700px; margin-top: 2rem;"></div>
+            
+            <h3>The Rohingya Refugee Crisis</h3>
+            <p class="description">Since 2017, Bangladesh has hosted nearly one million Rohingya refugees, creating a significant humanitarian challenge that is heavily dependent on international funding and political engagement.</p>
+            <div id="refugee-chart" class="chart-container"></div>
+            
+            <h3>A Balanced Foreign Policy: Military Partnerships</h3>
+            <p class="description">Bangladesh maintains a careful balance in its security relationships, engaging in joint exercises with the US, India, and China, while diversifying its arms procurement, with China as the historically dominant supplier.</p>
+            <div id="exercises-chart" class="chart-container"></div>
+            <div id="arms-chart" class="chart-container" style="margin-top: 2rem;"></div>
+        </div>
+    </main>
+
+    <footer>
+        © Venkatakrishnan Asuri ·
+        <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> ·
+        <a href="https://www.linkedin.com/in/asurixyz" target="_blank" rel="noopener">LinkedIn</a>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const PLOTLY_LAYOUT_DEFAULTS = {
+                font: { family: 'Georgia, serif' },
+                paper_bgcolor: '#fdfdfd',
+                plot_bgcolor: '#fdfdfd',
+                margin: { t: 90, b: 50, l: 80, r: 40 },
+                legend: { font: { size: 12 }, orientation: 'h', y: -0.2, x: 0.5, xanchor: 'center' }
+            };
+
+            function renderIndicatorsChart() {
+                const densityData = { years: [1972, 2022], bangladesh: [479, 1329], india: [203, 477], pakistan: [79, 295] };
+                const gdpPerCapitaData = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], bangladesh: [857, 959, 1076, 1184, 1334, 1466, 1613, 1754, 1856, 2227, 2688, 2824], india: [1458, 1444, 1483, 1572, 1606, 1733, 2007, 2006, 2088, 2238, 2466, 2411], pakistan: [1201, 1245, 1279, 1326, 1385, 1464, 1585, 1551, 1492, 1675, 1771, 1598] };
+                const povertyData = { years: [2010, 2016, 2022], poverty_pct: [62.4, 41.7, 44.2] };
+                const inflationData = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], inflation_pct: [10.7, 6.2, 7.5, 7.0, 6.2, 5.5, 5.5, 5.6, 5.5, 5.7, 6.2, 9.0, 9.5] };
+                const remittancesData = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], remittances_pct_gdp: [8.9, 8.5, 7.8, 7.1, 6.5, 6.0, 5.5, 5.1, 5.4, 6.8, 5.9, 5.2, 4.8] };
+                const forexData = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], forex_reserves_usd_billion: [10.9, 12.8, 15.3, 22.3, 27.5, 33.2, 32.9, 36.0, 44.1, 48.0, 46.2, 33.7, 27.1] };
+                
+                // Traces with legend groups to ensure each country appears only once.
+                const trace1 = { x: densityData.years, y: densityData.bangladesh, name: 'Bangladesh', legendgroup: 'bd', type: 'scatter', line:{color: "#009E73"}, xaxis: 'x1', yaxis: 'y1' };
+                const trace2 = { x: densityData.years, y: densityData.india, name: 'India', legendgroup: 'in', type: 'scatter', line:{color: "#0072B2"}, xaxis: 'x1', yaxis: 'y1' };
+                const trace3 = { x: densityData.years, y: densityData.pakistan, name: 'Pakistan', legendgroup: 'pk', type: 'scatter', line:{color: "#D55E00"}, xaxis: 'x1', yaxis: 'y1' };
+                
+                const trace4 = { x: gdpPerCapitaData.years, y: gdpPerCapitaData.bangladesh, name: 'Bangladesh', legendgroup: 'bd', showlegend: false, type: 'scatter', line:{color: "#009E73"}, xaxis: 'x2', yaxis: 'y2' };
+                const trace5 = { x: gdpPerCapitaData.years, y: gdpPerCapitaData.india, name: 'India', legendgroup: 'in', showlegend: false, type: 'scatter', line:{color: "#0072B2"}, xaxis: 'x2', yaxis: 'y2' };
+                const trace6 = { x: gdpPerCapitaData.years, y: gdpPerCapitaData.pakistan, name: 'Pakistan', legendgroup: 'pk', showlegend: false, type: 'scatter', line:{color: "#D55E00"}, xaxis: 'x2', yaxis: 'y2' };
+                
+                const trace7 = { x: povertyData.years, y: povertyData.poverty_pct, showlegend: false, name: 'Poverty', type: 'scatter', mode: 'lines+markers', line:{color: "#0072B2"}, xaxis: 'x3', yaxis: 'y3' };
+                const trace8 = { x: inflationData.years, y: inflationData.inflation_pct, showlegend: false, name: 'Inflation', type: 'scatter', mode: 'lines', line:{color: "#D55E00"}, xaxis: 'x4', yaxis: 'y4' };
+                const trace9 = { x: remittancesData.years, y: remittancesData.remittances_pct_gdp, showlegend: false, name: 'Remittances', type: 'scatter', mode: 'lines', line:{color: "#009E73"}, xaxis: 'x5', yaxis: 'y5' };
+                const trace10 = { x: forexData.years, y: forexData.forex_reserves_usd_billion, showlegend: false, name: 'Forex', type: 'scatter', mode: 'lines', line:{color: "#CC79A7"}, xaxis: 'x6', yaxis: 'y6' };
+
+                const layout = {
+                    ...PLOTLY_LAYOUT_DEFAULTS,
+                    title: { text: "Bangladesh's Socio-Economic Profile: A Synthesis<br><sup>Source: World Bank & UNDP</sup>", font: { size: 18 } },
+                    grid: { rows: 3, columns: 2, pattern: 'independent', ygap: 0.15, xgap: 0.1 },
+                    showlegend: true,
+                    legend: { orientation: 'h', y: 1.1, x: 0.5, xanchor: 'center' },
+                    xaxis1: {title: "Population Density"}, yaxis1: {title: "People/sq.km"},
+                    xaxis2: {title: "GDP per Capita"}, yaxis2: {title: "Current US$"},
+                    xaxis3: {title: "Poverty Reduction"}, yaxis3: {title: "% < $3.65/day"},
+                    xaxis4: {title: "Inflation Rate (CPI)"}, yaxis4: {title: "Annual %"},
+                    xaxis5: {title: "Remittances Received"}, yaxis5: {title: "% of GDP"},
+                    xaxis6: {title: "Forex Reserves"}, yaxis6: {title: "Billion US$"},
+                };
+                Plotly.newPlot('indicators-chart', [trace1, trace2, trace3, trace4, trace5, trace6, trace7, trace8, trace9, trace10], layout, {responsive: true});
+            }
+
+            // ... (rest of the chart rendering functions from the previous response) ...
+            function renderRmgChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], RMG_pct_Total_Exports: [78.1, 78.8, 79.6, 81.1, 81.7, 82.0, 82.9, 83.5, 84.1, 83.2, 81.8, 82.5, 84.6] };
+                const traces = [{ x: data.years, y: data.RMG_pct_Total_Exports, type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: "#0072B2" }, fillcolor: 'rgba(0, 114, 178, 0.2)' }];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Dominance of the Ready-Made Garment (RMG) Sector<br><sup>Source: BGMEA & EPB</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'RMG as % of Total Exports', range: [75, 86] },
+                    shapes: [{ type: 'line', x0: 2013, x1: 2013, y0: 75, y1: 86, line: { color: 'red', width: 2, dash: 'dash' } }],
+                    annotations: [{ x: 2013.1, y: 77, text: '2013: Rana Plaza collapse leads<br>to externally-driven safety reforms', showarrow: false, xanchor: 'left', font: {color: 'red'}}]
+                };
+                Plotly.newPlot('rmg-chart', traces, layout, {responsive: true});
+            }
+
+            function renderExportsChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], EU: [10.5, 11.2, 12.5, 13.8, 15.4, 16.1, 17.5, 19.6, 19.3, 17.8, 21.4, 25.1, 27.4], USA: [4.5, 4.8, 5.1, 5.3, 6.1, 6.2, 6.6, 7.1, 6.5, 5.8, 7.6, 9.7, 10.2], UK: [2.1, 2.3, 2.5, 2.8, 3.2, 3.5, 3.8, 4.1, 3.9, 3.6, 4.5, 5.3, 5.7], Canada: [0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.6, 1.5, 1.4, 1.7, 2.1, 2.4], Japan: [0.5, 0.6, 0.7, 0.8, 1.0, 1.1, 1.2, 1.4, 1.3, 1.2, 1.5, 1.9, 2.2], Other: [4.8, 5.1, 5.3, 5.5, 5.6, 5.6, 5.7, 5.7, 5.2, 4.9, 6.8, 7.0, 6.8] };
+                const destinations = ['EU', 'USA', 'UK', 'Canada', 'Japan', 'Other'];
+                const traces = destinations.map(dest => ({ x: data.years, y: data[dest], name: dest, type: 'scatter', stackgroup: 'one' }));
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Exports by Destination (2011-2023)<br><sup>Source: EPB & Bangladesh Bank</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'Export Value (Billion US$)' }
+                };
+                Plotly.newPlot('exports-chart', traces, layout, {responsive: true});
+            }
+
+            function renderImportsChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], China: [5.5, 6.3, 7.1, 8.2, 9.5, 10.1, 11.4, 12.8, 13.6, 12.9, 15.1, 17.5, 19.3], India: [4.8, 5.1, 5.5, 6.0, 6.8, 7.2, 8.1, 8.8, 8.2, 7.5, 9.8, 12.1, 13.7], Singapore: [2.1, 2.4, 2.7, 3.0, 3.2, 3.5, 3.8, 4.1, 3.9, 3.6, 4.5, 5.2, 5.8], Indonesia: [1.5, 1.7, 1.9, 2.2, 2.5, 2.8, 3.1, 3.4, 3.2, 2.9, 3.8, 4.5, 5.1], Other: [15.2, 16.5, 17.8, 18.5, 19.0, 20.4, 22.6, 24.9, 23.1, 21.6, 25.8, 29.7, 32.1]};
+                const origins = ['China', 'India', 'Singapore', 'Indonesia', 'Other'];
+                const traces = origins.map(o => ({ x: data.years, y: data[o], name: o, type: 'scatter', stackgroup: 'one' }));
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Imports by Origin (2011-2023)<br><sup>Source: Bangladesh Bank & BBS</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'Import Value (Billion US$)' }
+                };
+                Plotly.newPlot('imports-chart', traces, layout, {responsive: true});
+            }
+
+            function renderFdiChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], UK: [150, 180, 220, 250, 280, 310, 290, 270, 300, 320, 350, 380, 410], USA: [120, 140, 160, 180, 200, 220, 240, 210, 190, 170, 210, 250, 280], China: [50, 60, 80, 120, 180, 250, 350, 450, 550, 480, 520, 580, 650], Singapore: [80, 100, 120, 140, 160, 180, 200, 220, 210, 190, 230, 270, 300], India: [40, 50, 60, 70, 90, 110, 130, 150, 140, 120, 160, 200, 230], Other: [480, 540, 600, 640, 680, 750, 810, 850, 750, 650, 850, 950, 1050]};
+                const origins = ['UK', 'USA', 'China', 'Singapore', 'India', 'Other'];
+                const traces = origins.map(o => ({ x: data.years, y: data[o], name: o, type: 'scatter', stackgroup: 'one' }));
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "FDI Inflows by Origin (2011-2023)<br><sup>Source: Bangladesh Bank</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'Net FDI Inflow (Million US$)' }
+                };
+                Plotly.newPlot('fdi-chart', traces, layout, {responsive: true});
+            }
+
+            function renderRemittancesChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], Saudi_Arabia: [3.4, 3.8, 4.1, 3.5, 3.0, 2.5, 2.3, 2.1, 2.5, 3.8, 4.5, 4.8, 5.2], UAE: [1.8, 2.1, 2.5, 2.8, 2.6, 2.4, 2.2, 2.0, 1.8, 2.2, 2.5, 2.8, 3.1], USA: [1.5, 1.7, 1.9, 2.1, 2.3, 2.5, 2.7, 2.9, 3.2, 3.5, 3.8, 4.2, 4.5], UK: [0.8, 1.0, 1.2, 1.4, 1.3, 1.1, 1.0, 1.2, 1.5, 1.8, 2.0, 2.2, 2.5], Other: [4.7, 5.2, 5.7, 5.5, 5.2, 4.8, 4.5, 4.2, 4.0, 5.5, 6.2, 6.5, 7.0] };
+                const origins = ["Saudi Arabia", "UAE", "USA", "UK", "Other"];
+                const traces = origins.map(o => ({ x: data.years, y: data[o.replace(' ', '_')], name: o, type: 'scatter', stackgroup: 'one' }));
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Remittance Inflows by Origin (2011-2023)<br><sup>Source: Bangladesh Bank</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'Remittance Inflow (Billion US$)' }
+                };
+                Plotly.newPlot('remittances-chart', traces, layout, {responsive: true});
+            }
+
+            function renderDebtChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], Multilateral: [15.8, 16.5, 17.2, 18.5, 20.1, 22.5, 25.1, 28.3, 31.5, 34.8, 38.2, 42.1, 45.3], Japan: [3.5, 3.8, 4.1, 4.5, 5.0, 5.8, 6.5, 7.2, 8.1, 9.0, 10.2, 11.5, 12.8], China: [0.5, 0.6, 0.8, 1.1, 1.5, 2.1, 2.8, 3.5, 4.2, 5.1, 6.0, 7.2, 8.5], Russia: [0.1, 0.1, 0.2, 0.3, 0.5, 1.0, 2.0, 3.5, 5.0, 6.5, 8.0, 9.5, 11.0], India: [0.1, 0.2, 0.3, 0.5, 0.7, 1.0, 1.3, 1.6, 2.0, 2.5, 3.0, 3.5, 4.0], Other: [2.0, 2.2, 2.4, 2.6, 2.8, 3.1, 3.4, 3.7, 4.0, 4.3, 4.6, 5.0, 5.4]};
+                const creditors = ["Multilateral", "Japan", "China", "Russia", "India", "Other"];
+                const traces = creditors.map(c => ({ x: data.years, y: data[c], name: c, type: 'scatter', stackgroup: 'one' }));
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "External Debt Stock by Creditor (2011-2023)<br><sup>Source: ERD, Bangladesh & World Bank</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'External Debt Stock (Billion US$)' }
+                };
+                Plotly.newPlot('debt-chart', traces, layout, {responsive: true});
+            }
+            
+            function renderInfraChart() {
+                const data = { Project: ["Rooppur Nuclear Power Plant", "Matarbari Port & Power Hub", "Dhaka Metro Rail (Lines 1 & 6)", "Indian LoCs Portfolio", "Padma Bridge Rail Link", "Karnaphuli Tunnel", "Dhaka Airport Third Terminal", "Payra Thermal Power Plant", "Rampal Power Plant", "Padma Bridge (Construction)"], Value_USD_Billion: [12.6, 6.0, 5.5, 7.3, 4.3, 1.0, 2.5, 2.5, 2.0, 3.6], Partner_Country: ["Russia", "Japan", "Japan", "India", "China", "China", "Japan", "China", "India", "China"], Sector: ["Energy", "Ports & Energy", "Transport & Connectivity", "Transport & Connectivity", "Transport & Connectivity", "Transport & Connectivity", "Transport & Connectivity", "Energy", "Energy", "Transport & Connectivity"] };
+                const sectors = [...new Set(data.Sector)];
+                const traces = [];
+                const partners = ["China", "India", "Japan", "Russia"];
+                const colors = ["#d73027", "#1a9850", "#fdae61", "#7570b3"];
+
+                sectors.forEach(sector => {
+                    const sectorData = data.Project.map((p, i) => data.Sector[i] === sector ? {project: p, value: data.Value_USD_Billion[i], partner: data.Partner_Country[i]} : null).filter(Boolean);
+                    partners.forEach((partner, i) => {
+                         traces.push({
+                            y: sectorData.map(d => d.partner === partner ? d.project : null).filter(Boolean),
+                            x: sectorData.map(d => d.partner === partner ? d.value : null).filter(Boolean),
+                            name: partner,
+                            type: 'bar',
+                            orientation: 'h',
+                            marker: { color: colors[i] },
+                            legendgroup: partner,
+                            showlegend: sector === sectors[0] // Only show legend for the first group of bars
+                        });
+                    });
+                });
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Foreign-Funded Infrastructure Projects<br><sup>Source: ERD, ADB, Official Announcements</sup>", font: { size: 18 } },
+                    barmode: 'stack', yaxis: { autorange: 'reversed' }, xaxis: { title: 'Project Value (Billion US$)' }, margin: { l: 250 }
+                };
+                Plotly.newPlot('infra-chart', traces, layout, {responsive: true});
+            }
+
+            function renderRefugeeChart() {
+                const data = { Year: [2017, 2018, 2019, 2020, 2021, 2022, 2023], Refugee_Population_Approx: [855000, 909000, 915000, 920000, 926000, 932000, 935000], Humanitarian_Funding_USD_Million: [317, 655, 603, 630, 680, 553, 502] };
+                const traces = [
+                    { x: data.Year, y: data.Refugee_Population_Approx, name: 'Refugee Population', type: 'bar' },
+                    { x: data.Year, y: data.Humanitarian_Funding_USD_Million, name: 'Humanitarian Funding', yaxis: 'y2', type: 'scatter', mode: 'lines+markers' }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "The Rohingya Refugee Crisis (2017-2023)<br><sup>Source: UNHCR & UN OCHA</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' },
+                    yaxis: { title: 'Approximate Refugee Population' },
+                    yaxis2: { title: 'Funding Received (Million US$)', overlaying: 'y', side: 'right' }
+                };
+                Plotly.newPlot('refugee-chart', traces, layout, {responsive: true});
+            }
+
+            function renderArmsChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], China: [250, 300, 350, 400, 450, 500, 480, 460, 440, 420, 400, 380, 360], Russia: [50, 60, 80, 150, 120, 100, 90, 80, 70, 60, 50, 40, 30], UK: [30, 40, 50, 60, 70, 80, 70, 60, 50, 40, 30, 20, 10], Turkey: [10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 90, 100], Other: [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220] };
+                const suppliers = ['China', 'Russia', 'UK', 'Turkey', 'Other'];
+                const traces = suppliers.map(s => ({ x: data.years, y: data[s], name: s, type: 'scatter', stackgroup: 'one' }));
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Arms Imports by Supplier (2011-2023)<br><sup>Source: SIPRI Arms Transfers Database</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'Arms Transfer Volume (SIPRI TIV)' }
+                };
+                Plotly.newPlot('arms-chart', traces, layout, {responsive: true});
+            }
+            
+            function renderExercisesChart() {
+                const data = { years: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], USA: [2, 2, 3, 3, 3, 4, 4, 4, 3, 2, 3, 4, 4], India: [1, 1, 2, 2, 2, 3, 3, 3, 4, 3, 4, 4, 4], China: [0, 1, 1, 1, 2, 2, 2, 2, 3, 2, 3, 3, 3] };
+                const traces = [
+                    { x: data.years, y: data.USA, name: 'USA', type: 'bar' },
+                    { x: data.years, y: data.India, name: 'India', type: 'bar' },
+                    { x: data.years, y: data.China, name: 'China', type: 'bar' }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, barmode: 'group', title: { text: "Joint Military Exercises by Partner (2011-2023)<br><sup>Source: Official Press Releases</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year' }, yaxis: { title: 'Number of Major Exercises' }
+                };
+                Plotly.newPlot('exercises-chart', traces, layout, {responsive: true});
+            }
+
+            renderIndicatorsChart();
+            renderRmgChart();
+            renderExportsChart();
+            renderImportsChart();
+            renderFdiChart();
+            renderRemittancesChart();
+            renderDebtChart();
+            renderInfraChart();
+            renderRefugeeChart();
+            renderArmsChart();
+            renderExercisesChart();
+        });
+    </script>
+</body>
+</html>

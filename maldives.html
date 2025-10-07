@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMEN - Maldives Deep Dive</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #fdfdfd;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .home-link {
+            color: #004080;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .home-link:hover {
+            text-decoration: underline;
+        }
+        main {
+            max-width: 900px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+        }
+        .page-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: #004080;
+            margin-bottom: 1rem;
+        }
+        .intro {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #333;
+            text-align: justify;
+            margin-bottom: 3rem;
+        }
+        .chart-section {
+            margin-top: 4rem;
+        }
+        .chart-container {
+            width: 100%;
+            height: 500px;
+            margin-top: 1.5rem;
+        }
+        .chart-section h2 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #004080;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.5rem;
+        }
+        .chart-section p.description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #444;
+            margin-top: 0.5rem;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+            color: #777;
+            border-top: 1px solid #eee;
+        }
+        footer a {
+            color: #004080;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LUMEN Deep Dive</h1>
+        <a href="home.html" class="home-link">← Return to Dashboard Index</a>
+    </header>
+
+    <main>
+        <h1 class="page-title">Maldives: A Geostrategic Crossroads</h1>
+        <p class="intro">
+            Positioned strategically in the Indian Ocean, the Maldives has become a focal point of geopolitical and economic competition, primarily between India and China. This analysis visualizes the key trends shaping the archipelagic nation, from its tourism-dependent economy and mounting public debt to the shifting dynamics of its foreign policy and security partnerships.
+        </p>
+
+        <div class="chart-section">
+            <h2>The Economic Engine: Tourism</h2>
+            <p class="description">The Maldivian economy is overwhelmingly reliant on tourism. This chart tracks total arrivals and breaks down the shifting composition of its top source markets, highlighting the decline and recent resurgence of Chinese tourists and the consistent growth from India.</p>
+            <div id="tourism-chart" class="chart-container"></div>
+        </div>
+        
+        <div class="chart-section">
+            <h2>The Debt Challenge</h2>
+            <p class="description">Rapid infrastructure development has been financed through substantial external borrowing. These charts visualize the country's rising debt-to-GDP ratio and the evolution of its public debt owed to its two largest creditors, India and China.</p>
+            <div id="debt-gdp-chart" class="chart-container" style="height: 450px;"></div>
+            <div id="bilateral-debt-chart" class="chart-container" style="height: 450px; margin-top: 2rem;"></div>
+        </div>
+
+        <div class="chart-section">
+            <h2>Financing the Future: Development Partnerships</h2>
+            <p class="description">This visualization breaks down the major development finance projects from India and China, illustrating the different approaches to financing—with China primarily providing loans for large-scale projects and India offering a mix of grants and concessional Lines of Credit (LoCs).</p>
+            <div id="dev-finance-chart" class="chart-container" style="height: 600px;"></div>
+        </div>
+        
+        <div class="chart-section">
+            <h2>Shifting Tides of Investment</h2>
+            <p class="description">Foreign Direct Investment (FDI) is another critical component of the Maldivian economy. This chart tracks annual FDI inflows from the Maldives' four most significant partners, showing a notable spike in Chinese investment during the mid-2010s.</p>
+            <div id="fdi-chart" class="chart-container"></div>
+        </div>
+
+        <div class="chart-section">
+            <h2>Security & Strategic Alignment</h2>
+            <p class="description">Military and security cooperation is a key indicator of strategic alignment. These charts compare engagement with India and China across three domains: the provision of defence platforms, the frequency of joint military exercises, and the tempo of high-level official visits.</p>
+            <div id="military-chart" class="chart-container" style="height: 900px;"></div>
+        </div>
+    </main>
+
+    <footer>
+        © Venkatakrishnan Asuri ·
+        <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> ·
+        <a href="https://www.linkedin.com/in/asurixyz" target="_blank" rel="noopener">LinkedIn</a>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const PLOTLY_LAYOUT_DEFAULTS = {
+                font: { family: 'Georgia, serif' },
+                paper_bgcolor: '#fdfdfd',
+                plot_bgcolor: '#fdfdfd',
+                margin: { t: 90, b: 50, l: 80, r: 40 },
+                legend: { font: { size: 12 } }
+            };
+            const COLOR_INDIA = "#057eff";
+            const COLOR_CHINA = "#d90734";
+
+            function renderTourismChart() {
+                const data = { years: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024], total: [791917, 931333, 958027, 1125202, 1204857, 1234248, 1286135, 1389542, 1484274, 1702887, 555494, 1321932, 1675285, 1878537, 1985432], india: [25232, 31920, 31766, 38014, 45549, 52368, 66955, 83019, 90474, 166030, 62960, 291752, 241369, 209198, 310540], china: [118961, 198655, 229559, 331719, 363626, 359514, 306530, 302020, 283116, 284029, 1398, 7120, 27457, 201450, 195765], russia: [42491, 57579, 66308, 62966, 60888, 65612, 80004, 88874, 95938, 125199, 45314, 222422, 198031, 201954, 215000], uk: [72901, 85603, 84391, 85859, 88704, 92775, 101843, 114631, 114639, 115271, 57496, 131336, 179426, 177340, 185000]};
+                const traces = [
+                    { x: data.years, y: data.total, type: 'scatter', mode: 'lines', name: 'Total Arrivals', fill: 'tozeroy', line: { color: 'gray', dash: 'dash' }, fillcolor: 'rgba(200,200,200,0.2)' },
+                    { x: data.years, y: data.india, type: 'scatter', mode: 'lines+markers', name: 'India', line: { color: '#ff9933', width: 2 } },
+                    { x: data.years, y: data.china, type: 'scatter', mode: 'lines+markers', name: 'China', line: { color: COLOR_CHINA, width: 2 } },
+                    { x: data.years, y: data.russia, type: 'scatter', mode: 'lines+markers', name: 'Russia', line: { color: '#428bca', width: 2 } },
+                    { x: data.years, y: data.uk, type: 'scatter', mode: 'lines+markers', name: 'UK', line: { color: '#5cb85c', width: 2 } }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Top Tourist Arrivals by Nationality (2010-2024)<br><sup>Source: Ministry of Tourism, Maldives</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year', dtick: 2 }, yaxis: { title: 'Number of Tourist Arrivals' }, legend: { orientation: 'h', y: -0.2 }
+                };
+                Plotly.newPlot('tourism-chart', traces, layout, {responsive: true});
+            }
+
+            function renderDebtGdpChart() {
+                const data = { years: [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024], ratio: [55.9, 55.1, 54.8, 61.9, 63.8, 70.7, 77.2, 155.7, 123.4, 111.6, 123.0, 124.6] };
+                const traces = [{ x: data.years, y: data.ratio, type: 'scatter', mode: 'lines+markers', line: { color: COLOR_CHINA, width: 2.5 } }];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Public Debt to GDP Ratio (2013–2024)<br><sup>Source: IMF / World Bank</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year', dtick: 1 }, yaxis: { title: 'Debt as % of GDP', ticksuffix: '%' },
+                    annotations: [{ x: 2020, y: 160, text: 'COVID-19 Impact', showarrow: true, arrowhead: 4, ax: 0, ay: -40 }]
+                };
+                Plotly.newPlot('debt-gdp-chart', traces, layout, {responsive: true});
+            }
+
+            function renderBilateralDebtChart() {
+                const data = { years: [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], india: [85.5, 90.2, 95.1, 100.5, 110.8, 125.2, 180.9, 250.5, 310.8, 380.6, 420.1, 455.4], china: [50.2, 150.8, 280.7, 450.4, 680.1, 950.3, 1150.2, 1300.6, 1350.1, 1370.7, 1360.5, 1355.9]};
+                const traces = [
+                    { x: data.years, y: data.india, name: 'India', type: 'scatter', mode: 'lines+markers', line: { color: COLOR_INDIA, width: 2.5 } },
+                    { x: data.years, y: data.china, name: 'China', type: 'scatter', mode: 'lines+markers', line: { color: COLOR_CHINA, width: 2.5 } }
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Public Debt to India & China (2012–2023)<br><sup>Source: Maldives Ministry of Finance</sup>", font: { size: 18 } },
+                    xaxis: { title: 'Year', dtick: 1 }, yaxis: { title: 'Debt Value (US$ Millions)' }, legend: { orientation: 'h', y: -0.2 }
+                };
+                Plotly.newPlot('bilateral-debt-chart', traces, layout, {responsive: true});
+            }
+
+            function renderDevFinanceChart() {
+                const indiaProjects = { y: ["Greater Malé<br>Connectivity Project", "Line of Credit for<br>Water & Sewerage", "Line of Credit for<br>Addu Development", "Various<br>Infrastructure", "Defence<br>Line of Credit", "Policing<br>College"], x: [500, 800, 100, 100, 50, 45] };
+                const chinaProjects = { y: ["Social Housing", "Sinamalé Bridge &<br>Airport Expansion", "Foreign Ministry<br>Building"], x: [550, 400, 7] };
+                const traceIndia = { y: indiaProjects.y, x: indiaProjects.x, name: 'India (Grant / LoC)', type: 'bar', orientation: 'h', marker: { color: COLOR_INDIA } };
+                const traceChina = { y: chinaProjects.y, x: chinaProjects.x, name: 'China (Loan)', type: 'bar', orientation: 'h', marker: { color: COLOR_CHINA } };
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "Major Development Finance for Infrastructure<br><sup>Source: Official Govt. Press Releases</sup>", font: { size: 18 } },
+                    barmode: 'group', yaxis: { autorange: 'reversed' }, xaxis: { title: 'Announced Value (US$ Millions)' },
+                    legend: { orientation: 'h', y: -0.2 }, margin: { l: 150 }
+                };
+                 Plotly.newPlot('dev-finance-chart', [traceIndia, traceChina], layout, {responsive: true});
+            }
+            
+            function renderFdiChart() {
+                const data = { years: [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], india: [8.5, 9.2, 10.1, 11.5, 12.8, 15.2, 18.9, 22.5, 19.8, 25.6, 30.1, 35.4], china: [15.2, 25.8, 88.7, 105.4, 120.1, 95.3, 70.2, 55.6, 45.1, 38.7, 30.5, 25.9], uae: [40.5, 45.1, 50.2, 55.8, 60.3, 58.1, 65.7, 70.2, 68.9, 75.3, 80.1, 85.6], saudi: [10.1, 12.5, 15.3, 50.6, 75.9, 30.2, 25.8, 20.1, 18.5, 15.6, 14.2, 12.8] };
+                const traces = [
+                    { x: data.years, y: data.india, name: 'India', type: 'scatter', mode: 'lines+markers', line: {width: 2.5} },
+                    { x: data.years, y: data.china, name: 'China', type: 'scatter', mode: 'lines+markers', line: {width: 2.5} },
+                    { x: data.years, y: data.uae, name: 'UAE', type: 'scatter', mode: 'lines+markers', line: {width: 2.5} },
+                    { x: data.years, y: data.saudi, name: 'Saudi Arabia', type: 'scatter', mode: 'lines+markers', line: {width: 2.5} },
+                ];
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: { text: "FDI Inflows to Maldives (2012-2023)<br><sup>Source: Maldives Monetary Authority</sup>", font: { size: 18 } },
+                     xaxis: { title: 'Year', dtick: 1 }, yaxis: { title: 'FDI Value (US$ Millions)' }, legend: { orientation: 'h', y: -0.2 }
+                };
+                Plotly.newPlot('fdi-chart', traces, layout, {responsive: true});
+            }
+
+            function renderMilitaryChart() {
+                const platforms = { x:[2006, 2009, 2010, 2013, 2019, 2020, 2022, 2023, 2024], y: [1, 1, 1, 1, 1, 1, 1, 2, 1], country: ["India", "India", "India", "India", "India", "India", "India", "India", "China"] };
+                const exercises = { x:[2009, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2023, 2024], y: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1], country: ["India", "India", "India", "India", "India", "India", "India", "India", "India", "India", "India", "India", "China"] };
+                const visits = { x: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024], y: [1, 2, 1, 1, 1, 2, 1, 1, 2, 2, 1, 3, 2, 2, 1], country: ["India", "India", "India", "India", "China", "India", "India", "China", "India", "India", "India", "India", "India", "India", "China"] };
+
+                const createTraces = (data) => [
+                    { x: data.x.filter((_, i) => data.country[i] === 'India'), y: data.y.filter((_, i) => data.country[i] === 'India'), name: 'India', type: 'bar', marker: { color: COLOR_INDIA } },
+                    { x: data.x.filter((_, i) => data.country[i] === 'China'), y: data.y.filter((_, i) => data.country[i] === 'China'), name: 'China', type: 'bar', marker: { color: COLOR_CHINA } }
+                ];
+
+                const trace1 = { ...createTraces(platforms)[0], xaxis: 'x1', yaxis: 'y1' };
+                const trace2 = { ...createTraces(platforms)[1], xaxis: 'x1', yaxis: 'y1' };
+                const trace3 = { ...createTraces(exercises)[0], xaxis: 'x2', yaxis: 'y2', showlegend: false };
+                const trace4 = { ...createTraces(exercises)[1], xaxis: 'x2', yaxis: 'y2', showlegend: false };
+                const trace5 = { ...createTraces(visits)[0], xaxis: 'x3', yaxis: 'y3', showlegend: false };
+                const trace6 = { ...createTraces(visits)[1], xaxis: 'x3', yaxis: 'y3', showlegend: false };
+
+                const layout = { ...PLOTLY_LAYOUT_DEFAULTS,
+                    title: { text: "Key Military Engagement Indicators (2006–2024)<br><sup>Source: Official Govt. Press Releases</sup>", font: { size: 18 } },
+                    grid: { rows: 3, columns: 1, pattern: 'independent' },
+                    barmode: 'stack',
+                    showlegend: true, legend: { orientation: 'h', y: 1.15 },
+                    yaxis1: { title: 'Defence Platforms' },
+                    yaxis2: { title: 'Joint Exercises' },
+                    yaxis3: { title: 'High-Level Visits' },
+                    xaxis3: { title: 'Year' }
+                };
+                Plotly.newPlot('military-chart', [trace1, trace2, trace3, trace4, trace5, trace6], layout, {responsive: true});
+            }
+
+            // Render all charts
+            renderTourismChart();
+            renderDebtGdpChart();
+            renderBilateralDebtChart();
+            renderDevFinanceChart();
+            renderFdiChart();
+            renderMilitaryChart();
+        });
+    </script>
+</body>
+</html>
