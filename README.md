@@ -1,102 +1,74 @@
-# Asian Economic Data
+# LUMEN
+### Illumination Through Data
 
-A lightweight, static website visualizing trade and investment trends across key maritime regions. Everything runs client-side using CSV files in this repo, parsed via CDN libraries and rendered with responsive charts.
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-brightgreen.svg)](https://asurixyz.github.io/your-repo-name/) LUMEN is an interactive, web-based data visualization dashboard designed to explore the complex interplay of geopolitics, economics, and strategic trade. The project provides a multi-faceted analysis of the forces shaping the 21st-century global landscape, with a focus on long-term projections, shifting trade partnerships, and the dynamics of key maritime corridors.
 
-## Live pages
-- Home: `home.html`
-- South China Sea: `scs.html`
-- Bay of Bengal: `bob.html`
-- East African Coast: `eac.html`
-- Persian Gulf: `pg.html`
+![A preview image of the LUMEN dashboard or trade map](https://imgbox.com/CMPYMXFr)
+*Suggestion: Replace the placeholder above with a screenshot of your `trademap.html` or `home.html` page.*
 
-On GitHub Pages, your URLs will look like:
-- `https://<your-username>.github.io/<your-repo>/home.html`
-- `https://<your-username>.github.io/<your-repo>/scs.html` (and similarly for the others)
+---
 
-## What's inside
+## 🏛️ Project Features
 
-- Client-side only (no build, no backend).
-- CSV parsing: Papa Parse (CDN).
-- Charting: Plotly (CDN).
-- Mobile-friendly layout, responsive charts.
-- Small home button (🏠) in each page's top bar linking back to `home.html`.
+LUMEN is organized into several key analytical sections, each providing a unique perspective on global trends:
 
-### Data folders
-- `South China Sea/`
-- `Bay of Bengal/`
-- `East African Coast/`
-- `Persian Gulf/`
+* **Interactive Global Trade Map:** An interactive D3.js-based world map visualizing the shifting trade partnerships (imports/exports) of global economies with the US and China from 2000 to 2022.
 
-Each folder contains one or more CSVs used by its corresponding page.
+* **Long-Term Geopolitical & Economic Projections:** A dashboard of long-term forecasts (to 2075) covering critical national indicators, including:
+    * GDP and Population Growth
+    * Demographics (Median Age, Working-Age Population, Dependency Ratios)
+    * R&D Spending, High-Tech Exports, and Manufacturing Share of GDP
+    * Military Spending, FDI, and Economic Freedom
 
-## How to view locally
+* **Contemporary Regional Analysis:** A deep-dive into recent economic indicators for major Asian economies and the ASEAN bloc.
 
-Modern browsers block CSV fetches from file://. Serve the folder over HTTP:
+* **Strategic Maritime Dashboards:** Focused analyses of trade and investment data for four of the world's most critical maritime corridors:
+    * South China Sea
+    * Bay of Bengal
+    * East African Coast
+    * Persian Gulf
 
-- Node (recommended):
-```bash
-npx serve .
-```
-Then open the printed localhost URL and navigate to `/home.html`.
+---
 
-- VS Code: Use the "Live Server" extension and open `home.html`.
+## 🛠️ Tech Stack & Data
 
-## Deploying on GitHub Pages
+This project is built as a static website using modern web technologies and relies on publicly available data from reputable institutions.
 
-1) Push this repo to GitHub.
-2) In your repository, go to Settings → Pages.
-3) Select your default branch and root as the source.
-4) Save and wait ~1 minute.
-5) Visit `https://<your-username>.github.io/<your-repo>/home.html`.
+* **Core Technologies:**
+    * HTML5
+    * CSS3
+    * JavaScript (ES6+)
 
-## Pages overview
+* **Data Visualization Libraries:**
+    * **D3.js:** Powers the interactive Global Trade Map.
+    * **Plotly.js:** Used for the time-series and scatter plot charts in the projection and regional dashboards.
 
-- Home (`home.html`)
-  - Intro to the datasets and how to read the charts.
-  - Cards linking to each region page.
+* **Primary Data Sources:**
+    * The World Bank (World Development Indicators)
+    * United Nations (World Population Prospects, UN Comtrade)
+    * Goldman Sachs Research ("The Path to 2075")
+    * Stockholm International Peace Research Institute (SIPRI)
+    * International Energy Agency (IEA)
+    * The Heritage Foundation (Index of Economic Freedom)
+    * Various national and international statistical agencies.
 
-- South China Sea (`scs.html`)
-  - Trade volume by country over time.
-  - Investment breakdowns (e.g., oil & gas, military infrastructure, ports/BRI).
-  - Energy consumption shares through the SCS.
-  - Key players' trade with SCS countries.
+---
 
-- Bay of Bengal (`bob.html`)
-  - Total trade volume (long- or wide-form CSV support).
-  - Investment series across countries/sectors.
+## 🚀 Deployment
 
-- East African Coast (`eac.html`)
-  - Total trade volume with East African countries.
-  - Investment series across countries/sectors.
-  - Excludes "Source/Notes" columns from legends.
+This project is a collection of static HTML, CSS, and JavaScript files, making it incredibly easy to deploy.
 
-- Persian Gulf (`pg.html`)
-  - Total trade volume in the Gulf.
-  - Key players' trade with Gulf countries.
-  - Excludes "Source/Notes" columns from legends.
+**Deploying on GitHub Pages:**
+1.  Ensure all files (`index.html`, `home.html`, `trademap.html`, etc.) are in the main branch of your repository.
+2.  Go to your repository's **Settings**.
+3.  Navigate to the **Pages** section in the left sidebar.
+4.  Under "Branch," select your main branch (e.g., `main`) and the `/root` folder, then click **Save**.
+5.  Your site will be live at `https://your-username.github.io/your-repo-name/` within a few minutes.
 
-## Data and assumptions
+---
 
-- CSVs are expected to have a `Year` column plus one or more numeric series.
-- Column names are used directly as legend labels; updating headers updates the plots.
-- Some pages auto-handle long-form vs wide-form data.
-- Numeric strings like "$1,234" or "44%" are parsed to numbers.
+## 👨‍💻 Created By
 
-## Adding or updating data
-
-- Keep filenames and folder names exactly as referenced in each page (GitHub Pages is case-sensitive).
-- To add a new series, add a new column to the CSV; it will appear as a new line in the chart.
-- If you rename columns, legends will reflect the new names automatically.
-
-## Troubleshooting
-
-- Blank or "Error loading data": ensure you're serving over HTTP and the CSV paths exist.
-- 404 on GitHub Pages: verify exact file and folder casing; paths in HTML must match repository paths.
-- CSV header differences: if a chart doesn't show expected lines, confirm the header names and adjust the page's key mapping if needed.
-
-## Acknowledgements
-
-- Charts: Plotly (CDN)
-- CSV parsing: Papa Parse (CDN)
-
-If you'd like a combined "All Regions" page, a dark theme, or fixed color palettes for specific countries/categories across pages, open an issue or request and I'll extend the site.
+* **Venkatakrishnan Asuri**
+    * [GitHub](https://github.com/asurixyz)
+    * [LinkedIn](https://www.linkedin.com/in/asurixyz)
