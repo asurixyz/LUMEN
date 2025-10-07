@@ -152,6 +152,30 @@
         return null;
     };
 
+    // Specific function for the "long" format of the Trade Volume data
+    const plotTradeVolume = (data) => {
+        const countries = [...new Set(data.map(d => d.Country))].filter(Boolean);
+        const years = [...new Set(data.map(d => d.Year))].sort((a, b) => a - b);
+        
+        const traces = countries.map(country => {
+            const countryData = data.filter(d => d.Country === country);
+            return {
+                x: years,
+                y: years.map(year => {
+                    const entry = countryData.find(d => d.Year === year);
+                    return entry ? numberize(entry["Trade Volume (Imports+Exports) in SCS ($B)"]) : null;
+                }),
+                mode: 'lines+markers',
+                name: country
+            };
+        });
+
+        const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: 'Trade Volume in South China Sea', yaxis: { title: 'Trade Volume (Billion USD)' }, xaxis: { title: 'Year' } };
+        Plotly.newPlot('chart', traces, layout, { responsive: true });
+        document.getElementById('chart-desc').textContent = 'Annual trade volume (imports + exports) through the South China Sea by country.';
+    };
+
+    // Generic function for "wide" data formats
     const plotGeneric = (data, title, y_axis_title, desc) => {
         const yearKey = 'Year' in data[0] ? 'Year' : Object.keys(data[0])[0];
         const keys = Object.keys(data[0]).filter(k => k.toLowerCase() !== yearKey.toLowerCase());
@@ -177,9 +201,14 @@
 
       try {
         const data = await parseCSV(file);
+        if (!data || data.length === 0) {
+            descDiv.textContent = "No data found or file could not be loaded.";
+            return;
+        }
+
         switch(chartType) {
           case 'tradeVolume':
-            plotGeneric(data, 'Trade Volume (Imports + Exports) in South China Sea', 'Trade Volume (Billion USD)', 'Annual trade volume (imports + exports) through the South China Sea by country.');
+            plotTradeVolume(data); // Use the dedicated function
             break;
           case 'chinaInvestment':
             plotGeneric(data, 'Chinese Investment in the South China Sea', 'Investment (Billion USD)', 'Breakdown of China\'s annual investment in the South China Sea by sector.');
