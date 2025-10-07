@@ -1,7 +1,7 @@
 # LUMEN
 ### Illumination Through Data
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-brightgreen.svg)](https://asurixyz.github.io/econ-data/) 
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-brightgreen.svg)](https://asurixyz.github.io/LUMEN/) 
 LUMEN is an interactive, web-based data visualization dashboard designed to explore the complex interplay of geopolitics, economics, and strategic trade. The project provides a multi-faceted analysis of the forces shaping the 21st-century global landscape, with a focus on long-term projections, shifting trade partnerships, and the dynamics of key maritime corridors.
 
 ![A preview image of the LUMEN dashboard or trade map](https://images2.imgbox.com/50/4c/CMPYMXFr_o.png)
