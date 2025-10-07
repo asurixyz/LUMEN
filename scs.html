@@ -3,361 +3,216 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>South China Sea Data Visualization</title>
-  <!-- Plotly.js CDN -->
+  <title>South China Sea - Data Visualization</title>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <!-- PapaParse.js CDN for CSV parsing -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      background: #f9f9f9;
+      font-family: Georgia, 'Times New Roman', serif;
+      background-color: #fdfdfd;
       color: #222;
+      margin: 0;
+      padding: 0;
     }
     header {
-      background: #004080;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-      position: relative;
-    }
-    .home-icon { position:absolute; top:10px; right:10px; display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:8px; background:#ffffff; color:#004080; text-decoration:none; font-size:18px; border:1px solid #d1d5db }
-    nav {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #ddd;
       display: flex;
-      background: #e1e1e1;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.5rem 0.5rem;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
     }
-    .tabs { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; }
-    nav button {
-      background: none;
-      border: none;
-      padding: 0.6rem 0.9rem;
-      font-size: 1rem;
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      transition: border-color 0.3s;
-      border-radius: 6px;
-      background: #f5f5f5;
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin: 0;
     }
-    nav button.active {
-      border-bottom: 3px solid #004080;
-      font-weight: bold;
+    .home-link {
       color: #004080;
-      background: #ffffff;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    .home-link:hover {
+      text-decoration: underline;
     }
     main {
-      max-width: 900px;
-      margin: 1rem auto;
-      padding: 1rem;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    .controls {
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .controls label {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    #chart-selector {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1rem;
+      padding: 0.5rem 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fff;
     }
     #chart {
       width: 100%;
-      height: 60vh;          /* scale with viewport */
-      min-height: 360px;     /* ensure readable on phones */
-      max-height: 760px;     /* avoid overly tall on desktops */
+      height: 65vh;
+      min-height: 400px;
     }
     .chart-desc {
-      margin-top: .5rem;
+      margin-top: 0.75rem;
       color: #555;
-      font-size: .95rem;
-    }
-    @media (max-width: 900px) {
-      main { margin: 0.5rem; padding: 0.75rem; }
-      nav button { font-size: 0.95rem; padding: 0.55rem 0.8rem; }
-    }
-    @media (max-width: 600px) {
-      header { font-size: 1.25rem; }
-      nav { gap: 0.4rem; }
-      nav button { flex: 1 1 auto; }
-      .chart-desc { font-size: 0.92rem; }
+      font-size: 0.95rem;
+      font-style: italic;
     }
     footer {
       text-align: center;
-      padding: 1rem;
+      padding: 2rem;
+      margin-top: 3rem;
       font-size: 0.9rem;
-      color: #666;
-      margin-top: 2rem;
+      color: #777;
+      border-top: 1px solid #eee;
+    }
+    footer a {
+      color: #004080;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.2rem; }
+      main { margin: 1.5rem auto; padding: 0 1rem; }
+      .controls { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
-  <header><span>South China Sea Data Visualization</span><a href="home.html" class="home-icon" aria-label="Home">🏠</a></header>
-  <nav>
-    <div class="tabs">
-      <button class="active" data-file="South China Sea/Trade Volume.csv" data-chart="tradeVolume">Trade Volume</button>
-      <button data-file="South China Sea/Chinese Investment.csv" data-chart="chinaInvestment">Chinese Investment</button>
-      <button data-file="South China Sea/US Investment.csv" data-chart="usInvestment">US Investment</button>
-      <button data-file="South China Sea/Total Investment.csv" data-chart="totalInvestment">Total Investment</button>
-      <button data-file="South China Sea/Consumption of Energy.csv" data-chart="energyConsumption">Transit of Energy through SCS</button>
-      <button data-file="South China Sea/Key Players Trade with SCS Countries.csv" data-chart="keyPlayersTrade">Key Players Trade</button>
-    </div>
-  </nav>
+  <header>
+    <h1>South China Sea: Regional Analysis</h1>
+    <a href="home.html" class="home-link">← Return to Dashboard Index</a>
+  </header>
+
   <main>
+    <div class="controls">
+      <label for="chart-selector">Select Dataset:</label>
+      <select id="chart-selector">
+        <option value="tradeVolume" data-file="South China Sea/Trade Volume.csv">Trade Volume</option>
+        <option value="keyPlayersTrade" data-file="South China Sea/Key Players Trade with SCS Countries.csv">Key Players Trade</option>
+        <option value="chinaInvestment" data-file="South China Sea/Chinese Investment.csv">Chinese Investment</option>
+        <option value="usInvestment" data-file="South China Sea/US Investment.csv">US Investment</option>
+        <option value="totalInvestment" data-file="South China Sea/Total Investment.csv">Total Investment (China vs. US)</option>
+        <option value="energyConsumption" data-file="South China Sea/Consumption of Energy.csv">Energy Transit Dependence</option>
+      </select>
+    </div>
     <div id="chart"></div>
     <div id="chart-desc" class="chart-desc"></div>
   </main>
+
   <footer>
-    © Venkatakrishnan Asuri · 
-    <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> · 
-    <a href="https://www.linkedin.com/in/venkatakrishnan-asuri" target="_blank" rel="noopener">LinkedIn</a>
+    © Venkatakrishnan Asuri ·
+    <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> ·
+    <a href="https://www.linkedin.com/in/asurixyz" target="_blank" rel="noopener">LinkedIn</a>
   </footer>
 
   <script>
-    const folderPath = ""; // full relative paths provided per button
-
-    const parseCSV = (file, isTxt=false) => {
+    const PLOTLY_LAYOUT_DEFAULTS = {
+        font: { family: 'Georgia, serif' },
+        legend: { orientation: 'h', y: -0.2 },
+        margin: { t: 50, b: 100 },
+        paper_bgcolor: '#fdfdfd',
+        plot_bgcolor: '#fdfdfd'
+    };
+    
+    const parseCSV = (file) => {
       return new Promise((resolve, reject) => {
-        if (isTxt) {
-          // For .txt file with CSV content:
-          fetch(encodeURI(folderPath + file))
-            .then(response => response.text())
-            .then(text => {
-              // convert txt to CSV string for PapaParse
-              Papa.parse(text, {
-                header: true,
-                complete: results => resolve(results.data),
-                error: err => reject(err)
-              });
-            })
-            .catch(err => reject(err));
-        } else {
-          Papa.parse(encodeURI(folderPath + file), {
-            download: true,
-            header: true,
-            dynamicTyping: true,
-            complete: results => resolve(results.data),
-            error: err => reject(err)
-          });
-        }
+        Papa.parse(encodeURI(file), {
+          download: true,
+          header: true,
+          dynamicTyping: true,
+          skipEmptyLines: true,
+          complete: results => resolve(results.data),
+          error: err => reject(err)
+        });
       });
     };
 
-    const plotTradeVolume = (data) => {
-      // data fields: Country, Year, Trade Volume (Imports+Exports) in SCS ($B)
-      // Prepare traces for each country, with year on x-axis
-      const countries = [...new Set(data.map(d => d.Country))]
-        .filter(c => c !== undefined && c !== null && String(c).trim() !== "");
-      const years = [...new Set(data.map(d => d.Year))].sort((a,b) => a-b);
-      const traces = countries.map(country => {
-        const series = years.map(year => {
-          const entry = data.find(d => d.Country === country && d.Year == year);
-          return entry ? entry["Trade Volume (Imports+Exports) in SCS ($B)"] : null;
-        });
-        const hasAnyNumber = series.some(v => typeof v === 'number' || (typeof v === 'string' && v.trim() !== '' && !Number.isNaN(Number(v))));
-        if (!hasAnyNumber) return null;
-        return { x: years, y: series, mode: 'lines+markers', name: String(country) };
-      }).filter(t => t !== null);
-      const p = Plotly.newPlot('chart', traces, {
-        title: 'Trade Volume (Imports + Exports) in South China Sea',
-        xaxis: {title: 'Year'},
-        yaxis: {title: 'Trade Volume (Billion USD)'},
-        legend: {orientation: "h", y: -0.3}
-      }, {responsive: true});
-      document.getElementById('chart-desc').textContent = 'Annual trade volume (imports + exports) through the South China Sea by country.';
-      return p;
-    };
-    
-    const plotChineseInvestment = (data) => {
-      // data fields: Year, Oil & Gas, Military Infrastructure, Ports/BRI Projects, Total Annual Investment ($B)
-      const years = data.map(d => d.Year);
-      const oilGas = data.map(d => d["Oil & Gas"]);
-      const military = data.map(d => d["Military Infrastructure"]);
-      const ports = data.map(d => d["Ports/BRI Projects"]);
-      const n = (v) => {
+    const numberize = (v) => {
         if (v == null) return null;
         if (typeof v === 'number') return Number.isFinite(v) ? v : null;
         if (typeof v === 'string') {
-          const t = v.replace(/[$,]/g, '').trim();
-          const num = Number(t);
-          return Number.isFinite(num) ? num : null;
+            const t = String(v).replace(/[,$%]/g, '').trim();
+            const n = Number(t);
+            return Number.isFinite(n) ? n : null;
         }
         return null;
-      };
-      const totals = years.map((_, i) => {
-        const a = n(oilGas[i]) || 0;
-        const b = n(military[i]) || 0;
-        const c = n(ports[i]) || 0;
-        const sum = a + b + c;
-        return Number.isFinite(sum) ? sum : null;
-      });
-      const traces = [
-        {x: years, y: oilGas, mode:'lines+markers', name: 'Oil & Gas'},
-        {x: years, y: military, mode:'lines+markers', name: 'Military Infrastructure'},
-        {x: years, y: ports, mode:'lines+markers', name: 'Ports/BRI Projects'},
-        {x: years, y: totals, mode:'lines+markers', name: 'Total', line: {width: 3}}
-      ];
-      const p = Plotly.newPlot('chart', traces, {
-        title: 'Chinese Investment in the South China Sea',
-        xaxis: {title: 'Year'},
-        yaxis: {title: 'Investment (Billion USD)'},
-        legend: {orientation: "h", y: -0.3}
-      }, {responsive: true});
-      document.getElementById('chart-desc').textContent = 'Breakdown of China\'s annual investment in the South China Sea by sector.';
-      return p;
     };
 
-    const plotUSInvestment = (data) => {
-      // Accepts flexible header names. Normalizes keys to expected labels.
-      const keyOf = (row, candidates) => candidates.find(k => k in row);
-      const years = data.map(d => d.Year ?? d["year"] ?? d["Year "]); // handle minor variants
-
-      const fdiKey = keyOf(data[0] || {}, ["FDI ($B)", "FDI", "FDI (B)", "FDI (USD B)", "FDI_$_B"]);
-      const secKey = keyOf(data[0] || {}, ["Security Assistance ($B)", "Security Assistance", "Security ($B)", "Security_Assistance_B"]);
-      const devKey = keyOf(data[0] || {}, ["Development & Economic Assistance ($B)", "Development and Economic Assistance ($B)", "Dev & Econ Assistance ($B)", "Development Assistance ($B)", "Development_Economic_Assistance_B"]);
-
-      const num = (v) => {
-        if (v == null) return null;
-        if (typeof v === 'string') {
-          const t = v.replace(/[$,]/g, '').trim();
-          const n = Number(t);
-          return Number.isFinite(n) ? n : null;
-        }
-        return Number.isFinite(v) ? v : null;
-      };
-
-      const fdi = data.map(d => num(d[fdiKey]));
-      const security = data.map(d => num(d[secKey]));
-      const dev = data.map(d => num(d[devKey]));
-      const totals = years.map((_, i) => {
-        const a = num(fdi[i]) || 0;
-        const b = num(security[i]) || 0;
-        const c = num(dev[i]) || 0;
-        const sum = a + b + c;
-        return Number.isFinite(sum) ? sum : null;
-      });
-
-      const traces = [
-        {x: years, y: fdi, mode:'lines+markers', name: 'FDI'},
-        {x: years, y: security, mode:'lines+markers', name: 'Security Assistance'},
-        {x: years, y: dev, mode:'lines+markers', name: 'Development & Economic Assistance'},
-        {x: years, y: totals, mode:'lines+markers', name: 'Total', line: {width: 3}}
-      ];
-      const p = Plotly.newPlot('chart', traces, {
-        title: 'US Investment in the South China Sea',
-        xaxis: {title: 'Year'},
-        yaxis: {title: 'Investment (Billion USD)'},
-        legend: {orientation: "h", y: -0.3}
-      }, {responsive: true});
-      document.getElementById('chart-desc').textContent = 'US financial flows to the region: FDI, security, and development assistance.';
-      return p;
+    const plotGeneric = (data, title, y_axis_title, desc) => {
+        const yearKey = 'Year' in data[0] ? 'Year' : Object.keys(data[0])[0];
+        const keys = Object.keys(data[0]).filter(k => k.toLowerCase() !== yearKey.toLowerCase());
+        const traces = keys.map(key => ({
+            x: data.map(d => d[yearKey]),
+            y: data.map(d => numberize(d[key])),
+            mode: 'lines+markers',
+            name: key
+        }));
+        const layout = { ...PLOTLY_LAYOUT_DEFAULTS, title, yaxis: { title: y_axis_title }, xaxis: { title: 'Year' } };
+        Plotly.newPlot('chart', traces, layout, { responsive: true });
+        document.getElementById('chart-desc').textContent = desc;
     };
+    
+    async function loadAndPlot(selectedOption) {
+      const chartType = selectedOption.value;
+      const file = selectedOption.dataset.file;
+      const chartDiv = document.getElementById('chart');
+      const descDiv = document.getElementById('chart-desc');
+      
+      chartDiv.innerHTML = '';
+      descDiv.textContent = 'Loading...';
 
-    const plotTotalInvestment = (data) => {
-      // data fields: Year, China - Total Investment ($B), US - Total Investment ($B)
-      const years = data.map(d => d.Year);
-      const china = data.map(d => d["China - Total Investment ($B)"]);
-      const us = data.map(d => d["US - Total Investment ($B)"]);
-      const traces = [
-        {x: years, y: china, mode:'lines+markers', name: 'China'},
-        {x: years, y: us, mode:'lines+markers', name: 'US'}
-      ];
-      const p = Plotly.newPlot('chart', traces, {
-        title: 'Total Investment in the South China Sea',
-        xaxis: {title: 'Year'},
-        yaxis: {title: 'Total Investment (Billion USD)'},
-        legend: {orientation: "h", y: -0.3}
-      }, {responsive: true});
-      document.getElementById('chart-desc').textContent = 'Total annual investment comparison between China and the US in the SCS.';
-      return p;
-    };
-
-    const plotEnergyConsumption = (data) => {
-      // data fields: Year, China, Japan, South Korea, ASEAN (shares %)
-      const years = data.map(d => d.Year);
-      const countries = ["China", "Japan", "South Korea", "ASEAN"];
-      const traces = countries.map(c => {
-        return {
-          x: years,
-          y: data.map(d => {
-            let val = d[c];
-            if (typeof val === "string") val = val.replace("%",""); // convert "44%" to 44 number
-            return +val;
-          }),
-          mode: 'lines+markers',
-          name: c
-        };
-      });
-      const p = Plotly.newPlot('chart', traces, {
-        title: 'Transit of Energy through SCS (%)',
-        xaxis: {title: 'Year'},
-        yaxis: {title: 'Energy Consumption Share (%)'},
-        legend: {orientation: "h", y: -0.3}
-      }, {responsive: true});
-      document.getElementById('chart-desc').textContent = 'Share of each economy\'s energy consumption transiting the South China Sea (proxy for energy transit dependence).';
-      return p;
-    };
-
-    const plotKeyPlayersTrade = (data) => {
-      // data fields: Year, China, US, Vietnam, Singapore
-      const years = data.map(d => d.Year);
-      const countries = ["China", "US", "Vietnam", "Singapore"];
-      const traces = countries.map(c => {
-        return {
-          x: years,
-          y: data.map(d => d[c]),
-          mode: 'lines+markers',
-          name: c
-        };
-      });
-      const p = Plotly.newPlot('chart', traces, {
-        title: 'Key Players\' Trade with SCS Countries (Billion USD)',
-        xaxis: {title: 'Year'},
-        yaxis: {title: 'Trade Volume (Billion USD)'},
-        legend: {orientation: "h", y: -0.3}
-      }, {responsive: true});
-      document.getElementById('chart-desc').textContent = 'Trade volumes of major economies with South China Sea countries.';
-      return p;
-    };
-
-    async function loadAndPlot(file, chartType) {
       try {
-        let data;
-        if (file.endsWith(".txt")) {
-          data = await parseCSV(file, true);
-        } else {
-          data = await parseCSV(file, false);
-        }
+        const data = await parseCSV(file);
         switch(chartType) {
-          case 'tradeVolume': plotTradeVolume(data); break;
-          case 'chinaInvestment': plotChineseInvestment(data); break;
-          case 'usInvestment': plotUSInvestment(data); break;
-          case 'totalInvestment': plotTotalInvestment(data); break;
-          case 'energyConsumption': plotEnergyConsumption(data); break;
-          case 'keyPlayersTrade': plotKeyPlayersTrade(data); break;
-          default: document.getElementById('chart').innerText = "Unknown Chart Type";
+          case 'tradeVolume':
+            plotGeneric(data, 'Trade Volume (Imports + Exports) in South China Sea', 'Trade Volume (Billion USD)', 'Annual trade volume (imports + exports) through the South China Sea by country.');
+            break;
+          case 'chinaInvestment':
+            plotGeneric(data, 'Chinese Investment in the South China Sea', 'Investment (Billion USD)', 'Breakdown of China\'s annual investment in the South China Sea by sector.');
+            break;
+          case 'usInvestment':
+            plotGeneric(data, 'US Investment in the South China Sea', 'Investment (Billion USD)', 'US financial flows to the region: FDI, security, and development assistance.');
+            break;
+          case 'totalInvestment':
+            plotGeneric(data, 'Total Investment in the South China Sea (China vs. US)', 'Total Investment (Billion USD)', 'Total annual investment comparison between China and the US in the SCS.');
+            break;
+          case 'energyConsumption':
+            plotGeneric(data, 'Energy Transit Dependence on the South China Sea', 'Share of National Energy Consumption (%)', 'Share of each economy\'s energy consumption that transits the South China Sea.');
+            break;
+          case 'keyPlayersTrade':
+            plotGeneric(data, 'Key Players\' Trade with SCS Countries', 'Trade Volume (Billion USD)', 'Trade volumes of major economies with South China Sea countries.');
+            break;
+          default:
+            descDiv.textContent = "Chart type not recognized.";
         }
       } catch (err) {
-        document.getElementById('chart').innerText = "Error loading data: " + err;
+        descDiv.textContent = `Error loading data from ${file}.`;
+        console.error('Error loading:', file, err);
       }
     }
 
-    // Initial load
-    const buttons = document.querySelectorAll("nav button");
-    buttons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        buttons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        const file = btn.dataset.file;
-        const chartType = btn.dataset.chart;
-        document.getElementById('chart').innerHTML = "";
-        document.getElementById('chart-desc').textContent = "";
-        loadAndPlot(file, chartType);
+    window.addEventListener('DOMContentLoaded', () => {
+      const selector = document.getElementById('chart-selector');
+      selector.addEventListener('change', () => {
+        loadAndPlot(selector.options[selector.selectedIndex]);
       });
+      // Initial load
+      loadAndPlot(selector.options[selector.selectedIndex]);
     });
-
-    // Load default chart (Trade Volume)
-    loadAndPlot("South China Sea/Trade Volume.csv", "tradeVolume");
-
   </script>
 </body>
 </html>
-
