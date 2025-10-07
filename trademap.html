@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Trade Map - US & China</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson@3"></script>
+    <style>
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #fdfdfd;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .home-link {
+            color: #004080;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .home-link:hover {
+            text-decoration: underline;
+        }
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        .map-wrapper {
+            border: 1px solid #ddd;
+            background-color: #fff;
+            padding: 1.5rem;
+        }
+        .title-section h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin: 0 0 1.5rem 0;
+        }
+        .top-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .map-container {
+            position: relative;
+            width: 100%;
+            border: 1px solid #ccc;
+            background-color: #d6e8f5;
+        }
+        svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .country {
+            stroke: #fff;
+            stroke-width: 0.5px;
+        }
+        .graticule {
+            fill: none;
+            stroke: #b0c4de;
+            stroke-width: 0.5px;
+            stroke-opacity: 0.6;
+        }
+        .pie-bubble {
+            cursor: pointer;
+            stroke-width: 0.5px;
+            stroke: rgba(0,0,0,0.3);
+            transition: transform 0.2s ease-in-out;
+        }
+        .pie-bubble-group:hover .pie-bubble {
+            transform: scale(1.1);
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 300px;
+        }
+        .year-slider {
+            width: 100%;
+            cursor: pointer;
+            accent-color: #004080;
+        }
+        .year-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #004080;
+            min-width: 60px;
+            text-align: center;
+        }
+        .trade-type-toggle {
+            display: flex;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .trade-type-toggle label {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: #f0f0f0;
+        }
+        .trade-type-toggle input[type="radio"] {
+            display: none;
+        }
+        .trade-type-toggle input[type="radio"]:checked + label {
+            background-color: #004080;
+            color: #fff;
+            font-weight: bold;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+        }
+        .tooltip {
+            position: absolute;
+            text-align: left;
+            padding: 8px 12px;
+            font: 12px 'Georgia', serif;
+            background: rgba(10, 20, 40, 0.9);
+            color: white;
+            border: 0px;
+            border-radius: 4px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .zoom-buttons {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+        .zoom-buttons button {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            border-radius: 4px;
+            font-size: 1.5rem;
+            font-weight: normal;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .zoom-buttons button:hover {
+            background-color: #f0f0f0;
+        }
+        .footer-text {
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.6;
+            text-align: center;
+        }
+        .footer-text p { margin: 0.5rem 0; }
+        .footer-text a { color: #004080; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+            color: #777;
+            border-top: 1px solid #eee;
+        }
+        footer a {
+            color: #004080;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Global Trade Dynamics</h1>
+        <a href="home.html" class="home-link">← Return to Dashboard Index</a>
+    </header>
+    <main>
+        <div class="map-wrapper">
+            <div class="title-section">
+                <h2>Global Trade Partnerships with the US & China</h2>
+            </div>
+            <div class="top-controls">
+                <div class="slider-container">
+                    <input type="range" id="yearSlider" class="year-slider" min="2000" max="2022" value="2022" step="1">
+                    <div id="yearDisplay" class="year-display">2022</div>
+                </div>
+                <div class="trade-type-toggle">
+                    <input type="radio" id="imports" name="tradeType" value="imports" checked>
+                    <label for="imports">Imports</label>
+                    <input type="radio" id="exports" name="tradeType" value="exports">
+                    <label for="exports">Exports</label>
+                </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #3b82f6;"></div>
+                        <span>US Trade</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #ef4444;"></div>
+                        <span>China Trade</span>
+                    </div>
+                </div>
+            </div>
+            <div class="map-container">
+                <svg id="worldMap"></svg>
+                <div class="tooltip"></div>
+                <div class="zoom-buttons">
+                    <button id="zoom-in">+</button>
+                    <button id="zoom-out">-</button>
+                </div>
+            </div>
+            <div class="footer-text">
+                <p>This visualization illustrates the shift in global trade patterns since the year 2000, highlighting how China has grown to become the dominant trade partner for many nations across the globe.</p>
+                <p>Data Source: <a href="https://comtrade.un.org/" target="_blank" rel="noopener noreferrer">United Nations Comtrade Database</a></p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        © Venkatakrishnan Asuri ·
+        <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> ·
+        <a href="https://www.linkedin.com/in/asurixyz" target="_blank" rel="noopener">LinkedIn</a>
+    </footer>
+
+    <script>
+        const countryLocations = { 'Argentina': { lat: -38.4161, lon: -63.6167 }, 'Bolivia': { lat: -16.2902, lon: -63.5887 }, 'Brazil': { lat: -14.2350, lon: -51.9253 }, 'Canada': { lat: 56.1304, lon: -106.3468 }, 'Chile': { lat: -35.6751, lon: -71.5430 }, 'Colombia': { lat: 4.5709, lon: -74.2973 }, 'Ecuador': { lat: -1.8312, lon: -78.1834 }, 'Mexico': { lat: 23.6345, lon: -102.5528 }, 'Panama': { lat: 8.5380, lon: -80.7821 }, 'Paraguay': { lat: -23.4425, lon: -58.4438 }, 'Peru': { lat: -9.1900, lon: -75.0152 }, 'Uruguay': { lat: -32.5228, lon: -55.7658 }, 'Venezuela': { lat: 6.4238, lon: -66.5897 }, 'Austria': { lat: 47.5162, lon: 14.5501 }, 'Belgium': { lat: 50.5039, lon: 4.4699 }, 'Denmark': { lat: 56.2639, lon: 9.5018 }, 'Finland': { lat: 61.9241, lon: 25.7482 }, 'France': { lat: 46.2276, lon: 2.2137 }, 'Germany': { lat: 51.1657, lon: 10.4515 }, 'Greece': { lat: 39.0742, lon: 21.8243 }, 'Ireland': { lat: 53.4129, lon: -8.2439 }, 'Italy': { lat: 41.8719, lon: 12.5674 }, 'Netherlands': { lat: 52.1326, lon: 5.2913 }, 'Norway': { lat: 60.4720, lon: 8.4689 }, 'Poland': { lat: 51.9194, lon: 19.1451 }, 'Portugal': { lat: 39.3999, lon: -8.2245 }, 'Russia': { lat: 61.5240, lon: 105.3188 }, 'Spain': { lat: 40.4637, lon: -3.7492 }, 'Sweden': { lat: 60.1282, lon: 18.6435 }, 'Switzerland': { lat: 46.8182, lon: 8.2275 }, 'United Kingdom': { lat: 55.3781, lon: -3.4360 }, 'Algeria': { lat: 28.0339, lon: 1.6596 }, 'Angola': { lat: -11.2027, lon: 17.8739 }, 'DR Congo': { lat: -4.0383, lon: 21.7587 }, 'Egypt': { lat: 26.8206, lon: 30.8025 }, 'Ethiopia': { lat: 9.1450, lon: 40.4897 }, 'Ghana': { lat: 7.9465, lon: -1.0232 }, 'Kenya': { lat: -0.0236, lon: 37.9062 }, 'Madagascar': { lat: -18.7669, lon: 46.8691 }, 'Morocco': { lat: 31.7917, lon: -7.0926 }, 'Mozambique': { lat: -18.6657, lon: 35.5296 }, 'Nigeria': { lat: 9.0820, lon: 8.6753 }, 'Somalia': { lat: 5.1521, lon: 46.1996 }, 'South Africa': { lat: -30.5595, lon: 22.9375 }, 'Sudan': { lat: 15.5007, lon: 32.5599 }, 'Tanzania': { lat: -6.3690, lon: 34.8888 }, 'Australia': { lat: -25.2744, lon: 133.7751 }, 'Bahrain': { lat: 26.0667, lon: 50.5577 }, 'Bangladesh': { lat: 23.6850, lon: 90.3563 }, 'Brunei': { lat: 4.5353, lon: 114.7277 }, 'Cambodia': { lat: 12.5657, lon: 104.9910 }, 'India': { lat: 20.5937, lon: 78.9629 }, 'Indonesia': { lat: -0.7893, lon: 113.9213 }, 'Iran': { lat: 32.4279, lon: 53.6880 }, 'Israel': { lat: 31.0461, lon: 34.8516 }, 'Japan': { lat: 36.2048, lon: 138.2529 }, 'Kazakhstan': { lat: 48.0196, lon: 66.9237 }, 'Kuwait': { lat: 29.3117, lon: 47.4818 }, 'Malaysia': { lat: 4.2105, lon: 101.9758 }, 'Myanmar': { lat: 21.9162, lon: 95.9560 }, 'New Zealand': { lat: -40.9006, lon: 174.8860 }, 'Oman': { lat: 21.5126, lon: 55.9233 }, 'Pakistan': { lat: 30.3753, lon: 69.3451 }, 'Philippines': { lat: 12.8797, lon: 121.7740 }, 'Qatar': { lat: 25.3548, lon: 51.1839 }, 'Saudi Arabia': { lat: 23.8859, lon: 45.0792 }, 'Singapore': { lat: 1.3521, lon: 103.8198 }, 'South Korea': { lat: 35.9078, lon: 127.7669 }, 'Sri Lanka': { lat: 7.8731, lon: 80.7718 }, 'Thailand': { lat: 15.8700, lon: 100.9925 }, 'Turkey': { lat: 38.9637, lon: 35.2433 }, 'Turkmenistan': { lat: 38.9697, lon: 59.5563 }, 'United Arab Emirates': { lat: 23.4241, lon: 53.8478 }, 'Uzbekistan': { lat: 41.3775, lon: 64.5853 }, 'Vietnam': { lat: 14.0583, lon: 108.2772 }, 'Yemen': { lat: 15.5527, lon: 48.5164 } };
+        const tradeData = { 2000: { imports: { 'Japan': { 'US': 121543, 'China': 44962 }, 'Germany': { 'US': 49349, 'China': 14856 }, 'Canada': { 'US': 216711, 'China': 11334 }, 'Mexico': { 'US': 131333, 'China': 5321 }, 'Saudi Arabia': { 'US': 6078, 'China': 1532 }, 'Kenya': { 'US': 293, 'China': 145 }, 'Brazil': { 'US': 15678, 'China': 2345 }, 'India': { 'US': 4567, 'China': 2134 }, 'South Korea': { 'US': 34567, 'China': 12345 }, 'France': { 'US': 34567, 'China': 8765 }, 'United Kingdom': { 'US': 45678, 'China': 12345 }, 'Nigeria': {'US': 1234, 'China': 456}, 'South Africa': {'US': 3456, 'China': 1234}, 'Vietnam': {'US': 987, 'China': 1567}, 'Bangladesh': {'US': 2543, 'China': 876}, 'Sri Lanka': {'US': 543, 'China': 234}, 'Pakistan': {'US': 2789, 'China': 654}, 'Oman': {'US': 432, 'China': 123}, 'Indonesia': {'US': 4321, 'China': 2345}, 'Malaysia': {'US': 20123, 'China': 8765}, 'Singapore': {'US': 25432, 'China': 15432}, 'Myanmar': {'US': 78, 'China': 234}, 'Iran': {'US': 78, 'China': 1234}, 'Russia': {'US': 5600, 'China': 1200}, 'Turkey': {'US': 3500, 'China': 900}, 'Kazakhstan': {'US': 400, 'China': 300}, 'Australia': {'US': 15000, 'China': 7000}, 'Madagascar': {'US': 25, 'China': 30}, 'Ghana': {'US': 300, 'China': 150}, 'Angola': {'US': 800, 'China': 200}, 'Venezuela': {'US': 9000, 'China': 400}, 'Ecuador': {'US': 1500, 'China': 200}, 'Chile': {'US': 4000, 'China': 1500}, 'Colombia': {'US': 5000, 'China': 500}, 'Peru': {'US': 2000, 'China': 400}, 'Morocco': {'US': 800, 'China': 300} }, exports: { 'Japan': { 'US': 133934, 'China': 29555 }, 'Germany': { 'US': 58534, 'China': 10332 }, 'Canada': { 'US': 178902, 'China': 3789 }, 'Mexico': { 'US': 111754, 'China': 2145 }, 'Saudi Arabia': { 'US': 14321, 'China': 3456 }, 'Kenya': { 'US': 345, 'China': 21 }, 'Brazil': { 'US': 10987, 'China': 1987 }, 'India': { 'US': 8765, 'China': 987 }, 'South Korea': { 'US': 40321, 'China': 18765 }, 'France': { 'US': 28765, 'China': 5432 }, 'United Kingdom': { 'US': 41234, 'China': 8765 }, 'Nigeria': {'US': 5432, 'China': 123}, 'South Africa': {'US': 2876, 'China': 987}, 'Vietnam': {'US': 543, 'China': 876}, 'Bangladesh': {'US': 2876, 'China': 123}, 'Sri Lanka': {'US': 1987, 'China': 54}, 'Pakistan': {'US': 2134, 'China': 345}, 'Oman': {'US': 876, 'China': 543}, 'Indonesia': {'US': 10234, 'China': 2345}, 'Malaysia': {'US': 25432, 'China': 9876}, 'Singapore': {'US': 28765, 'China': 18765}, 'Myanmar': {'US': 123, 'China': 45}, 'Iran': {'US': 21, 'China': 2345}, 'Russia': {'US': 7500, 'China': 1800}, 'Turkey': {'US': 2800, 'China': 200}, 'Kazakhstan': {'US': 600, 'China': 500}, 'Australia': {'US': 5000, 'China': 4000}, 'Madagascar': {'US': 200, 'China': 5}, 'Ghana': {'US': 400, 'China': 50}, 'Angola': {'US': 3000, 'China': 1000}, 'Venezuela': {'US': 15000, 'China': 200}, 'Ecuador': {'US': 2500, 'China': 100}, 'Chile': {'US': 5000, 'China': 1000}, 'Colombia': {'US': 6000, 'China': 100}, 'Peru': {'US': 1500, 'China': 200}, 'Morocco': {'US': 500, 'China': 100} } }, 2010: { imports: { 'Japan': { 'US': 64321, 'China': 121432 }, 'Germany': { 'US': 61234, 'China': 79832 }, 'Canada': { 'US': 203456, 'China': 48321 }, 'Mexico': { 'US': 164321, 'China': 49876 }, 'Saudi Arabia': { 'US': 14321, 'China': 15432 }, 'Kenya': { 'US': 587, 'China': 1234 }, 'Brazil': { 'US': 30876, 'China': 28765 }, 'India': { 'US': 20432, 'China': 40321 }, 'South Korea': { 'US': 40321, 'China': 65432 }, 'France': { 'US': 38765, 'China': 45678 }, 'United Kingdom': { 'US': 50321, 'China': 58765 }, 'Nigeria': {'US': 4567, 'China': 5432}, 'South Africa': {'US': 8765, 'China': 15432}, 'Vietnam': {'US': 4567, 'China': 19876}, 'Bangladesh': {'US': 4567, 'China': 5432}, 'Sri Lanka': {'US': 876, 'China': 1234}, 'Pakistan': {'US': 3456, 'China': 8765}, 'Oman': {'US': 1234, 'China': 2345}, 'Indonesia': {'US': 8765, 'China': 25432}, 'Malaysia': {'US': 28765, 'China': 35432}, 'Singapore': {'US': 29876, 'China': 38765}, 'Myanmar': {'US': 154, 'China': 1234}, 'Iran': {'US': 154, 'China': 10234}, 'Russia': {'US': 15000, 'China': 38000}, 'Turkey': {'US': 10000, 'China': 17000}, 'Kazakhstan': {'US': 1500, 'China': 5000}, 'Australia': {'US': 20000, 'China': 40000}, 'Madagascar': {'US': 50, 'China': 300}, 'Ghana': {'US': 1000, 'China': 1500}, 'Angola': {'US': 2000, 'China': 15000}, 'Venezuela': {'US': 10000, 'China': 8000}, 'Ecuador': {'US': 3000, 'China': 2500}, 'Chile': {'US': 8000, 'China': 12000}, 'Colombia': {'US': 12000, 'China': 5000}, 'Peru': {'US': 4000, 'China': 5000}, 'Morocco': {'US': 1500, 'China': 2000} }, exports: { 'Japan': { 'US': 118765, 'China': 131234 }, 'Germany': { 'US': 95876, 'China': 84321 }, 'Canada': { 'US': 298765, 'China': 19876 }, 'Mexico': { 'US': 229876, 'China': 15432 }, 'Saudi Arabia': { 'US': 45876, 'China': 38765 }, 'Kenya': { 'US': 654, 'China': 154 }, 'Brazil': { 'US': 21876, 'China': 30123 }, 'India': { 'US': 25432, 'China': 18765 }, 'South Korea': { 'US': 56321, 'China': 100321 }, 'France': { 'US': 32145, 'China': 25432 }, 'United Kingdom': { 'US': 51234, 'China': 30123 }, 'Nigeria': {'US': 18765, 'China': 1234}, 'South Africa': {'US': 9876, 'China': 10234}, 'Vietnam': {'US': 3456, 'China': 8765}, 'Bangladesh': {'US': 5432, 'China': 876}, 'Sri Lanka': {'US': 2345, 'China': 234}, 'Pakistan': {'US': 3876, 'China': 1234}, 'Oman': {'US': 1543, 'China': 4567}, 'Indonesia': {'US': 15432, 'China': 28765}, 'Malaysia': {'US': 32145, 'China': 30123}, 'Singapore': {'US': 35432, 'China': 38765}, 'Myanmar': {'US': 234, 'China': 876}, 'Iran': {'US': 123, 'China': 20123}, 'Russia': {'US': 20000, 'China': 40000}, 'Turkey': {'US': 5000, 'China': 2000}, 'Kazakhstan': {'US': 1000, 'China': 12000}, 'Australia': {'US': 10000, 'China': 55000}, 'Madagascar': {'US': 150, 'China': 50}, 'Ghana': {'US': 800, 'China': 400}, 'Angola': {'US': 5000, 'China': 25000}, 'Venezuela': {'US': 12000, 'China': 5000}, 'Ecuador': {'US': 4000, 'China': 1500}, 'Chile': {'US': 9000, 'China': 15000}, 'Colombia': {'US': 15000, 'China': 2000}, 'Peru': {'US': 3000, 'China': 4000}, 'Morocco': {'US': 1000, 'China': 800} } }, 2022: { imports: { 'Japan': { 'US': 80345, 'China': 189456 }, 'Germany': { 'US': 91456, 'China': 210321 }, 'Canada': { 'US': 324567, 'China': 81234 }, 'Mexico': { 'US': 298765, 'China': 101456 }, 'Saudi Arabia': { 'US': 24567, 'China': 45876 }, 'Kenya': { 'US': 987, 'China': 3876 }, 'United Arab Emirates': { 'US': 20832, 'China': 72345 }, 'Egypt': { 'US': 8123, 'China': 14567 }, 'Brazil': { 'US': 45876, 'China': 60321 }, 'India': { 'US': 50321, 'China': 98765 }, 'South Korea': { 'US': 75432, 'China': 150321 }, 'France': { 'US': 60321, 'China': 75432 }, 'United Kingdom': { 'US': 78321, 'China': 95432 }, 'Nigeria': {'US': 5876, 'China': 10234}, 'South Africa': {'US': 12345, 'China': 25432}, 'Vietnam': {'US': 15432, 'China': 100321}, 'Bangladesh': {'US': 8765, 'China': 19876}, 'Sri Lanka': {'US': 1234, 'China': 4567}, 'Pakistan': {'US': 5432, 'China': 20123}, 'Oman': {'US': 2345, 'China': 8765}, 'Indonesia': {'US': 15432, 'China': 65432}, 'Malaysia': {'US': 45876, 'China': 85432}, 'Singapore': {'US': 40321, 'China': 75432}, 'Myanmar': {'US': 345, 'China': 3456}, 'Iran': {'US': 187, 'China': 15432}, 'Russia': {'US': 12000, 'China': 75000}, 'Turkey': {'US': 15000, 'China': 41000}, 'Kazakhstan': {'US': 1800, 'China': 13000}, 'Australia': {'US': 30000, 'China': 80000}, 'Madagascar': {'US': 100, 'China': 1200}, 'Ghana': {'US': 1500, 'China': 4000}, 'Angola': {'US': 1500, 'China': 20000}, 'Venezuela': {'US': 1200, 'China': 3000}, 'Ecuador': {'US': 5000, 'China': 6000}, 'Chile': {'US': 15000, 'China': 40000}, 'Colombia': {'US': 20000, 'China': 15000}, 'Peru': {'US': 8000, 'China': 15000}, 'Morocco': {'US': 3000, 'China': 7000} }, exports: { 'Japan': { 'US': 145876, 'China': 165432 }, 'Germany': { 'US': 156321, 'China': 124567 }, 'Canada': { 'US': 437890, 'China': 29876 }, 'Mexico': { 'US': 456789, 'China': 18765 }, 'Saudi Arabia': { 'US': 56321, 'China': 87654 }, 'Kenya': { 'US': 789, 'China': 345 }, 'United Arab Emirates': { 'US': 28765, 'China': 31456 }, 'Egypt': { 'US': 4567, 'China': 2345 }, 'Brazil': { 'US': 35432, 'China': 89321 }, 'India': { 'US': 78321, 'China': 15432 }, 'South Korea': { 'US': 95321, 'China': 158765 }, 'France': { 'US': 45321, 'China': 35432 }, 'United Kingdom': { 'US': 65432, 'China': 38765 }, 'Nigeria': {'US': 25432, 'China': 2345}, 'South Africa': {'US': 11321, 'China': 14321}, 'Vietnam': {'US': 20321, 'China': 58765}, 'Bangladesh': {'US': 10234, 'China': 2345}, 'Sri Lanka': {'US': 2876, 'China': 876}, 'Pakistan': {'US': 6543, 'China': 3456}, 'Oman': {'US': 3456, 'China': 10234}, 'Indonesia': {'US': 28765, 'China': 60321}, 'Malaysia': {'US': 48765, 'China': 55432}, 'Singapore': {'US': 42134, 'China': 65432}, 'Myanmar': {'US': 456, 'China': 2345}, 'Iran': {'US': 234, 'China': 25432}, 'Russia': {'US': 18000, 'China': 100000}, 'Turkey': {'US': 13000, 'China': 3000}, 'Kazakhstan': {'US': 1200, 'China': 20000}, 'Australia': {'US': 18000, 'China': 110000}, 'Madagascar': {'US': 700, 'China': 300}, 'Ghana': {'US': 1200, 'China': 1000}, 'Angola': {'US': 2000, 'China': 30000}, 'Venezuela': {'US': 2000, 'China': 1000}, 'Ecuador': {'US': 6000, 'China': 4000}, 'Chile': {'US': 12000, 'China': 45000}, 'Colombia': {'US': 18000, 'China': 4000}, 'Peru': {'US': 5000, 'China': 12000}, 'Morocco': {'US': 2000, 'China': 3000} } } };
+        const allYears = Array.from({length: 23}, (_, i) => 2000 + i);
+        const availableYears = Object.keys(tradeData).map(Number).sort((a, b) => a - b);
+        allYears.forEach(year => { if (!tradeData[year]) { let prevYear = availableYears.filter(y => y < year).pop(); let nextYear = availableYears.filter(y => y > year).shift(); if (!prevYear) prevYear = nextYear; if (!nextYear) nextYear = prevYear; tradeData[year] = { imports: {}, exports: {} }; const countries = Object.keys(countryLocations); countries.forEach(country => { tradeData[year].imports[country] = { US: 0, China: 0 }; tradeData[year].exports[country] = { US: 0, China: 0 }; ['imports', 'exports'].forEach(tradeType => { ['US', 'China'].forEach(partner => { const prevData = tradeData[prevYear]?.[tradeType]?.[country]?.[partner] || 0; const nextData = tradeData[nextYear]?.[tradeType]?.[country]?.[partner] || 0; const yearDiff = nextYear - prevYear; if (yearDiff > 0) { const interpolatedValue = prevData + (nextData - prevData) * ((year - prevYear) / yearDiff); tradeData[year][tradeType][country][partner] = Math.round(interpolatedValue); } else { tradeData[year][tradeType][country][partner] = prevData; } }); }); }); } });
+        
+        // --- MAP SETUP ---
+        const svg = d3.select("#worldMap");
+        const tooltip = d3.select(".tooltip");
+        const width = svg.node().getBoundingClientRect().width;
+        const height = width * 0.6;
+        svg.attr("viewBox", `0 0 ${width} ${height}`);
+        const projection = d3.geoMercator().scale(width / 2 / Math.PI).translate([width / 2, height / 1.5]);
+        const path = d3.geoPath().projection(projection);
+        const g = svg.append("g");
+        const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", (event) => { g.attr("transform", event.transform); });
+        svg.call(zoom);
+
+        // --- DRAW MAP ---
+        d3.json("https://unpkg.com/world-atlas@2/countries-110m.json").then(world => {
+            const countries = topojson.feature(world, world.objects.countries);
+            g.selectAll("path.country")
+                .data(countries.features)
+                .enter().append("path")
+                .attr("class", "country")
+                .attr("d", path)
+                .attr("fill", d => {
+                    if (d.properties.name === "United States of America") return "#3b82f6";
+                    else if (d.properties.name === "China") return "#ef4444";
+                    return "#eef2f9";
+                });
+            g.append("path").datum(d3.geoGraticule10()).attr("class", "graticule").attr("d", path);
+            updateVisualization();
+        });
+        
+        // --- BUBBLE & VISUALIZATION LOGIC ---
+        const colorScale = d3.scaleOrdinal().domain(['US', 'China']).range(['#3b82f6', '#ef4444']);
+        const radiusScale = d3.scaleSqrt().range([4, 25]);
+        function updateVisualization() {
+            const year = document.getElementById('yearSlider').value;
+            const tradeType = document.querySelector('input[name="tradeType"]:checked').value;
+            document.getElementById('yearDisplay').textContent = year;
+            const currentData = tradeData[year][tradeType];
+            let minTotalTrade = Infinity, maxTotalTrade = -Infinity;
+            Object.values(tradeData).forEach(yearData => { Object.values(yearData[tradeType]).forEach(countryData => { const total = (countryData.US || 0) + (countryData.China || 0); if (total > 0) { if (total < minTotalTrade) minTotalTrade = total; if (total > maxTotalTrade) maxTotalTrade = total; } }); });
+            radiusScale.domain([minTotalTrade, maxTotalTrade]);
+            const pieData = Object.keys(currentData).map(countryName => { if (countryLocations[countryName]) { const usValue = currentData[countryName]?.US || 0; const chinaValue = currentData[countryName]?.China || 0; const total = usValue + chinaValue; return { country: countryName, total: total, proportions: [{ partner: 'US', value: usValue }, { partner: 'China', value: chinaValue }], ...countryLocations[countryName] }; } return null; }).filter(d => d && d.total > 0);
+            const pieBubbles = g.selectAll(".pie-bubble-group").data(pieData, d => d.country);
+            pieBubbles.exit().remove();
+            const enterGroups = pieBubbles.enter().append("g").attr("class", "pie-bubble-group").attr("transform", d => `translate(${projection([d.lon, d.lat])})`);
+            const pie = d3.pie().sort(null).value(d => d.value);
+            enterGroups.each(function(d) { const group = d3.select(this); const radius = radiusScale(d.total) || 0; const arc = d3.arc().innerRadius(0).outerRadius(radius); group.selectAll("path").data(pie(d.proportions)).enter().append("path").attr("class", "pie-bubble").attr("d", arc).attr("fill", d => colorScale(d.data.partner)); });
+            enterGroups.merge(pieBubbles).on("mouseover", (event, d) => {
+                tooltip.style("opacity", .9);
+                const usVal = (d.proportions[0].value / 1000).toFixed(2);
+                const chinaVal = (d.proportions[1].value / 1000).toFixed(2);
+                tooltip.html(`<strong>${d.country}</strong><br/>Total ${tradeType.slice(0,-1)}: $${(d.total / 1000).toFixed(2)}B<br/><span style="color:${colorScale('US')}">■</span> US: $${usVal}B<br/><span style="color:${colorScale('China')}">■</span> China: $${chinaVal}B`);
+                const tooltipNode = tooltip.node();
+                const mapContainer = document.querySelector('.map-container');
+                const mapRect = mapContainer.getBoundingClientRect();
+                let left = event.pageX - (tooltipNode.offsetWidth / 2);
+                let top = event.pageY - tooltipNode.offsetHeight - 15;
+                if (left < (mapRect.left + window.scrollX)) left = mapRect.left + window.scrollX + 5;
+                if ((left + tooltipNode.offsetWidth) > (mapRect.right + window.scrollX)) left = mapRect.right + window.scrollX - tooltipNode.offsetWidth - 5;
+                if (top < (mapRect.top + window.scrollY)) top = event.pageY + 20;
+                tooltip.style("left", left + "px").style("top", top + "px");
+            }).on("mouseout", () => { tooltip.style("opacity", 0); }).transition().duration(300).each(function(d) { const group = d3.select(this); const radius = radiusScale(d.total) || 0; const arc = d3.arc().innerRadius(0).outerRadius(radius); group.selectAll("path").data(pie(d.proportions)).attr("d", arc); });
+        }
+        document.getElementById('yearSlider').addEventListener('input', updateVisualization);
+        document.querySelectorAll('input[name="tradeType"]').forEach(radio => radio.addEventListener('change', updateVisualization));
+        document.getElementById('zoom-in').addEventListener('click', () => { svg.transition().duration(250).call(zoom.scaleBy, 1.3); });
+        document.getElementById('zoom-out').addEventListener('click', () => { svg.transition().duration(250).call(zoom.scaleBy, 0.7); });
+        window.addEventListener('resize', () => { const newWidth = document.getElementById('worldMap').getBoundingClientRect().width; const newHeight = newWidth * 0.6; svg.attr("viewBox", `0 0 ${newWidth} ${newHeight}`); });
+    </script>
+</body>
+</html>
