@@ -3,81 +3,156 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Maritime Trade & Investment — Home</title>
+  <title>Data Dashboard - A Geopolitical & Economic Analysis</title>
   <style>
-    :root { --accent:#004080; }
-    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f6f8fb; color:#1c2230; }
-    header { background: var(--accent); color:#fff; padding: 1.25rem 1rem; text-align:center; position:relative; }
-    header h1 { margin:0; font-size:1.6rem; }
-    header p { margin:.35rem 0 0 0; opacity:.9; }
-    .home-icon { position:absolute; top:10px; right:10px; display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:8px; background:#ffffff; color:#004080; text-decoration:none; font-size:18px; border:1px solid #d1d5db }
-    main { max-width: 1200px; margin: 1rem auto; padding: 1rem; }
-    .intro { background:#ffffff; border-radius:10px; padding:1rem; box-shadow:0 2px 10px rgba(0,0,0,.06); margin-bottom: 1rem; }
-    .intro p { margin:.5rem 0; }
-    .intro h2 { color: var(--accent); margin-top: 1.5rem; margin-bottom: 0.5rem; }
-    .intro ul { margin: 0.5rem 0; padding-left: 1.5rem; }
-    .intro li { margin: 0.25rem 0; }
-    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 14px; margin-top: 14px; }
-    .card { display:block; text-decoration:none; color:inherit; background:#fff; border-radius:10px; border:1px solid #e2e8f0; padding:14px; box-shadow:0 2px 10px rgba(0,0,0,.05); transition: transform .15s ease, box-shadow .15s ease; }
-    .card:hover { transform: translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,.1); }
-    .card h2 { margin:0 0 6px 0; font-size:1.05rem; color: var(--accent); }
-    .card p { margin:0; color:#4b5563; font-size:.95rem; }
-    
-    
-    footer { text-align:center; color:#6b7280; font-size:.9rem; padding: 1.25rem 0; }
-    @media (max-width: 600px) { header h1 { font-size:1.35rem; } }
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background-color: #fdfdfd;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      padding: 1.5rem 1rem;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 500;
+      margin: 0;
+    }
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    .intro p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #333;
+      text-align: justify;
+    }
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: #004080; /* Muted Dark Blue */
+      margin-top: 3rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.5rem;
+    }
+    .data-links-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .data-links-list li {
+      margin-bottom: 1.8rem;
+    }
+    .data-link {
+      display: block;
+      text-decoration: none;
+      color: #222;
+    }
+    .data-link h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0 0 0.3rem 0;
+      text-decoration: underline;
+      text-decoration-color: #004080;
+    }
+    .data-link p {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #555;
+      margin: 0;
+    }
+    .data-link:hover h3 {
+      color: #002d5a;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #777;
+      border-top: 1px solid #eee;
+    }
+    footer a {
+      color: #004080;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.8rem; }
+      main { padding: 0 1rem; }
+      .section-title { font-size: 1.4rem; }
+      .data-link h3 { font-size: 1.15rem; }
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>Asian Geopolitics & Economic Data</h1>
-    <p>Data-driven insights into the forces shaping Asia's future.</p>
-    <a href="index.html" class="home-icon" aria-label="Home">🏠</a>
+    <h1>Dashboard & Data Index</h1>
   </header>
   <main>
     <section class="intro">
-      <h2>Asia's Rise: A New Global Center</h2>
-      <p>Asia is at the heart of the 21st century's changing global landscape. Its rapid economic growth, shifting demographics, and complex regional relationships are creating a new world order. This dashboard provides a comprehensive look at the data driving these shifts, focusing on key players: China, Japan, India, South Korea, and the ASEAN bloc.</p>
-      
-      <p>Explore economic indicators and demographic trends to understand the rise of Asian economies and the geopolitical dynamics that define their interactions.</p>
-      
-      <h2>Global Supply Chains and Maritime Routes</h2>
-      <p>Beyond national economies, this analysis delves into the vital maritime regions that power global trade. These waterways are crucial economic corridors and, in some cases, points of strategic competition. Our analysis includes data from four key maritime regions:</p>
-      
-      <ul>
-        <li><strong>South China Sea:</strong> A critical chokepoint for global energy and a hub for Chinese investment, central to regional power rivalries.</li>
-        <li><strong>Bay of Bengal:</strong> An emerging trade route that highlights global efforts to diversify supply chains.</li>
-        <li><strong>East African Coast:</strong> A strategic link for trade between Asia and Africa, tracking new partnerships and investment flows.</li>
-        <li><strong>Persian Gulf:</strong> The heart of global energy, where data on trade and investment reflects key players' energy security priorities.</li>
-      </ul>
+      <p>
+        This dashboard provides access to a series of datasets visualizing the primary forces shaping the 21st-century global landscape. The data is organized into three principal sections: long-term global projections, contemporary regional economic data, and a geographic analysis of strategic maritime corridors.
+      </p>
     </section>
 
-    <section class="grid">
-      <a class="card" href="future.html">
-        <h2>Geopolitical & Economic Futures</h2>
-        <p>Long-term projections on GDP, demographics, and other key global trends.</p>
-      </a>
-      <a class="card" href="asian_data.html">
-        <h2>Asian Economic Data</h2>
-        <p>Explore economic indicators for major economies and the ASEAN bloc.</p>
-      </a>
-      <a class="card" href="scs.html">
-        <h2>South China Sea</h2>
-        <p>Data on trade, investments, and energy dependence in a critical region.</p>
-      </a>
-      <a class="card" href="bob.html">
-        <h2>Bay of Bengal</h2>
-        <p>Analysis of regional trade and investment trends in the Bay of Bengal.</p>
-      </a>
-      <a class="card" href="eac.html">
-        <h2>East African Coast</h2>
-        <p>Insights into trade and investment between Asia and East Africa.</p>
-      </a>
-      <a class="card" href="pg.html">
-        <h2>Persian Gulf</h2>
-        <p>Data on trade and financial flows in a region vital for energy security.</p>
-      </a>
-    </section>
+    <h2 class="section-title">I. Global & National Projections</h2>
+    <ul class="data-links-list">
+      <li>
+        <a href="future.html" class="data-link">
+          <h3>Geopolitical & Economic Futures →</h3>
+          <p>An interactive dashboard of long-term (2025-2075) projections covering GDP, population, R&D spending, military expenditure, and other key national indicators.</p>
+        </a>
+      </li>
+    </ul>
+
+    <h2 class="section-title">II. Contemporary Regional Data</h2>
+    <ul class="data-links-list">
+      <li>
+        <a href="asian_data.html" class="data-link">
+          <h3>Asian Economic Indicators →</h3>
+          <p>A focused look at key economic indicators for major Asian economies and the ASEAN bloc.</p>
+        </a>
+      </li>
+    </ul>
+
+    <h2 class="section-title">III. Strategic Maritime Corridors</h2>
+    <ul class="data-links-list">
+      <li>
+        <a href="scs.html" class="data-link">
+          <h3>South China Sea →</h3>
+          <p>Data on trade, investments, and energy dependence in a critical region of strategic competition.</p>
+        </a>
+      </li>
+      <li>
+        <a href="bob.html" class="data-link">
+          <h3>Bay of Bengal →</h3>
+          <p>Analysis of regional trade and investment trends in an emerging global supply chain corridor.</p>
+        </a>
+      </li>
+      <li>
+        <a href="eac.html" class="data-link">
+          <h3>East African Coast →</h3>
+          <p>Insights into the growing trade and investment partnerships between major Asian economies and East Africa.</p>
+        </a>
+      </li>
+      <li>
+        <a href="pg.html" class="data-link">
+          <h3>Persian Gulf →</h3>
+          <p>Data on trade and financial flows in a region vital for global energy security and economic stability.</p>
+        </a>
+      </li>
+    </ul>
   </main>
   <footer>
     © Venkatakrishnan Asuri · 
