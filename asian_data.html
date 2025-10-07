@@ -1,55 +1,160 @@
-<!DOCTYPE ahtml>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Major Asian Economies: Economic Data</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contemporary Asian Data - Economic Indicators</title>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; color: #222; }
-    header { background: #004080; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; font-weight: bold; position:relative; }
-    .home-icon { position:absolute; top:10px; right:10px; display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:8px; background:#ffffff; color:#004080; text-decoration:none; font-size:18px; border:1px solid #d1d5db }
-    nav { display: flex; background: #e1e1e1; justify-content: center; gap: 0.5rem; padding: 0.5rem 0.5rem; flex-wrap: wrap; }
-    nav button { background: #f5f5f5; border: none; padding: 0.6rem 0.9rem; font-size: 1rem; cursor: pointer; border-bottom: 3px solid transparent; transition: border-color 0.3s; border-radius: 6px; }
-    nav button.active { border-bottom: 3px solid #004080; font-weight: bold; color: #004080; background: #ffffff; }
-    main { max-width: 900px; margin: 1rem auto; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
-    #chart { width: 100%; height: 60vh; min-height: 360px; max-height: 760px; }
-    .chart-desc { margin-top: .5rem; color: #555; font-size: .95rem; }
-    .country-chart-container { margin-bottom: 2rem; }
-    .country-chart-container h2 { text-align: center; }
-
-    /* New styles for side-by-side population charts */
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background-color: #fdfdfd;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin: 0;
+    }
+    .home-link {
+      color: #004080;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    .home-link:hover {
+      text-decoration: underline;
+    }
+    main {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    .controls {
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .controls label {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    #chart-selector {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1rem;
+      padding: 0.5rem 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fff;
+    }
+    #chart-container {
+      width: 100%;
+    }
+    #chart {
+      width: 100%;
+      height: 65vh;
+      min-height: 400px;
+    }
+    .chart-desc {
+      margin-top: 0.75rem;
+      color: #555;
+      font-size: 0.95rem;
+      font-style: italic;
+    }
     .population-charts-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
     }
-    .population-charts-grid .country-chart-container {
-      margin: 0;
-      padding: 0.5rem;
-      border: 1px solid #e1e1e1;
-      border-radius: 8px;
+    .country-chart-container h2 {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
     }
-    .population-charts-grid .country-chart {
+    .country-chart {
       width: 100%;
-      height: 300px; 
+      height: 300px;
     }
-    
-    footer { text-align: center; padding: 1rem; font-size: 0.9rem; color: #666; margin-top: 2rem; }
-    @media (max-width: 900px) { main { margin: 0.5rem; padding: 0.75rem; } nav button { font-size: 0.95rem; padding: 0.55rem 0.8rem; } }
-    @media (max-width: 600px) { header { font-size: 1.25rem; } nav { gap: 0.4rem; } nav button { flex: 1 1 auto; } .chart-desc { font-size: 0.92rem; } }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #777;
+      border-top: 1px solid #eee;
+    }
+    footer a {
+      color: #004080;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.2rem; }
+      main { margin: 1.5rem auto; padding: 0 1rem; }
+      .controls { flex-direction: column; align-items: flex-start; }
+      .population-charts-grid { grid-template-columns: 1fr; }
+    }
   </style>
+</head>
+<body>
+  <header>
+    <h1>Asian Economic Indicators</h1>
+    <a href="home.html" class="home-link">← Return to Dashboard Index</a>
+  </header>
+
+  <main>
+    <div class="controls">
+      <label for="chart-selector">Select Dataset:</label>
+      <select id="chart-selector">
+        <option value="fdi" data-file="Economic Data/FDI Data.csv">Foreign Direct Investment</option>
+        <option value="consumption" data-file="Economic Data/Consumption GDP Data.csv">Consumption (% of GDP)</option>
+        <option value="savings" data-file="Economic Data/Gross Savings Data.csv">Gross Savings (% of GDP)</option>
+        <option value="labour" data-file="Economic Data/Labour Force Data.csv">Total Labour Force</option>
+        <option value="migration" data-file="Economic Data/Net Migration Data.csv">Net Migration</option>
+        <option value="population" data-file="Economic Data/Population Data.csv">Total Population</option>
+        <option value="urban" data-file="Economic Data/Urban Population Data.csv">Urban Population</option>
+        <option value="tfr" data-file="Economic Data/TFR Data.csv">Total Fertility Rate</option>
+        <option value="population_comp">Population Age Composition</option>
+      </select>
+    </div>
+    <div id="chart-container">
+      <div id="chart"></div>
+      <div id="chart-desc" class="chart-desc"></div>
+    </div>
+  </main>
+
+  <footer>
+    © Venkatakrishnan Asuri ·
+    <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> ·
+    <a href="https://www.linkedin.com/in/asurixyz" target="_blank" rel="noopener">LinkedIn</a>
+  </footer>
+
   <script>
-    // -------- Country lists and helpers --------
-    const ASEAN_COUNTRIES = [
-      'Brunei Darussalam', 'Cambodia', 'Indonesia', 'Lao PDR', 'Malaysia', 'Myanmar',
-      'Philippines', 'Singapore', 'Thailand', 'Viet Nam'
-    ];
-    // Main countries for focus
+    const ASEAN_COUNTRIES = ['Brunei Darussalam', 'Cambodia', 'Indonesia', 'Lao PDR', 'Malaysia', 'Myanmar', 'Philippines', 'Singapore', 'Thailand', 'Viet Nam'];
     const TARGET_COUNTRIES = ['China', 'Japan', 'India', 'Korea, Rep.', 'Taiwan, China'];
 
-    // Utility to parse numbers safely
+    const PLOTLY_LAYOUT = {
+        font: { family: 'Georgia, serif' },
+        legend: { orientation: 'h', y: -0.2 },
+        margin: { t: 50, b: 100 },
+        paper_bgcolor: '#fdfdfd',
+        plot_bgcolor: '#fdfdfd'
+    };
+
     function numberize(val) {
       if (val == null) return null;
       if (typeof val === 'number') return Number.isFinite(val) ? val : null;
@@ -61,8 +166,7 @@
       }
       return null;
     }
-    
-    // Custom PapaParse function to skip the first 4 metadata rows and parse data
+
     function parseCSV(url) {
       return new Promise((resolve, reject) => {
         Papa.parse(url, {
@@ -80,22 +184,15 @@
                 break;
               }
             }
-            if (headerIndex !== -1) {
-              return lines.slice(headerIndex).join('\n');
-            }
+            if (headerIndex !== -1) return lines.slice(headerIndex).join('\n');
             return chunk;
           },
-          complete: function(results) {
-            resolve(results.data);
-          },
-          error: function(err) {
-            reject(err);
-          }
+          complete: (results) => resolve(results.data),
+          error: (err) => reject(err)
         });
       });
     }
 
-    // New parser for TFR data format
     function parseTFR_CSV(url) {
       return new Promise((resolve, reject) => {
         Papa.parse(url, {
@@ -104,7 +201,6 @@
           dynamicTyping: true,
           skipEmptyLines: true,
           complete: function(results) {
-            // The TFR data has a long format, we need to transform it to wide format
             const longRows = results.data.filter(d => d.REF_AREA_LABEL && d.TIME_PERIOD && d.OBS_VALUE != null);
             const wideData = {};
             longRows.forEach(row => {
@@ -118,28 +214,20 @@
             });
             resolve(Object.values(wideData));
           },
-          error: function(err) {
-            reject(err);
-          }
+          error: (err) => reject(err)
         });
       });
     }
 
-    // World Bank wide-to-long parser for hosting multi-year CSVs
     function wideToLongWB(rawRows, valueColName, filterCountries = null) {
+      if (!rawRows || rawRows.length === 0) return [];
       const years = Object.keys(rawRows[0]).filter(k => /^\d{4}$/.test(k));
       const result = [];
       rawRows.forEach(row => {
         const country = row["Country Name"] || row["Country"];
         if (filterCountries && !filterCountries.includes(country) && !ASEAN_COUNTRIES.includes(country)) return;
         years.forEach(year => {
-          let value = row[year];
-          value = numberize(value);
-          result.push({
-            Country: country,
-            Year: +year,
-            Value: value
-          });
+          result.push({ Country: country, Year: +year, Value: numberize(row[year]) });
         });
       });
       return result;
@@ -152,7 +240,7 @@
         const aseanRows = longRows.filter(d => ASEAN_COUNTRIES.includes(d.Country) && d.Year === year);
         const nums = aseanRows.map(r => r.Value).filter(v => v != null);
         if (nums.length > 0) {
-          out[year] = isPercentage ? nums.reduce((a,b)=>a+b,0) / nums.length : nums.reduce((a,b)=>a+b,0);
+          out[year] = isPercentage ? nums.reduce((a, b) => a + b, 0) / nums.length : nums.reduce((a, b) => a + b, 0);
         } else {
           out[year] = null;
         }
@@ -160,8 +248,8 @@
       return out;
     }
 
-    function buildTraces(longRows, scale=1, isPercentage = false) {
-      const years = [...new Set(longRows.map(d => d.Year))].sort((a,b)=>a-b);
+    function buildTraces(longRows, scale = 1, isPercentage = false) {
+      const years = [...new Set(longRows.map(d => d.Year))].sort((a, b) => a - b);
       const traces = [];
       for (const country of TARGET_COUNTRIES) {
         const cLong = longRows.filter(d => d.Country === country);
@@ -170,7 +258,7 @@
           x: years,
           y: years.map(y => {
             const v = cLong.find(d => d.Year === y);
-            return v && v.Value != null ? v.Value/scale : null;
+            return v && v.Value != null ? v.Value / scale : null;
           }),
           mode: 'lines+markers',
           name: country
@@ -179,108 +267,88 @@
       const aseanAgg = aggregateASEAN(longRows, isPercentage);
       traces.push({
         x: years,
-        y: years.map(y => aseanAgg[y] != null ? aseanAgg[y]/scale : null),
+        y: years.map(y => aseanAgg[y] != null ? aseanAgg[y] / scale : null),
         mode: 'lines+markers',
         name: 'ASEAN'
       });
       return traces;
     }
 
-    // -------- Chart Loaders --------
-
     const plotFDI = async (file) => {
       const data = await parseCSV(file);
-      const longRows = wideToLongWB(data, "Foreign direct investment, net inflows (BoP, current US$)", TARGET_COUNTRIES);
+      const longRows = wideToLongWB(data, "FDI", TARGET_COUNTRIES);
       const traces = buildTraces(longRows, 1e9);
-      Plotly.newPlot('chart', traces, { 
-        title: 'Foreign Direct Investment (Net Inflows)', 
-        xaxis: {title:'Year'}, yaxis: {title:'FDI (Billion USD)'}, legend: {orientation:'h', y:-0.3} }, {responsive:true}
-      );
+      const layout = { ...PLOTLY_LAYOUT, title: 'Foreign Direct Investment (Net Inflows)', xaxis: { title: 'Year' }, yaxis: { title: 'FDI (Billion USD)' } };
+      Plotly.newPlot('chart', traces, layout, { responsive: true });
       document.getElementById('chart-desc').textContent = 'FDI net inflows for major Asian economies and ASEAN aggregate.';
     };
 
     const plotConsumption = async (file) => {
-      const data = await parseCSV(file);
-      const longRows = wideToLongWB(data, "Final consumption expenditure (% of GDP)", TARGET_COUNTRIES);
-      const traces = buildTraces(longRows, 1, true); // Added true for percentage
-      Plotly.newPlot('chart', traces, { 
-        title: 'Final Consumption Expenditure (% of GDP)', 
-        xaxis: {title:'Year'}, yaxis: {title:'% of GDP'}, legend: {orientation:'h', y:-0.3} }, {responsive:true}
-      );
-      document.getElementById('chart-desc').textContent = 'Final consumption expenditure as a % of GDP.';
+        const data = await parseCSV(file);
+        const longRows = wideToLongWB(data, "Consumption", TARGET_COUNTRIES);
+        const traces = buildTraces(longRows, 1, true);
+        const layout = { ...PLOTLY_LAYOUT, title: 'Final Consumption Expenditure (% of GDP)', xaxis: { title: 'Year' }, yaxis: { title: '% of GDP' } };
+        Plotly.newPlot('chart', traces, layout, { responsive: true });
+        document.getElementById('chart-desc').textContent = 'Final consumption expenditure as a percentage of GDP.';
     };
 
     const plotSavings = async (file) => {
-      const data = await parseCSV(file);
-      const longRows = wideToLongWB(data, "Gross savings (% of GDP)", TARGET_COUNTRIES).filter(d => d.Year >= 1975);
-      const traces = buildTraces(longRows, 1, true); // Added true for percentage
-      Plotly.newPlot('chart', traces, { 
-        title: 'Gross Savings (% of GDP)', 
-        xaxis: {title:'Year'}, yaxis: {title:'% of GDP'}, legend: {orientation:'h', y:-0.3} }, {responsive:true}
-      );
-      document.getElementById('chart-desc').textContent = 'Gross savings as a % of GDP, starting from 1975.';
+        const data = await parseCSV(file);
+        const longRows = wideToLongWB(data, "Savings", TARGET_COUNTRIES).filter(d => d.Year >= 1975);
+        const traces = buildTraces(longRows, 1, true);
+        const layout = { ...PLOTLY_LAYOUT, title: 'Gross Savings (% of GDP)', xaxis: { title: 'Year' }, yaxis: { title: '% of GDP' } };
+        Plotly.newPlot('chart', traces, layout, { responsive: true });
+        document.getElementById('chart-desc').textContent = 'Gross savings as a percentage of GDP, from 1975 onwards.';
     };
 
     const plotLabourForce = async (file) => {
-      const data = await parseCSV(file);
-      const longRows = wideToLongWB(data, "Labor force, total", TARGET_COUNTRIES).filter(d => d.Year >= 1990); // Filtered for years >= 1990
-      const traces = buildTraces(longRows, 1e6);
-      Plotly.newPlot('chart', traces, {
-        title: 'Labour Force Over Time',
-        xaxis: {title:'Year'}, yaxis: {title:'Labour Force (Million)'}, legend: {orientation:'h', y:-0.3}
-      }, {responsive:true});
-      document.getElementById('chart-desc').textContent = 'Labour force size over time, starting from 1990.';
+        const data = await parseCSV(file);
+        const longRows = wideToLongWB(data, "Labour", TARGET_COUNTRIES).filter(d => d.Year >= 1990);
+        const traces = buildTraces(longRows, 1e6);
+        const layout = { ...PLOTLY_LAYOUT, title: 'Total Labour Force', xaxis: { title: 'Year' }, yaxis: { title: 'Labour Force (Millions)' } };
+        Plotly.newPlot('chart', traces, layout, { responsive: true });
+        document.getElementById('chart-desc').textContent = 'Total labour force size, from 1990 onwards.';
     };
 
     const plotNetMigration = async (file) => {
-      const data = await parseCSV(file);
-      const longRows = wideToLongWB(data, "Net migration", TARGET_COUNTRIES);
-      const traces = buildTraces(longRows, 1);
-      Plotly.newPlot('chart', traces, {
-        title: 'Net Migration Over Time',
-        xaxis: {title:'Year'}, yaxis: {title:'Net Migration (Number of People)'}, legend: {orientation:'h', y:-0.3}
-      }, {responsive:true});
-      document.getElementById('chart-desc').textContent = 'Net migration (number of people).';
+        const data = await parseCSV(file);
+        const longRows = wideToLongWB(data, "Migration", TARGET_COUNTRIES);
+        const traces = buildTraces(longRows, 1);
+        const layout = { ...PLOTLY_LAYOUT, title: 'Net Migration', xaxis: { title: 'Year' }, yaxis: { title: 'Net Migration (Number of People)' } };
+        Plotly.newPlot('chart', traces, layout, { responsive: true });
+        document.getElementById('chart-desc').textContent = 'Net migration figures for major Asian economies and ASEAN.';
     };
-    
-    // New function to plot urban population data
+
     const plotUrbanPopulation = async (file) => {
-      const data = await parseCSV(file);
-      const longRows = wideToLongWB(data, "Urban population", TARGET_COUNTRIES);
-      const traces = buildTraces(longRows, 1e6);
-      Plotly.newPlot('chart', traces, {
-        title: 'Urban Population',
-        xaxis: {title:'Year'}, yaxis: {title:'Urban Population (Million)'}, legend: {orientation:'h', y:-0.3}
-      }, {responsive:true});
-      document.getElementById('chart-desc').textContent = 'Urban population over time.';
+        const data = await parseCSV(file);
+        const longRows = wideToLongWB(data, "Urban Pop", TARGET_COUNTRIES);
+        const traces = buildTraces(longRows, 1e6);
+        const layout = { ...PLOTLY_LAYOUT, title: 'Urban Population', xaxis: { title: 'Year' }, yaxis: { title: 'Urban Population (Millions)' } };
+        Plotly.newPlot('chart', traces, layout, { responsive: true });
+        document.getElementById('chart-desc').textContent = 'Total urban population over time.';
     };
 
     const plotPopulation = async (file) => {
-      const data = await parseCSV(file);
-      const longRows = wideToLongWB(data, "Population, total", TARGET_COUNTRIES);
-      const traces = buildTraces(longRows, 1e6);
-      Plotly.newPlot('chart', traces, {
-        title: 'Total Population',
-        xaxis: {title:'Year'}, yaxis: {title:'Population (Million)'}, legend: {orientation:'h', y:-0.3}
-      }, {responsive:true});
-      document.getElementById('chart-desc').textContent = 'Total population over time.';
+        const data = await parseCSV(file);
+        const longRows = wideToLongWB(data, "Population", TARGET_COUNTRIES);
+        const traces = buildTraces(longRows, 1e6);
+        const layout = { ...PLOTLY_LAYOUT, title: 'Total Population', xaxis: { title: 'Year' }, yaxis: { title: 'Population (Millions)' } };
+        Plotly.newPlot('chart', traces, layout, { responsive: true });
+        document.getElementById('chart-desc').textContent = 'Total population over time.';
     };
-
+    
     const plotTFR = async (file) => {
-      const data = await parseTFR_CSV(file); // Switched to new parser
-      const longRows = wideToLongWB(data, "Total fertility rate (births per woman)", TARGET_COUNTRIES);
-      const traces = buildTraces(longRows, 1, true);
-      Plotly.newPlot('chart', traces, {
-        title: 'Total Fertility Rate (TFR)',
-        xaxis: {title:'Year'}, yaxis: {title:'Births Per Woman'}, legend: {orientation:'h', y:-0.3}
-      }, {responsive:true});
-      document.getElementById('chart-desc').textContent = 'Total fertility rate by country/region.';
+        const data = await parseTFR_CSV(file);
+        const longRows = wideToLongWB(data, "TFR", TARGET_COUNTRIES);
+        const traces = buildTraces(longRows, 1, true);
+        const layout = { ...PLOTLY_LAYOUT, title: 'Total Fertility Rate (TFR)', xaxis: { title: 'Year' }, yaxis: { title: 'Births Per Woman' } };
+        Plotly.newPlot('chart', traces, layout, { responsive: true });
+        document.getElementById('chart-desc').textContent = 'Total fertility rate (births per woman) by country/region.';
     };
 
-    // New function to plot separate stacked charts for each country
     const plotIndividualPopulationCompositions = async () => {
-      const main = document.querySelector('main');
-      main.innerHTML = `<div id="chart-desc" class="chart-desc">Loading Population Data...</div><div class="population-charts-grid"></div>`;
+      const container = document.getElementById('chart-container');
+      container.innerHTML = `<div id="chart-desc" class="chart-desc">Loading Population Data...</div><div class="population-charts-grid"></div>`;
       try {
         const [data0_14, data15_64, data65] = await Promise.all([
           parseCSV('Economic Data/Population 0-14 Data.csv'),
@@ -288,24 +356,22 @@
           parseCSV('Economic Data/Population 65 Data.csv')
         ]);
         
-        const longRows0_14 = wideToLongWB(data0_14, 'Population ages 0-14 (% of total population)');
-        const longRows15_64 = wideToLongWB(data15_64, 'Population ages 15-64 (% of total population)');
-        const longRows65 = wideToLongWB(data65, 'Population ages 65 and above (% of total population)');
+        const longRows0_14 = wideToLongWB(data0_14, 'Pop 0-14');
+        const longRows15_64 = wideToLongWB(data15_64, 'Pop 15-64');
+        const longRows65 = wideToLongWB(data65, 'Pop 65+');
         
-        document.getElementById('chart-desc').textContent = 'Population composition by age group for each major Asian economy.';
+        document.getElementById('chart-desc').textContent = 'Population composition by age group for each major Asian economy and ASEAN.';
         const gridContainer = document.querySelector('.population-charts-grid');
         
         const plotCountries = ['China', 'Japan', 'India', 'Korea, Rep.', 'Indonesia', 'ASEAN'];
         for (const country of plotCountries) {
-          const chartContainer = document.createElement('div');
-          chartContainer.className = 'country-chart-container';
-          // Use a simplified ID for the container to avoid overflow
+          const chartDiv = document.createElement('div');
+          chartDiv.className = 'country-chart-container';
           const chartId = `chart-${country.replace(/[^a-zA-Z0-9]/g, '')}`;
-          chartContainer.innerHTML = `<h2>${country}</h2><div id="${chartId}" class="country-chart"></div>`;
-          gridContainer.appendChild(chartContainer);
+          chartDiv.innerHTML = `<h2>${country}</h2><div id="${chartId}" class="country-chart"></div>`;
+          gridContainer.appendChild(chartDiv);
           
           let countryRows0_14, countryRows15_64, countryRows65;
-          
           if (country === 'ASEAN') {
             countryRows0_14 = longRows0_14.filter(d => ASEAN_COUNTRIES.includes(d.Country));
             countryRows15_64 = longRows15_64.filter(d => ASEAN_COUNTRIES.includes(d.Country));
@@ -317,7 +383,6 @@
           }
           
           const years = [...new Set(countryRows0_14.map(d => d.Year))].sort((a,b)=>a-b);
-          const traces = [];
           
           const getAverages = (rows) => {
             const out = {};
@@ -333,122 +398,58 @@
           const values15_64 = (country === 'ASEAN') ? getAverages(countryRows15_64) : {};
           const values65 = (country === 'ASEAN') ? getAverages(countryRows65) : {};
           
-          traces.push({
-            x: years,
-            y: years.map(y => {
-              if (country === 'ASEAN') return values0_14[y];
-              const v = countryRows0_14.find(d => d.Year === y);
-              return v && v.Value != null ? v.Value : null;
-            }),
-            name: `0-14`,
-            mode: 'lines',
-            line: { width: 0 },
-            fill: 'tonexty',
-            stackgroup: 'one',
-            fillcolor: 'rgba(31, 119, 180, 0.7)',
-          });
-          traces.push({
-            x: years,
-            y: years.map(y => {
-              if (country === 'ASEAN') return values15_64[y];
-              const v = countryRows15_64.find(d => d.Year === y);
-              return v && v.Value != null ? v.Value : null;
-            }),
-            name: `15-64`,
-            mode: 'lines',
-            line: { width: 0 },
-            fill: 'tonexty',
-            stackgroup: 'one',
-            fillcolor: 'rgba(44, 160, 44, 0.7)'
-          });
-          traces.push({
-            x: years,
-            y: years.map(y => {
-              if (country === 'ASEAN') return values65[y];
-              const v = countryRows65.find(d => d.Year === y);
-              return v && v.Value != null ? v.Value : null;
-            }),
-            name: `65+`,
-            mode: 'lines',
-            line: { width: 0 },
-            fill: 'tonexty',
-            stackgroup: 'one',
-            fillcolor: 'rgba(255, 127, 14, 0.7)'
-          });
+          const traces = [
+              { x: years, y: years.map(y => (country === 'ASEAN' ? values0_14[y] : (countryRows0_14.find(d=>d.Year===y)?.Value ?? null))), name: '0-14', mode: 'lines', line: {width:0}, fill: 'tonexty', stackgroup: 'one', fillcolor: 'rgba(31, 119, 180, 0.7)' },
+              { x: years, y: years.map(y => (country === 'ASEAN' ? values15_64[y] : (countryRows15_64.find(d=>d.Year===y)?.Value ?? null))), name: '15-64', mode: 'lines', line: {width:0}, fill: 'tonexty', stackgroup: 'one', fillcolor: 'rgba(44, 160, 44, 0.7)' },
+              { x: years, y: years.map(y => (country === 'ASEAN' ? values65[y] : (countryRows65.find(d=>d.Year===y)?.Value ?? null))), name: '65+', mode: 'lines', line: {width:0}, fill: 'tonexty', stackgroup: 'one', fillcolor: 'rgba(255, 127, 14, 0.7)' }
+          ];
           
-          Plotly.newPlot(chartId, traces, {
-            xaxis: {title: 'Year'},
-            yaxis: {title: '% of Total Population', range: [0, 100]},
-            legend: {orientation: 'h', y: -0.5}
-          }, {responsive: true});
+          const layout = { ...PLOTLY_LAYOUT, yaxis: { title: '% of Total Population', range: [0, 100]}, showlegend: true, legend: {orientation: 'h', y: -0.3} };
+          Plotly.newPlot(chartId, traces, layout, {responsive: true});
         }
       } catch (err) {
-        document.getElementById('chart-desc').textContent = 'Error loading population data';
-        console.error('Error loading population data:', err);
+        document.getElementById('chart-desc').textContent = 'Error loading population data.';
+        console.error('Error:', err);
       }
     };
 
+    async function loadChart(selectedOption) {
+        const chartType = selectedOption.value;
+        const file = selectedOption.dataset.file;
+        const container = document.getElementById('chart-container');
+        
+        // Reset the view to a single chart for most cases
+        if (chartType !== 'population_comp') {
+            container.innerHTML = `<div id="chart"></div><div id="chart-desc" class="chart-desc"></div>`;
+        }
+        document.getElementById('chart-desc').textContent = 'Loading...';
 
-    // -------- Chart Loader Dispatcher --------
-    async function loadAndPlot(file, which) {
-      const main = document.querySelector('main');
-      main.innerHTML = `<div id="chart"></div><div id="chart-desc" class="chart-desc"></div>`;
-      document.getElementById('chart-desc').textContent = 'Loading...';
-      if (which === 'population_comp') {
-        plotIndividualPopulationCompositions();
-        return;
-      }
-      try {
-        if (which === 'fdi') return plotFDI(file);
-        if (which === 'consumption') return plotConsumption(file);
-        if (which === 'savings') return plotSavings(file);
-        if (which === 'labour') return plotLabourForce(file);
-        if (which === 'migration') return plotNetMigration(file);
-        if (which === 'population') return plotPopulation(file);
-        if (which === 'tfr') return plotTFR(file);
-        if (which === 'urban') return plotUrbanPopulation(file);
-        document.getElementById('chart').innerText = 'Unknown chart type';
-      } catch (err) {
-        document.getElementById('chart').innerText = 'Error loading data';
-        console.error('Error loading', file, err);
-      }
+        try {
+            switch (chartType) {
+                case 'fdi': await plotFDI(file); break;
+                case 'consumption': await plotConsumption(file); break;
+                case 'savings': await plotSavings(file); break;
+                case 'labour': await plotLabourForce(file); break;
+                case 'migration': await plotNetMigration(file); break;
+                case 'population': await plotPopulation(file); break;
+                case 'urban': await plotUrbanPopulation(file); break;
+                case 'tfr': await plotTFR(file); break;
+                case 'population_comp': await plotIndividualPopulationCompositions(); break;
+                default: document.getElementById('chart').innerText = 'Unknown chart type';
+            }
+        } catch (err) {
+            document.getElementById('chart-desc').textContent = `Error loading data for ${chartType}.`;
+            console.error('Error loading:', file, err);
+        }
     }
 
-    // -------- Navigation / Page loader --------
     window.addEventListener('DOMContentLoaded', () => {
-      const buttons = document.querySelectorAll('nav button');
-      buttons.forEach(btn => btn.addEventListener('click', () => {
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        loadAndPlot(btn.dataset.file, btn.dataset.chart);
-      }));
-      // Default load: FDI view
-      loadAndPlot('Economic Data/FDI Data.csv', 'fdi');
+      const selector = document.getElementById('chart-selector');
+      selector.addEventListener('change', () => {
+        loadChart(selector.options[selector.selectedIndex]);
+      });
+      loadChart(selector.options[selector.selectedIndex]); // Initial load
     });
   </script>
-</head>
-<body>
-  <header>
-    <span>Major Asian Economies: Economic Data</span>
-    <a href="index.html" class="home-icon" aria-label="Home">🏠</a>
-  </header>
-  <nav>
-    <button class="active" data-file="Economic Data/FDI Data.csv" data-chart="fdi">FDI</button>
-    <button data-file="Economic Data/Consumption GDP Data.csv" data-chart="consumption">Consumption</button>
-    <button data-file="Economic Data/Gross Savings Data.csv" data-chart="savings">Gross Savings</button>
-    <button data-file="Economic Data/Labour Force Data.csv" data-chart="labour">Labour Force</button>
-    <button data-file="Economic Data/Net Migration Data.csv" data-chart="migration">Net Migration</button>
-    <button data-file="Economic Data/Population Data.csv" data-chart="population">Total Population</button>
-    <button data-file="Economic Data/Urban Population Data.csv" data-chart="urban">Urban Pop.</button>
-    <button data-file="Economic Data/TFR Data.csv" data-chart="tfr">Total Fertility Rate</button>
-    <button data-file="" data-chart="population_comp">Pop. Age Comp.</button>
-  </nav>
-  <main>
-    <div id="chart"></div>
-    <div id="chart-desc" class="chart-desc"></div>
-  </main>
-  <footer>© Venkatakrishnan Asuri · <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> · <a href="https://www.linkedin.com/in/asurixyz" target="_blank" rel="noopener">LinkedIn</a></footer>
 </body>
 </html>
-
-
