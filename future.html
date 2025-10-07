@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bay of Bengal Data Visualization</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; color: #222; }
+    header { background: #004080; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; font-weight: bold; position:relative; }
+    .home-icon { position:absolute; top:10px; right:10px; display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:8px; background:#ffffff; color:#004080; text-decoration:none; font-size:18px; border:1px solid #d1d5db }
+    nav { display: flex; background: #e1e1e1; justify-content: center; gap: 0.5rem; padding: 0.5rem 0.5rem; flex-wrap: wrap; }
+    .tabs { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; }
+    nav button { background: #f5f5f5; border: none; padding: 0.6rem 0.9rem; font-size: 1rem; cursor: pointer; border-bottom: 3px solid transparent; transition: border-color 0.3s; border-radius: 6px; }
+    nav button.active { border-bottom: 3px solid #004080; font-weight: bold; color: #004080; background: #ffffff; }
+    main { max-width: 900px; margin: 1rem auto; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+    #chart { width: 100%; height: 60vh; min-height: 360px; max-height: 760px; }
+    .chart-desc { margin-top: .5rem; color: #555; font-size: .95rem; }
+    footer { text-align: center; padding: 1rem; font-size: 0.9rem; color: #666; margin-top: 2rem; }
+    @media (max-width: 900px) { main { margin: 0.5rem; padding: 0.75rem; } nav button { font-size: 0.95rem; padding: 0.55rem 0.8rem; } }
+    @media (max-width: 600px) { header { font-size: 1.25rem; } nav { gap: 0.4rem; } nav button { flex: 1 1 auto; } .chart-desc { font-size: 0.92rem; } }
+  </style>
+  <script>
+    const chartsData = {
+      gdp: {
+        title: "Long-Term Economic Projections: Major Economies 2022-2075",
+        description: "Source: Goldman Sachs Research, 'The Path to 2075' (Global Economics Paper No: 324, December 2022)",
+        xaxis: "Year",
+        yaxis: "Projected Nominal GDP (USD Trillions)",
+        type: 'line',
+        data: [
+          { Entity: "China", 2022: 18.3, 2030: 28.9, 2050: 51.5, 2075: 57.0 },
+          { Entity: "USA", 2022: 25.5, 2030: 31.0, 2050: 45.8, 2075: 51.5 },
+          { Entity: "India", 2022: 3.5, 2030: 7.9, 2050: 22.2, 2075: 52.5 },
+          { Entity: "EU (DE+FR)", 2022: 6.8, 2030: 8.1, 2050: 10.9, 2075: 13.9 },
+          { Entity: "Brazil", 2022: 1.9, 2030: 2.8, 2050: 5.4, 2075: 8.7 },
+          { Entity: "Russia", 2022: 2.1, 2030: 2.5, 2050: 3.6, 2075: 4.6 }
+        ]
+      },
+      population: {
+        title: "Global Population Distribution 2025-2075",
+        description: "Source: UN World Population Prospects 2022",
+        xaxis: "Year",
+        yaxis: "Population (Millions)",
+        type: 'area',
+        data: [
+            { Entity: "India", 2025: 1458, 2050: 1670, 2075: 1657 },
+            { Entity: "China", 2025: 1425, 2050: 1312, 2075: 1028 },
+            { Entity: "EU", 2025: 448, 2050: 420, 2075: 401 },
+            { Entity: "USA", 2025: 340, 2050: 375, 2075: 394 },
+            { Entity: "Brazil", 2025: 218, 2050: 231, 2075: 215 },
+            { Entity: "Russia", 2025: 144, 2050: 133, 2075: 121 },
+            { Entity: "Japan", 2025: 123, 2050: 104, 2075: 82 },
+            { Entity: "South Africa", 2025: 62, 2050: 70, 2075: 74 }
+        ]
+      },
+       working_pop: {
+        title: "The Global Workforce Engine: Working-Age Population to 2075",
+        description: "Source: United Nations World Population Prospects 2022 (Medium-variant projection)",
+        xaxis: "Year",
+        yaxis: "Working-Age Population (Millions)",
+        type: 'area',
+        data: [
+            { Entity: "India", 2025: 988, 2050: 1119, 2075: 1088 },
+            { Entity: "China", 2025: 986, 2050: 768, 2075: 579 },
+            { Entity: "EU", 2025: 284, 2050: 246, 2075: 222 },
+            { Entity: "USA", 2025: 221, 2050: 231, 2075: 238 },
+            { Entity: "Brazil", 2025: 149, 2050: 146, 2075: 129 },
+            { Entity: "Russia", 2025: 91, 2050: 81, 2075: 71 },
+            { Entity: "Japan", 2025: 73, 2050: 52, 2075: 41 },
+            { Entity: "South Africa", 2025: 40, 2050: 45, 2075: 46 }
+        ]
+      },
+      median_age: {
+        title: "Median Age Trends to 2050",
+        description: "Source: UN World Population Prospects 2022.",
+        xaxis: "Year",
+        yaxis: "Median Age (Years)",
+        type: 'line',
+        data: [
+          { Entity: "Japan", 2010: 44.9, 2023: 49.1, 2050: 53.6 },
+          { Entity: "EU", 2010: 41.5, 2023: 44.0, 2050: 48.9 },
+          { Entity: "USA", 2010: 37.0, 2023: 38.6, 2050: 42.1 },
+          { Entity: "China", 2010: 35.2, 2023: 39.0, 2050: 49.8 },
+          { Entity: "Russia", 2010: 38.4, 2023: 40.3, 2050: 44.1 },
+          { Entity: "Brazil", 2010: 29.4, 2023: 33.8, 2050: 42.5 },
+          { Entity: "India", 2010: 25.1, 2023: 28.2, 2050: 38.1 }
+        ]
+      },
+       age_dependency: {
+        title: "The Economic Burden: Age Dependency Ratio to 2050",
+        description: "Source: UN World Population Prospects 2022. Formula: Ratio = (Dependents ÷ Workforce) * 100",
+        xaxis: "Year",
+        yaxis: "Dependents per 100 Working-Age People",
+        type: 'line',
+        data: [
+            { Entity: "Japan", 2010: 57.2, 2023: 71.1, 2050: 80.8 },
+            { Entity: "EU", 2010: 52.5, 2023: 57.5, 2050: 70.1 },
+            { Entity: "USA", 2010: 50.9, 2023: 53.8, 2050: 61.2 },
+            { Entity: "Russia", 2010: 43.1, 2023: 51.5, 2050: 58.2 },
+            { Entity: "China", 2010: 39.6, 2023: 47.3, 2050: 69.8 },
+            { Entity: "Brazil", 2010: 48.9, 2023: 44.5, 2050: 56.4 },
+            { Entity: "India", 2010: 53.6, 2023: 45.8, 2050: 52.1 }
+        ]
+    },
+    urbanization: {
+        title: "The Urban Shift: Urbanization Rate Trends to 2050",
+        description: "Source: UN World Urbanization Prospects.",
+        xaxis: "Year",
+        yaxis: "Urban Population (% of Total)",
+        type: 'line',
+        data: [
+            { Entity: "Japan", 2010: 90.7, 2023: 92.0, 2050: 93.8 },
+            { Entity: "Brazil", 2010: 84.4, 2023: 87.8, 2050: 91.5 },
+            { Entity: "USA", 2010: 80.7, 2023: 83.3, 2050: 87.4 },
+            { Entity: "EU", 2010: 73.8, 2023: 75.7, 2050: 80.1 },
+            { Entity: "Russia", 2010: 73.7, 2023: 75.1, 2050: 78.2 },
+            { Entity: "China", 2010: 49.2, 2023: 64.7, 2050: 75.3 },
+            { Entity: "India", 2010: 30.9, 2023: 36.2, 2050: 52.8 }
+        ]
+    },
+    manuf_gdp: {
+        title: "Global Industrial Shifts: Manufacturing Share of GDP to 2035",
+        description: "Source: World Bank (historical); Projections synthesized from EIU & S&P Global trend analyses.",
+        xaxis: "Year",
+        yaxis: "Manufacturing Value Added (% of GDP)",
+        type: 'line',
+        data: [
+            { Entity: "China", 2010: 32.1, 2023: 27.8, 2035: 25.0 },
+            { Entity: "India", 2010: 15.1, 2023: 13.5, 2035: 18.0 },
+            { Entity: "EU", 2010: 16.5, 2023: 15.0, 2035: 14.0 },
+            { Entity: "USA", 2010: 12.0, 2023: 11.0, 2035: 10.5 },
+            { Entity: "Brazil", 2010: 15.5, 2023: 10.0, 2035: 9.5 },
+            { Entity: "Russia", 2010: 13.0, 2023: 12.5, 2035: 12.0 },
+            { Entity: "Japan", 2010: 20.7, 2023: 20.5, 2035: 20.0 }
+        ]
+    },
+     hightech_exports: {
+        title: "Climbing the Value Chain: High-Tech Exports to 2035",
+        description: "Source: The World Bank (historical); Projections synthesized from national industrial strategies.",
+        xaxis: "Year",
+        yaxis: "High-Tech Exports (% of Manufactured Exports)",
+        type: 'line',
+        data: [
+            { Entity: "China", 2010: 25.1, 2021: 31.8, 2035: 38.0 },
+            { Entity: "Japan", 2010: 23.5, 2021: 19.5, 2035: 22.0 },
+            { Entity: "EU", 2010: 20.1, 2021: 22.5, 2035: 25.0 },
+            { Entity: "USA", 2010: 26.2, 2021: 24.1, 2035: 28.0 },
+            { Entity: "India", 2010: 7.8, 2021: 11.2, 2035: 18.0 },
+            { Entity: "Brazil", 2010: 10.5, 2021: 8.9, 2035: 12.0 },
+            { Entity: "Russia", 2010: 9.8, 2021: 10.5, 2035: 11.0 }
+        ]
+    },
+    rd_spending: {
+        title: "The Innovation Race: R&D Spending as a Share of GDP to 2035",
+        description: "Source: World Bank/OECD (historical); Projections synthesized from national targets and OECD/EIU analyses.",
+        xaxis: "Year",
+        yaxis: "R&D Expenditure (% of GDP)",
+        type: 'line',
+        data: [
+            { Entity: "South Korea", 2010: 3.59, 2022: 4.9, 2035: 5.5 },
+            { Entity: "Japan", 2010: 3.26, 2022: 3.3, 2035: 3.5 },
+            { Entity: "USA", 2010: 2.70, 2022: 3.5, 2035: 3.8 },
+            { Entity: "EU", 2010: 1.94, 2022: 2.2, 2035: 2.8 },
+            { Entity: "China", 2010: 1.71, 2022: 2.6, 2035: 3.5 },
+            { Entity: "Russia", 2010: 1.13, 2022: 1.0, 2035: 1.2 },
+            { Entity: "Brazil", 2010: 1.14, 2022: 1.0, 2035: 1.3 },
+            { Entity: "India", 2010: 0.82, 2022: 0.7, 2035: 1.5 }
+        ]
+    },
+    fdi: {
+        title: "Shifting Tides of Capital: FDI Inflow Trends to 2035",
+        description: "Source: UNCTAD (historical); Projections synthesized from OECD and market analyses.",
+        xaxis: "Year",
+        yaxis: "Net FDI Inflows (Billions of USD)",
+        type: 'line',
+        data: [
+            { Entity: "USA", 2010: 259, 2022: 285, 2035: 350 },
+            { Entity: "China", 2010: 244, 2022: 180, 2035: 200 },
+            { Entity: "EU", 2010: 420, 2022: 140, 2035: 250 },
+            { Entity: "Brazil", 2010: 84, 2022: 91, 2035: 110 },
+            { Entity: "India", 2010: 27, 2022: 49, 2035: 120 },
+            { Entity: "Russia", 2010: 43, 2022: -15, 2035: 10 },
+            { Entity: "Japan", 2010: -1, 2022: 33, 2035: 40 }
+        ]
+    },
+    economic_freedom: {
+        title: "The Foundation of Growth: Economic Freedom to 2035",
+        description: "Source: The Heritage Foundation (historical); Projections synthesized from governance trend analyses.",
+        xaxis: "Year",
+        yaxis: "Index of Economic Freedom (0-100)",
+        type: 'line',
+        data: [
+            { Entity: "EU", 2010: 68.5, 2023: 71.2, 2035: 72.0 },
+            { Entity: "Japan", 2010: 72.1, 2023: 69.5, 2035: 70.0 },
+            { Entity: "USA", 2010: 77.3, 2023: 70.6, 2035: 72.5 },
+            { Entity: "Brazil", 2010: 55.6, 2023: 53.5, 2035: 58.0 },
+            { Entity: "India", 2010: 54.1, 2023: 52.9, 2035: 60.0 },
+            { Entity: "China", 2010: 51.0, 2023: 48.3, 2035: 45.0 },
+            { Entity: "Russia", 2010: 50.3, 2023: 45.1, 2035: 48.0 }
+        ]
+    },
+    mil_spending: {
+        title: "The Hard Power Equation: Military Spending to 2035",
+        description: "Source: SIPRI (historical); Projections synthesized from national strategies and geopolitical analyses.",
+        xaxis: "Year",
+        yaxis: "Military Expenditure (% of GDP)",
+        type: 'line',
+        data: [
+            { Entity: "Russia", 2010: 3.96, 2023: 4.50, 2035: 4.0 },
+            { Entity: "USA", 2010: 4.67, 2023: 3.49, 2035: 3.2 },
+            { Entity: "India", 2010: 2.70, 2023: 2.40, 2035: 2.8 },
+            { Entity: "China", 2010: 1.88, 2023: 1.70, 2035: 2.0 },
+            { Entity: "EU", 2010: 1.60, 2023: 1.80, 2035: 2.2 },
+            { Entity: "Brazil", 2010: 1.50, 2023: 1.10, 2035: 1.3 },
+            { Entity: "Japan", 2010: 1.00, 2023: 1.20, 2035: 1.5 }
+        ]
+    },
+    hci: {
+        title: "Future Productivity: Human Capital Index Trends to 2035",
+        description: "Source: The World Bank (historical); Projections synthesized from education & health trends.",
+        xaxis: "Year",
+        yaxis: "Human Capital Index (0-1)",
+        type: 'line',
+        data: [
+            { Entity: "Japan", 2010: 0.82, 2020: 0.84, 2035: 0.86 },
+            { Entity: "EU", 2010: 0.78, 2020: 0.80, 2035: 0.82 },
+            { Entity: "USA", 2010: 0.75, 2020: 0.70, 2035: 0.72 },
+            { Entity: "China", 2010: 0.61, 2020: 0.67, 2035: 0.75 },
+            { Entity: "Russia", 2010: 0.65, 2020: 0.68, 2035: 0.70 },
+            { Entity: "Brazil", 2010: 0.55, 2020: 0.60, 2035: 0.65 },
+            { Entity: "India", 2010: 0.44, 2020: 0.49, 2035: 0.58 }
+        ]
+    },
+    convergence: {
+        title: "The Economic Convergence Test (2010-2023)",
+        description: "Source: World Bank data. Analysis based on the ß-convergence economic model.",
+        xaxis: "Initial Wealth in 2010 (GDP per Capita, PPP)",
+        yaxis: "Subsequent Growth (CAGR, 2010-2023)",
+        type: 'scatter',
+        data: [
+            { Entity: "China", Initial_GDP_PC_2010: 9526, CAGR_2010_2023: 6.7 },
+            { Entity: "India", Initial_GDP_PC_2010: 3781, CAGR_2010_2023: 5.5 },
+            { Entity: "Brazil", Initial_GDP_PC_2010: 13958, CAGR_2010_2023: 0.5 },
+            { Entity: "Russia", Initial_GDP_PC_2010: 22693, CAGR_2010_2023: 1.2 },
+            { Entity: "EU", Initial_GDP_PC_2010: 38850, CAGR_2010_2023: 1.3 },
+            { Entity: "USA", Initial_GDP_PC_2010: 49430, CAGR_2010_2023: 1.8 },
+            { Entity: "Japan", Initial_GDP_PC_2010: 36590, CAGR_2010_2023: 0.8 }
+        ]
+    },
+    risk_growth: {
+        title: "The Growth-Stability Matrix (2010–2023)",
+        description: "Source: World Bank data. Volatility is the standard deviation of annual GDP growth.",
+        xaxis: "Economic Volatility (Standard Deviation of Growth)",
+        yaxis: "Average Annual Growth Rate",
+        type: 'scatter',
+        data: [
+            { Entity: "China", Volatility: 2.1, Avg_Growth: 6.8 },
+            { Entity: "India", Volatility: 3.5, Avg_Growth: 5.9 },
+            { Entity: "Brazil", Volatility: 2.8, Avg_Growth: 1.0 },
+            { Entity: "Russia", Volatility: 3.2, Avg_Growth: 1.1 },
+            { Entity: "EU", Volatility: 2.5, Avg_Growth: 1.5 },
+            { Entity: "USA", Volatility: 2.3, Avg_Growth: 2.2 },
+            { Entity: "Japan", Volatility: 1.8, Avg_Growth: 0.9 }
+        ]
+    },
+    gini: {
+        title: "The Development & Inequality Matrix (~2022)",
+        description: "Source: World Bank data. Analysis framework related to the Kuznets Curve hypothesis.",
+        xaxis: "Economic Development (GDP per Capita, PPP, log scale)",
+        yaxis: "Income Inequality (Gini Index)",
+        type: 'scatter',
+        data: [
+            { Entity: "USA", GDP_per_Capita: 69288, Gini: 41.5 },
+            { Entity: "China", GDP_per_Capita: 12556, Gini: 38.2 },
+            { Entity: "EU", GDP_per_Capita: 47788, Gini: 30.1 },
+            { Entity: "India", GDP_per_Capita: 2256, Gini: 35.7 },
+            { Entity: "Brazil", GDP_per_Capita: 7519, Gini: 48.9 },
+            { Entity: "Russia", GDP_per_Capita: 12195, Gini: 37.5 },
+            { Entity: "Japan", GDP_per_Capita: 42440, Gini: 32.9 }
+        ]
+    },
+    decoupling: {
+        title: "The Decoupling Forecast: Growth vs. Emissions to 2040",
+        description: "Source: IEA (STEPS scenario) & OECD long-term forecasts.",
+        xaxis: "Projected Cumulative GDP Growth (2023-2040)",
+        yaxis: "Projected Cumulative CO2 Emissions Change (2023-2040)",
+        type: 'scatter',
+        data: [
+            { Entity: "India", GDP_Growth_2040: 135, CO2_Change_2040: 25 },
+            { Entity: "China", GDP_Growth_2040: 85, CO2_Change_2040: -20 },
+            { Entity: "USA", GDP_Growth_2040: 30, CO2_Change_2040: -30 },
+            { Entity: "EU", GDP_Growth_2040: 20, CO2_Change_2040: -45 },
+            { Entity: "Brazil", GDP_Growth_2040: 45, CO2_Change_2040: 5 },
+            { Entity: "Russia", GDP_Growth_2040: 15, CO2_Change_2040: -10 }
+        ]
+      }
+    };
+
+    function plotChart(chartId) {
+      const chartConfig = chartsData[chartId];
+      if (!chartConfig) {
+        document.getElementById('chart').innerText = 'Chart not found';
+        return;
+      }
+
+      const { title, description, xaxis, yaxis, type, data } = chartConfig;
+      let traces = [];
+
+      if (type === 'line' || type === 'area') {
+        const xValues = Object.keys(data[0]).filter(k => k !== 'Entity');
+        traces = data.map(d => ({
+          x: xValues,
+          y: xValues.map(year => d[year]),
+          mode: 'lines+markers',
+          name: d.Entity,
+          fill: type === 'area' ? 'tonexty' : 'none'
+        }));
+      } else if (type === 'scatter') {
+         const xKey = Object.keys(data[0])[1];
+         const yKey = Object.keys(data[0])[2];
+         traces = [{
+             x: data.map(d => d[xKey]),
+             y: data.map(d => d[yKey]),
+             text: data.map(d => d.Entity),
+             mode: 'markers+text',
+             type: 'scatter',
+             textposition: 'top center'
+         }];
+      }
+
+      const layout = {
+        title,
+        xaxis: { title: xaxis },
+        yaxis: { title: yaxis },
+        legend: { orientation: 'h', y: -0.3 },
+        margin: { t: 50, b: 100 }
+      };
+
+      Plotly.newPlot('chart', traces, layout, { responsive: true });
+      document.getElementById('chart-desc').textContent = description;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const buttons = document.querySelectorAll('nav button');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          plotChart(btn.dataset.chart);
+        });
+      });
+
+      // Load the first chart by default
+      if (buttons.length > 0) {
+        buttons[0].classList.add('active');
+        plotChart(buttons[0].dataset.chart);
+      }
+    });
+  </script>
+</head>
+<body>
+  <header><span>Data Visualization</span><a href="#" class="home-icon" aria-label="Home">🏠</a></header>
+  <nav>
+    <div class="tabs">
+      <button data-chart="gdp">GDP</button>
+      <button data-chart="population">Population</button>
+      <button data-chart="working_pop">Working Age Population</button>
+      <button data-chart="median_age">Median Age</button>
+      <button data-chart="age_dependency">Age Dependency</button>
+      <button data-chart="urbanization">Urbanization</button>
+      <button data-chart="manuf_gdp">Manufacturing % GDP</button>
+      <button data-chart="hightech_exports">High-Tech Exports</button>
+      <button data-chart="rd_spending">R&D Spending</button>
+      <button data-chart="fdi">FDI</button>
+      <button data-chart="economic_freedom">Economic Freedom</button>
+      <button data-chart="mil_spending">Military Spending</button>
+      <button data-chart="hci">Human Capital Index</button>
+      <button data-chart="convergence">Convergence</button>
+      <button data-chart="risk_growth">Risk/Growth</button>
+      <button data-chart="gini">Gini</button>
+      <button data-chart="decoupling">Decoupling</button>
+    </div>
+  </nav>
+  <main>
+    <div id="chart"></div>
+    <div id="chart-desc" class="chart-desc"></div>
+  </main>
+  <footer>© Venkatakrishnan Asuri · <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> · <a href="https://www.linkedin.com/in/venkatakrishnan-asuri" target="_blank" rel="noopener">LinkedIn</a></footer>
+</body>
+</html>
