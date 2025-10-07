@@ -3,23 +3,132 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bay of Bengal Data Visualization</title>
+  <title>Global & National Projections - Data Visualization</title>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; color: #222; }
-    header { background: #004080; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; font-weight: bold; position:relative; }
-    .home-icon { position:absolute; top:10px; right:10px; display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:8px; background:#ffffff; color:#004080; text-decoration:none; font-size:18px; border:1px solid #d1d5db }
-    nav { display: flex; background: #e1e1e1; justify-content: center; gap: 0.5rem; padding: 0.5rem 0.5rem; flex-wrap: wrap; }
-    .tabs { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; }
-    nav button { background: #f5f5f5; border: none; padding: 0.6rem 0.9rem; font-size: 1rem; cursor: pointer; border-bottom: 3px solid transparent; transition: border-color 0.3s; border-radius: 6px; }
-    nav button.active { border-bottom: 3px solid #004080; font-weight: bold; color: #004080; background: #ffffff; }
-    main { max-width: 900px; margin: 1rem auto; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
-    #chart { width: 100%; height: 60vh; min-height: 360px; max-height: 760px; }
-    .chart-desc { margin-top: .5rem; color: #555; font-size: .95rem; }
-    footer { text-align: center; padding: 1rem; font-size: 0.9rem; color: #666; margin-top: 2rem; }
-    @media (max-width: 900px) { main { margin: 0.5rem; padding: 0.75rem; } nav button { font-size: 0.95rem; padding: 0.55rem 0.8rem; } }
-    @media (max-width: 600px) { header { font-size: 1.25rem; } nav { gap: 0.4rem; } nav button { flex: 1 1 auto; } .chart-desc { font-size: 0.92rem; } }
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background-color: #fdfdfd;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin: 0;
+    }
+    .home-link {
+      color: #004080;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    .home-link:hover {
+      text-decoration: underline;
+    }
+    main {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    .controls {
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .controls label {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    #chart-selector {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1rem;
+      padding: 0.5rem 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fff;
+    }
+    #chart {
+      width: 100%;
+      height: 65vh;
+      min-height: 400px;
+    }
+    .chart-desc {
+      margin-top: 0.75rem;
+      color: #555;
+      font-size: 0.95rem;
+      font-style: italic;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #777;
+      border-top: 1px solid #eee;
+    }
+    footer a {
+      color: #004080;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.2rem; }
+      main { margin: 1.5rem auto; padding: 0 1rem; }
+      .controls { flex-direction: column; align-items: flex-start; }
+    }
   </style>
+</head>
+<body>
+  <header>
+    <h1>Global & National Projections</h1>
+    <a href="home.html" class="home-link">← Return to Dashboard Index</a>
+  </header>
+
+  <main>
+    <div class="controls">
+      <label for="chart-selector">Select Dataset:</label>
+      <select id="chart-selector">
+        <option value="gdp">GDP Projections</option>
+        <option value="population">Population</option>
+        <option value="working_pop">Working-Age Population</option>
+        <option value="median_age">Median Age</option>
+        <option value="age_dependency">Age Dependency Ratio</option>
+        <option value="urbanization">Urbanization Rate</option>
+        <option value="manuf_gdp">Manufacturing Share of GDP</option>
+        <option value="hightech_exports">High-Tech Exports</option>
+        <option value="rd_spending">R&D Spending</option>
+        <option value="fdi">Foreign Direct Investment</option>
+        <option value="economic_freedom">Economic Freedom Index</option>
+        <option value="mil_spending">Military Spending</option>
+        <option value="hci">Human Capital Index</option>
+        <option value="convergence">Economic Convergence</option>
+        <option value="risk_growth">Growth-Volatility Matrix</option>
+        <option value="gini">Development & Inequality</option>
+        <option value="decoupling">Growth vs. Emissions</option>
+      </select>
+    </div>
+    <div id="chart"></div>
+    <div id="chart-desc" class="chart-desc"></div>
+  </main>
+
+  <footer>
+    © Venkatakrishnan Asuri ·
+    <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> ·
+    <a href="https://www.linkedin.com/in/asurixyz" target="_blank" rel="noopener">LinkedIn</a>
+  </footer>
+
   <script>
     const chartsData = {
       gdp: {
@@ -310,11 +419,13 @@
       if (type === 'line' || type === 'area') {
         const xValues = Object.keys(data[0]).filter(k => k !== 'Entity');
         traces = data.map(d => ({
-          x: xValues,
+          x: xValues.map(x => parseInt(x)),
           y: xValues.map(year => d[year]),
           mode: 'lines+markers',
           name: d.Entity,
-          fill: type === 'area' ? 'tonexty' : 'none'
+          fill: type === 'area' ? 'tonexty' : 'none',
+          line: { width: 2 },
+          marker: { size: 6 }
         }));
       } else if (type === 'scatter') {
          const xKey = Object.keys(data[0])[1];
@@ -325,16 +436,19 @@
              text: data.map(d => d.Entity),
              mode: 'markers+text',
              type: 'scatter',
-             textposition: 'top center'
+             textposition: 'top center',
+             marker: { size: 10 }
          }];
       }
 
       const layout = {
-        title,
-        xaxis: { title: xaxis },
-        yaxis: { title: yaxis },
-        legend: { orientation: 'h', y: -0.3 },
-        margin: { t: 50, b: 100 }
+        title: { text: title, font: { family: 'Georgia, serif', size: 20 } },
+        xaxis: { title: xaxis, titlefont: { family: 'Georgia, serif' }, tickfont: { family: 'Georgia, serif' } },
+        yaxis: { title: yaxis, titlefont: { family: 'Georgia, serif' }, tickfont: { family: 'Georgia, serif' } },
+        legend: { orientation: 'h', y: -0.2, font: { family: 'Georgia, serif' } },
+        margin: { t: 50, b: 100 },
+        paper_bgcolor: '#fdfdfd',
+        plot_bgcolor: '#fdfdfd'
       };
 
       Plotly.newPlot('chart', traces, layout, { responsive: true });
@@ -342,50 +456,14 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      const buttons = document.querySelectorAll('nav button');
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          buttons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          plotChart(btn.dataset.chart);
-        });
+      const selector = document.getElementById('chart-selector');
+      selector.addEventListener('change', () => {
+        plotChart(selector.value);
       });
 
       // Load the first chart by default
-      if (buttons.length > 0) {
-        buttons[0].classList.add('active');
-        plotChart(buttons[0].dataset.chart);
-      }
+      plotChart(selector.value);
     });
   </script>
-</head>
-<body>
-  <header><span>Data Visualization</span><a href="home.html" class="home-icon" aria-label="Home">🏠</a></header>
-  <nav>
-    <div class="tabs">
-      <button data-chart="gdp">GDP</button>
-      <button data-chart="population">Population</button>
-      <button data-chart="working_pop">Working Age Population</button>
-      <button data-chart="median_age">Median Age</button>
-      <button data-chart="age_dependency">Age Dependency</button>
-      <button data-chart="urbanization">Urbanization</button>
-      <button data-chart="manuf_gdp">Manufacturing % GDP</button>
-      <button data-chart="hightech_exports">High-Tech Exports</button>
-      <button data-chart="rd_spending">R&D Spending</button>
-      <button data-chart="fdi">FDI</button>
-      <button data-chart="economic_freedom">Economic Freedom</button>
-      <button data-chart="mil_spending">Military Spending</button>
-      <button data-chart="hci">Human Capital Index</button>
-      <button data-chart="convergence">Convergence</button>
-      <button data-chart="risk_growth">Risk/Growth</button>
-      <button data-chart="gini">Gini</button>
-      <button data-chart="decoupling">Decoupling</button>
-    </div>
-  </nav>
-  <main>
-    <div id="chart"></div>
-    <div id="chart-desc" class="chart-desc"></div>
-  </main>
-  <footer>© Venkatakrishnan Asuri · <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> · <a href="https://www.linkedin.com/in/venkatakrishnan-asuri" target="_blank" rel="noopener">LinkedIn</a></footer>
 </body>
 </html>
