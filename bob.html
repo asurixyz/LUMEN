@@ -3,137 +3,202 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bay of Bengal Data Visualization</title>
+  <title>Bay of Bengal - Data Visualization</title>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; color: #222; }
-    header { background: #004080; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; font-weight: bold; position:relative; }
-    .home-icon { position:absolute; top:10px; right:10px; display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:8px; background:#ffffff; color:#004080; text-decoration:none; font-size:18px; border:1px solid #d1d5db }
-    nav { display: flex; background: #e1e1e1; justify-content: center; gap: 0.5rem; padding: 0.5rem 0.5rem; flex-wrap: wrap; }
-    .tabs { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; }
-    nav button { background: #f5f5f5; border: none; padding: 0.6rem 0.9rem; font-size: 1rem; cursor: pointer; border-bottom: 3px solid transparent; transition: border-color 0.3s; border-radius: 6px; }
-    nav button.active { border-bottom: 3px solid #004080; font-weight: bold; color: #004080; background: #ffffff; }
-    main { max-width: 900px; margin: 1rem auto; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
-    #chart { width: 100%; height: 60vh; min-height: 360px; max-height: 760px; }
-    .chart-desc { margin-top: .5rem; color: #555; font-size: .95rem; }
-    footer { text-align: center; padding: 1rem; font-size: 0.9rem; color: #666; margin-top: 2rem; }
-    @media (max-width: 900px) { main { margin: 0.5rem; padding: 0.75rem; } nav button { font-size: 0.95rem; padding: 0.55rem 0.8rem; } }
-    @media (max-width: 600px) { header { font-size: 1.25rem; } nav { gap: 0.4rem; } nav button { flex: 1 1 auto; } .chart-desc { font-size: 0.92rem; } }
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background-color: #fdfdfd;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin: 0;
+    }
+    .home-link {
+      color: #004080;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    .home-link:hover {
+      text-decoration: underline;
+    }
+    main {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    .controls {
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .controls label {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    #chart-selector {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1rem;
+      padding: 0.5rem 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fff;
+    }
+    #chart {
+      width: 100%;
+      height: 65vh;
+      min-height: 400px;
+    }
+    .chart-desc {
+      margin-top: 0.75rem;
+      color: #555;
+      font-size: 0.95rem;
+      font-style: italic;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #777;
+      border-top: 1px solid #eee;
+    }
+    footer a {
+      color: #004080;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.2rem; }
+      main { margin: 1.5rem auto; padding: 0 1rem; }
+      .controls { flex-direction: column; align-items: flex-start; }
+    }
   </style>
+</head>
+<body>
+  <header>
+    <h1>Bay of Bengal: Regional Analysis</h1>
+    <a href="home.html" class="home-link">← Return to Dashboard Index</a>
+  </header>
+
+  <main>
+    <div class="controls">
+      <label for="chart-selector">Select Dataset:</label>
+      <select id="chart-selector">
+        <option value="trade" data-file="Bay of Bengal/Trade Volume.csv">Trade Volume</option>
+        <option value="investment" data-file="Bay of Bengal/Investment.csv">Investment</option>
+      </select>
+    </div>
+    <div id="chart"></div>
+    <div id="chart-desc" class="chart-desc"></div>
+  </main>
+
+  <footer>
+    © Venkatakrishnan Asuri ·
+    <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> ·
+    <a href="https://www.linkedin.com/in/asurixyz" target="_blank" rel="noopener">LinkedIn</a>
+  </footer>
+
   <script>
-    // Helpers
+    const PLOTLY_LAYOUT_DEFAULTS = {
+        font: { family: 'Georgia, serif' },
+        legend: { orientation: 'h', y: -0.2 },
+        margin: { t: 50, b: 100 },
+        paper_bgcolor: '#fdfdfd',
+        plot_bgcolor: '#fdfdfd'
+    };
+
     const fetchCsv = (path) => new Promise((resolve, reject) => {
-      Papa.parse(encodeURI(path), { download: true, header: true, dynamicTyping: true, skipEmptyLines: true,
-        complete: (res) => resolve(res.data || []), error: (err) => reject(err) });
+      Papa.parse(encodeURI(path), {
+        download: true,
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+        complete: (res) => resolve(res.data || []),
+        error: (err) => reject(err)
+      });
     });
 
     const numberize = (val) => {
       if (val == null) return null;
       if (typeof val === 'number') return Number.isFinite(val) ? val : null;
       if (typeof val === 'string') {
-        const t = val.replace(/[,$%]/g,'').trim();
+        const t = val.replace(/[,$%]/g, '').trim();
         const n = Number(t);
         return Number.isFinite(n) ? n : null;
       }
       return null;
     };
 
-    // Chart renderers
-    const plotTradeVolume = (data) => {
-      // Try to support either long-form (Country, Year, Value*) or wide-form (Year + country columns)
-      const container = 'chart';
-      if (!data || !data.length) { document.getElementById(container).innerText = 'No data'; return; }
+    function processDataForPlotting(data) {
+        if (!data || data.length === 0) return [];
 
-      const hasCountry = 'Country' in data[0] || 'country' in data[0];
-      const yearKey = 'Year' in data[0] ? 'Year' : ('year' in data[0] ? 'year' : Object.keys(data[0])[0]);
-      let traces = [];
-
-      if (hasCountry) {
-        // long-form: find a numeric column as value
-        const numericKeys = Object.keys(data[0]).filter(k => k !== yearKey && k.toLowerCase() !== 'country');
-        const valueKey = numericKeys.find(k => typeof data[0][k] === 'number' || numberize(data[0][k]) != null) || numericKeys[0];
-        const countries = [...new Set(data.map(d => d.Country ?? d.country))];
-        const years = [...new Set(data.map(d => d[yearKey]))].sort((a,b)=>a-b);
-        traces = countries.map(c => ({
-          x: years,
-          y: years.map(y => {
-            const row = data.find(d => (d.Country ?? d.country) === c && d[yearKey] == y);
-            return row ? numberize(row[valueKey]) : null;
-          }),
-          mode: 'lines+markers', name: c
-        }));
-      } else {
-        // wide-form: Year + country columns
-        const keys = Object.keys(data[0]).filter(k => k !== yearKey);
+        const yearKey = 'Year' in data[0] ? 'Year' : ('year' in data[0] ? 'year' : Object.keys(data[0])[0]);
+        const countryKeys = Object.keys(data[0]).filter(k => k.toLowerCase() !== yearKey.toLowerCase());
         const years = data.map(d => d[yearKey]);
-        traces = keys.map(k => ({ x: years, y: data.map(d => numberize(d[k])), mode: 'lines+markers', name: k }));
-      }
+        
+        return countryKeys.map(key => ({
+            x: years,
+            y: data.map(d => numberize(d[key])),
+            mode: 'lines+markers',
+            name: key
+        }));
+    }
 
-      const p = Plotly.newPlot(container, traces, {
-        title: 'Trade Volume in Bay of Bengal',
-        xaxis: {title: 'Year'}, yaxis: {title: 'Trade Volume (Billion USD)'}, legend: {orientation: 'h', y: -0.3}
-      }, {responsive: true});
-      document.getElementById('chart-desc').textContent = 'Annual trade volumes associated with Bay of Bengal economies.';
-      return p;
-    };
+    async function loadAndPlot(selectedOption) {
+      const chartType = selectedOption.value;
+      const file = selectedOption.dataset.file;
+      const chartDiv = document.getElementById('chart');
+      const descDiv = document.getElementById('chart-desc');
+      
+      chartDiv.innerHTML = '';
+      descDiv.textContent = 'Loading...';
 
-    const plotInvestment = (data) => {
-      // Expect Year + multiple numeric series (e.g., countries or categories)
-      const container = 'chart';
-      if (!data || !data.length) { document.getElementById(container).innerText = 'No data'; return; }
-      const yearKey = 'Year' in data[0] ? 'Year' : ('year' in data[0] ? 'year' : Object.keys(data[0])[0]);
-      const keys = Object.keys(data[0]).filter(k => k !== yearKey);
-      const years = data.map(d => d[yearKey]);
-      const traces = keys.map(k => ({ x: years, y: data.map(d => numberize(d[k])), mode: 'lines+markers', name: k }));
-      const p = Plotly.newPlot(container, traces, {
-        title: 'Investment in Bay of Bengal',
-        xaxis: {title: 'Year'}, yaxis: {title: 'Investment (Billion USD)'}, legend: {orientation: 'h', y: -0.3}
-      }, {responsive: true});
-      document.getElementById('chart-desc').textContent = 'Investment trends across Bay of Bengal countries or sectors.';
-      return p;
-    };
-
-    async function loadAndPlot(file, which) {
-      document.getElementById('chart').innerHTML = '';
-      document.getElementById('chart-desc').textContent = '';
       try {
         const data = await fetchCsv(file);
-        if (which === 'trade') return plotTradeVolume(data);
-        if (which === 'investment') return plotInvestment(data);
-        document.getElementById('chart').innerText = 'Unknown chart type';
+        const traces = processDataForPlotting(data);
+        let layout;
+
+        if (chartType === 'trade') {
+            layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: 'Trade Volume in Bay of Bengal', xaxis: {title: 'Year'}, yaxis: {title: 'Trade Volume (Billion USD)'} };
+            descDiv.textContent = 'Annual trade volumes associated with Bay of Bengal economies.';
+        } else if (chartType === 'investment') {
+            layout = { ...PLOTLY_LAYOUT_DEFAULTS, title: 'Investment in Bay of Bengal', xaxis: {title: 'Year'}, yaxis: {title: 'Investment (Billion USD)'} };
+            descDiv.textContent = 'Investment trends across Bay of Bengal countries or sectors.';
+        }
+
+        Plotly.newPlot('chart', traces, layout, { responsive: true });
+
       } catch (err) {
-        document.getElementById('chart').innerText = 'Error loading data';
-        console.error('Error loading', file, err);
+        descDiv.textContent = `Error loading data from ${file}.`;
+        console.error('Error loading:', file, err);
       }
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      const buttons = document.querySelectorAll('nav button');
-      buttons.forEach(btn => btn.addEventListener('click', () => {
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        loadAndPlot(btn.dataset.file, btn.dataset.chart);
-      }));
-      loadAndPlot('Bay of Bengal/Trade Volume.csv', 'trade');
+      const selector = document.getElementById('chart-selector');
+      selector.addEventListener('change', () => {
+        loadAndPlot(selector.options[selector.selectedIndex]);
+      });
+      // Initial load
+      loadAndPlot(selector.options[selector.selectedIndex]);
     });
   </script>
-</head>
-<body>
-  <header><span>Bay of Bengal Data Visualization</span><a href="home.html" class="home-icon" aria-label="Home">🏠</a></header>
-  <nav>
-    <div class="tabs">
-      <button class="active" data-file="Bay of Bengal/Trade Volume.csv" data-chart="trade">Trade Volume</button>
-      <button data-file="Bay of Bengal/Investment.csv" data-chart="investment">Investment</button>
-    </div>
-  </nav>
-  <main>
-    <div id="chart"></div>
-    <div id="chart-desc" class="chart-desc"></div>
-  </main>
-  <footer>© Venkatakrishnan Asuri · <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> · <a href="https://www.linkedin.com/in/venkatakrishnan-asuri" target="_blank" rel="noopener">LinkedIn</a></footer>
 </body>
 </html>
-
-
-
