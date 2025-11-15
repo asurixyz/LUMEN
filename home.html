@@ -15,7 +15,17 @@
       --shadow-light: 0 2px 8px rgba(0,0,0,0.35);
       --card-bg: #0a0a0b;
       --blur-bg: rgba(10, 10, 12, 0.6);
+      --card-hover: #121214;
+      --green-accent: #3ddc97;
+      --blue-accent: #4ea3ff;
+      --purple-accent: #a78bfa;
+      --hover-glow: rgba(78, 163, 255, 0.15);
     }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
       background-color: var(--bg);
@@ -25,9 +35,13 @@
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(10, 20, 30, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(20, 10, 30, 0.1) 0%, transparent 20%);
     }
+    
     header.nav-blur {
-      padding: 1rem 0.5rem;
+      padding: 1.2rem 0.5rem;
       border-bottom: 1px solid var(--border);
       text-align: center;
       background: var(--blur-bg);
@@ -36,105 +50,319 @@
       position: sticky;
       top: 0;
       z-index: 10;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
+    
     header h1 {
-      font-size: 1.9rem;
-      font-weight: 600;
+      font-size: 2.1rem;
+      font-weight: 700;
       margin: 0;
-      background: linear-gradient(90deg, #eaeaec, #a1a1aa);
+      background: linear-gradient(90deg, #eaeaec, #a1a1aa, #eaeaec);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-size: 200% auto;
+      animation: shine 8s linear infinite;
     }
+    
+    @keyframes shine {
+      to { background-position: 200% center; }
+    }
+    
     .motto {
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-style: italic;
       color: var(--text-secondary);
-      margin-top: 0.2rem;
+      margin-top: 0.3rem;
+      letter-spacing: 0.5px;
     }
-    main { max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem; }
-    .intro p { font-size: 1rem; line-height: 1.6; color: var(--text-secondary); text-align: justify; margin-bottom: 1.5rem; }
+    
+    main { 
+      max-width: 1200px; 
+      margin: 1.8rem auto; 
+      padding: 0 1.2rem; 
+    }
+    
+    .intro {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-light);
+    }
+    
+    .intro p { 
+      font-size: 1.05rem; 
+      line-height: 1.7; 
+      color: var(--text-secondary); 
+      margin: 0; 
+    }
+    
     .section-title {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       font-weight: 600;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 0.3rem;
-      background: linear-gradient(90deg, #eaeaec, #a1a1aa);
+      margin-top: 2.2rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.5rem;
+      position: relative;
+      display: inline-block;
+      background: linear-gradient(90deg, var(--blue-accent), var(--purple-accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .data-links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem 1.2rem; list-style: none; padding: 0; margin: 0; }
-    .data-link { display: block; text-decoration: none; color: var(--text-primary); background: var(--card-bg); padding: 0.9rem; border: 1px solid var(--border); border-radius: 8px; transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease; height: 100%; box-shadow: var(--shadow-light); }
-    .data-link:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.4); border-color: #3a3a40; }
-    .data-link h3 { font-size: 1.05rem; font-weight: 600; margin: 0 0 0.25rem 0; color: var(--text-primary); }
-    .data-link p { font-size: 0.9rem; line-height: 1.3; color: var(--text-secondary); margin: 0; }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { color: #86c8ff; }
-    .home-link, .data-link { position: relative; }
-    .home-link::after, .data-link::after { content: ""; position: absolute; left: 0; bottom: -2px; width: 0%; height: 2px; background: linear-gradient(90deg, #4ea3ff, #86c8ff); transition: width 200ms ease; }
-    .home-link:hover::after, .data-link:hover::after { width: 100%; }
-    footer { text-align: center; padding: 1.5rem 0; margin-top: 2rem; font-size: 0.85rem; color: var(--text-secondary); border-top: 1px solid var(--border); }
-    footer a { color: var(--accent); }
-    footer a:hover { color: #86c8ff; }
+    
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue-accent), var(--purple-accent));
+      border-radius: 2px;
+    }
+    
+    .data-links-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+      gap: 1.3rem 1.5rem; 
+      list-style: none; 
+      padding: 0; 
+      margin: 0; 
+    }
+    
+    .data-link { 
+      display: block; 
+      text-decoration: none; 
+      color: var(--text-primary); 
+      background: var(--card-bg);
+      padding: 1.3rem; 
+      border: 1px solid var(--border); 
+      border-radius: 10px; 
+      transition: all 250ms ease; 
+      height: 100%; 
+      box-shadow: var(--shadow-light);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .data-link::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue-accent), var(--green-accent));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 300ms ease;
+    }
+    
+    .data-link:hover { 
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4), 0 0 0 1px var(--hover-glow);
+      border-color: #3a3a40;
+      background: var(--card-hover);
+    }
+    
+    .data-link:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .data-link h3 { 
+      font-size: 1.15rem; 
+      font-weight: 600; 
+      margin: 0 0 0.4rem 0; 
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+    }
+    
+    .data-link h3::after {
+      content: "→";
+      margin-left: auto;
+      opacity: 0.7;
+      transition: opacity 200ms ease, transform 200ms ease;
+    }
+    
+    .data-link:hover h3::after {
+      opacity: 1;
+      transform: translateX(3px);
+    }
+    
+    .data-link p { 
+      font-size: 0.95rem; 
+      line-height: 1.5; 
+      color: var(--text-secondary); 
+      margin: 0; 
+    }
+    
+    a { 
+      color: var(--accent); 
+      text-decoration: none; 
+    }
+    
+    a:hover { 
+      color: #86c8ff; 
+    }
+    
+    .home-link, .data-link { 
+      position: relative; 
+    }
+    
+    .home-link::after, .data-link::after { 
+      content: ""; 
+      position: absolute; 
+      left: 0; 
+      bottom: -2px; 
+      width: 0%; 
+      height: 2px; 
+      background: linear-gradient(90deg, #4ea3ff, #86c8ff); 
+      transition: width 200ms ease; 
+    }
+    
+    .home-link:hover::after, .data-link:hover::after { 
+      width: 100%; 
+    }
+    
+    footer { 
+      text-align: center; 
+      padding: 2rem 0; 
+      margin-top: 3rem; 
+      font-size: 0.9rem; 
+      color: var(--text-secondary); 
+      border-top: 1px solid var(--border); 
+      background: var(--blur-bg);
+      backdrop-filter: blur(10px);
+    }
+    
+    footer a { 
+      color: var(--accent); 
+      margin: 0 0.8rem;
+      display: inline-block;
+    }
+    
+    footer a:hover { 
+      color: #86c8ff; 
+      transform: translateY(-2px);
+    }
+    
+    .icon {
+      display: inline-block;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+    
     @media (max-width: 600px) {
-      header h1 { font-size: 1.6rem; }
-      main { padding: 0 0.7rem; }
-      .section-title { font-size: 1.15rem; }
-      .data-link h3 { font-size: 1rem; }
-      .data-link p { font-size: 0.85rem; }
+      header h1 { 
+        font-size: 1.7rem; 
+      }
+      
+      main { 
+        padding: 0 0.8rem; 
+      }
+      
+      .section-title { 
+        font-size: 1.25rem; 
+      }
+      
+      .data-link h3 { 
+        font-size: 1.05rem; 
+      }
+      
+      .data-link p { 
+        font-size: 0.9rem; 
+      }
+      
+      .intro {
+        padding: 1.2rem;
+      }
+    }
+    
+    /* Section-specific color accents */
+    .section-1 .data-link h3 { color: #4ea3ff; }
+    .section-2 .data-link h3 { color: #3ddc97; }
+    .section-3 .data-link h3 { color: #fbbf24; }
+    .section-4 .data-link h3 { color: #a78bfa; }
+    
+    /* Decorative elements */
+    .decoration {
+      position: fixed;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(78, 163, 255, 0.1) 0%, transparent 70%);
+      z-index: -1;
+    }
+    
+    .decoration-1 {
+      top: 10%;
+      left: 5%;
+      opacity: 0.3;
+    }
+    
+    .decoration-2 {
+      bottom: 10%;
+      right: 5%;
+      opacity: 0.2;
     }
   </style>
 </head>
 <body>
+  <div class="decoration decoration-1"></div>
+  <div class="decoration decoration-2"></div>
+  
   <header class="nav-blur">
     <h1>LUMEN Dashboard</h1>
     <p class="motto">Illumination Through Data</p>
   </header>
+  
   <main>
     <section class="intro">
       <p>
-        This dashboard provides access to datasets visualizing the primary forces shaping the 21st-century global landscape. Organized into global, regional, maritime, and neighborhood sections.
+        This dashboard provides access to datasets visualizing the primary forces shaping the 21st-century global landscape. Organized into global, regional, maritime, and neighborhood sections with interactive visualizations.
       </p>
     </section>
 
     <h2 class="section-title">I. Global & National Dynamics</h2>
-    <ul class="data-links-grid">
+    <ul class="data-links-grid section-1">
       <li><a href="trademap.html" class="data-link">
-        <h3>Interactive Global Trade Map →</h3>
+        <h3>Interactive Global Trade Map</h3>
         <p>Visualizing global trade partnerships with the US and China from 2000–2022.</p>
       </a></li>
       <li><a href="future.html" class="data-link">
-        <h3>Geopolitical & Economic Futures →</h3>
+        <h3>Geopolitical & Economic Futures</h3>
         <p>Long-term projections of GDP, population, R&D, and military spending.</p>
       </a></li>
     </ul>
 
     <h2 class="section-title">II. Contemporary Regional Data</h2>
-    <ul class="data-links-grid">
+    <ul class="data-links-grid section-2">
       <li><a href="asian_data.html" class="data-link">
-        <h3>Asian Economic Indicators →</h3>
+        <h3>Asian Economic Indicators</h3>
         <p>Key economic metrics for major Asian economies and ASEAN bloc.</p>
       </a></li>
     </ul>
 
     <h2 class="section-title">III. Strategic Maritime Corridors</h2>
-    <ul class="data-links-grid">
-      <li><a href="scs.html" class="data-link"><h3>South China Sea →</h3><p>Trade, investments, and energy dynamics in a contested region.</p></a></li>
-      <li><a href="bob.html" class="data-link"><h3>Bay of Bengal →</h3><p>Regional trade and supply chain corridor analysis.</p></a></li>
-      <li><a href="eac.html" class="data-link"><h3>East African Coast →</h3><p>Trade and investment ties with Asian economies.</p></a></li>
-      <li><a href="pg.html" class="data-link"><h3>Persian Gulf →</h3><p>Flows of trade and finance shaping global energy stability.</p></a></li>
+    <ul class="data-links-grid section-3">
+      <li><a href="scs.html" class="data-link"><h3>South China Sea</h3><p>Trade, investments, and energy dynamics in a contested region.</p></a></li>
+      <li><a href="bob.html" class="data-link"><h3>Bay of Bengal</h3><p>Regional trade and supply chain corridor analysis.</p></a></li>
+      <li><a href="eac.html" class="data-link"><h3>East African Coast</h3><p>Trade and investment ties with Asian economies.</p></a></li>
+      <li><a href="pg.html" class="data-link"><h3>Persian Gulf</h3><p>Flows of trade and finance shaping global energy stability.</p></a></li>
     </ul>
 
     <h2 class="section-title">IV. India's Neighborhood</h2>
-    <ul class="data-links-grid">
-      <li><a href="afghanistan.html" class="data-link"><h3>Afghanistan →</h3><p>Post-2021 shifts in economy and security.</p></a></li>
-      <li><a href="maldives.html" class="data-link"><h3>Maldives →</h3><p>Tourism, debt, and development under India–China competition.</p></a></li>
-      <li><a href="sri_lanka.html" class="data-link"><h3>Sri Lanka →</h3><p>Economic and military ties with India and China.</p></a></li>
-      <li><a href="bangladesh.html" class="data-link"><h3>Bangladesh →</h3><p>Socio-economic and geopolitical growth drivers.</p></a></li>
-      <li><a href="pakistan.html" class="data-link"><h3>Pakistan →</h3><p>Economic crises and strategic dependencies.</p></a></li>
+    <ul class="data-links-grid section-4">
+      <li><a href="afghanistan.html" class="data-link"><h3>Afghanistan</h3><p>Post-2021 shifts in economy and security.</p></a></li>
+      <li><a href="maldives.html" class="data-link"><h3>Maldives</h3><p>Tourism, debt, and development under India–China competition.</p></a></li>
+      <li><a href="sri_lanka.html" class="data-link"><h3>Sri Lanka</h3><p>Economic and military ties with India and China.</p></a></li>
+      <li><a href="bangladesh.html" class="data-link"><h3>Bangladesh</h3><p>Socio-economic and geopolitical growth drivers.</p></a></li>
+      <li><a href="pakistan.html" class="data-link"><h3>Pakistan</h3><p>Economic crises and strategic dependencies.</p></a></li>
     </ul>
   </main>
+  
   <footer>
     © Venkatakrishnan Asuri · 
     <a href="https://github.com/asurixyz" target="_blank" rel="noopener">GitHub</a> · 
